@@ -1,0 +1,38 @@
+.text {
+	&.ellipsis {
+		@apply overflow-hidden whitespace-nowrap text-ellipsis;
+	}
+	&.sec,
+	& .sec {
+		@apply text-sec dark:text-dark-sec;
+	}
+	&.tri,
+	& .tri {
+		@apply text-tri dark:text-dark-tri;
+	}
+	&.bold,
+	& .bold {
+		@apply font-medium;
+	}
+}
+
+.label {
+	@apply w-full px-3 mb-1
+	overflow-hidden whitespace-nowrap text-ellipsis
+	text-label transition-colors
+	text-sec dark:text-dark-sec;
+}
+
+*:focus-within > .label {
+	@apply text-pri dark:text-dark-pri;
+}
+
+.headline {
+	@apply text-headline uppercase font-medium
+	text-sec dark:text-dark-sec;
+	letterspacing: 1px;
+}
+
+.heading {
+	@apply text-heading font-light;
+}

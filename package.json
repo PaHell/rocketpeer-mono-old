@@ -1,0 +1,21 @@
+{
+  "name": "rocketpeer-mono",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "tauri": "tauri",
+    "sveltekit": "npm run dev -w rocketpeer-sveltekit",
+    "express": "npm run dev -w rocketpeer-express"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "rocketpeer-sveltekit": "file:sveltekit",
+    "rocketpeer-express": "file:express",
+    "rocketpeer-tauri": "file:src-tauri"
+  },
+  "workspaces": [
+    "./*"
+  ]
+}

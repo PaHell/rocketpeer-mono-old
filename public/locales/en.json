@@ -1,0 +1,150 @@
+{
+	"lib": {
+		"controls": {
+			"select": {
+				"none": "Nothing selected",
+				"theme": "Theme",
+				"view_size": "Application view size",
+				"language": "Language",
+				"country": "Country",
+				"role": "Role",
+				"product_types": "Product Types / Interests"
+			},
+			"themes": {
+				"dark": "Dark",
+				"light": "Light",
+				"os": "Operating System Preference"
+			},
+			"view_sizes": {
+				"auto": "Auto",
+				"mobile": "Mobile or Small/Medium Screen",
+				"desktop": "Desktop or Large Screen"
+			},
+			"text_input": {
+				"search_country": {
+					"placeholder": "Country or ISO-3"
+				},
+				"search_company": {
+					"placeholder": "Company names"
+				},
+				"search": {
+					"label": "Search",
+					"placeholder": "Search..."
+				},
+				"username": {
+					"label": "Username",
+					"placeholder": "robert.habeck"
+				},
+				"password": {
+					"label": "Password",
+					"placeholder": "gasumlage_22"
+				},
+				"product_type": {
+					"label": "Product Type Name",
+					"placeholder": "Marketing"
+				},
+				"first_name": {
+					"label": "First Name",
+					"placeholder": "Karen"
+				},
+				"last_name": {
+					"label": "Last Name",
+					"placeholder": "Smith"
+				},
+				"company": {
+					"label": "Company",
+					"placeholder": "FDA Ltd."
+				},
+				"street": {
+					"label": "Street",
+					"placeholder": "Moonshine Ave"
+				},
+				"house_number": {
+					"label": "House Number",
+					"placeholder": "42"
+				},
+				"postal_code": {
+					"label": "Postal Code",
+					"placeholder": "34512"
+				},
+				"city": {
+					"label": "City",
+					"placeholder": "New Haven"
+				}
+			},
+			"picture_input": {
+				"none": "No image",
+				"init": "Initializing...",
+				"video_not_avail": "VideoStream not available",
+				"cam_not_avail": "Camera not available",
+				"take_picture": "Take Picture",
+				"retake": "Retake",
+				"save": "Save"
+			}
+		},
+		"table": {
+			"row_state": {
+				"modified": "Modified",
+				"added": "Added",
+				"deleted": "Deleted"
+			},
+			"add": "Add",
+			"save": "Save"
+		},
+		"screen_lock": {
+			"lock": "Lock Screen",
+			"unlock": "Unlock"
+		},
+		"validation": {
+			"required": "This field is required",
+			"email": "This field must be a valid email",
+			"range": "This field must be between {0} and {1}"
+		}
+	},
+	"messages": {
+		"errors": {
+			"error": "Error",
+			"fetch": "Error while fetching data"
+		},
+		"success": "Success"
+	},
+	"routes": {
+		"dev_tools": "Dev Tools",
+		"app": {
+			"settings": {
+				"title": "Settings",
+				"general": "General",
+				"logout": "Logout",
+				"appearance": "Appearance"
+			},
+			"customers": {
+				"create": {
+					"title": "Create Customer",
+					"created": "Customer created",
+					"create": "Create"
+				},
+				"all": {
+					"title": "Customers"
+				}
+			},
+			"product_types": {
+				"title": "All Product Types"
+			}
+		},
+		"auth": {
+			"login": {
+				"title": "Login",
+				"login": "Login",
+				"reset_password": "Reset password",
+				"register": "Register",
+				"error": "Invalid username or password"
+			},
+			"register": {
+				"title": "Register",
+				"register": "Register",
+				"login": "Login",
+				"error": "Invalid username or password"
+			}
+		}
+	}
+}

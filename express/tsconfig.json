@@ -1,0 +1,7 @@
+{
+    "include": ["./index.ts"],
+    "exclude": [],
+    "compilerOptions": {
+        "outDir": "./"
+    }
+}

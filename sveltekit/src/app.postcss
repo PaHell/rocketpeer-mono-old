@@ -1,0 +1,49 @@
+@import 'remixicon/fonts/remixicon.css';
+
+@import 'style/header.postcss';
+@import 'style/text.postcss';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+html,
+body {
+	@apply w-screen h-screen overflow-hidden;
+}
+
+body {
+	@apply flex flex-col
+  bg-page dark:bg-dark-page
+  text-pri dark:text-dark-pri;
+}
+
+* {
+	&::selection {
+		@apply text-white bg-accent-600;
+	}
+
+	/* For Chrome & Safari */
+	&::-webkit-scrollbar {
+		@apply w-1 h-1 dark:w-2 dark:h-2;
+	}
+	&::-webkit-scrollbar-thumb {
+		@apply bg-gray-500 dark:bg-gray-700;
+	}
+	&::-webkit-scrollbar-track {
+		@apply bg-gray-300 dark:bg-transparent;
+	}
+
+	/* Standard version (Firefox only for now) */
+	scrollbar-color: gray transparent;
+}
+
+.dark * {
+	scrollbar-color: white transparent;
+}
+
+a,
+button {
+	@apply cursor-pointer;
+}
