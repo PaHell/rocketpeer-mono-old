@@ -3,64 +3,47 @@
 	import { default as Icon, Icons } from '$comps/general/Icon.svelte';
 	import TextInput from '$comps/controls/TextInput.svelte';
 	import { _ } from 'svelte-i18n';
-	import { onMount } from 'svelte';
-	import Gun from 'gun/gun';
-	import 'gun/sea';
-	import 'gun/axe';
-	import type { IGun, IGunInstance, IGunChain } from 'gun/types';
-	import type {IGunChainReference} from 'gun/types/chain';
+	import { onMount, SvelteComponent } from 'svelte';
+	import ChatMessage from '$src/components/ChatMessage.svelte';
+	import type { LayoutData } from './$types';
+	import { afterNavigate } from '$app/navigation';
 
-	interface AppState {
-		name: string
+	export let data: LayoutData;
+
+	let input = "message";
+	let refInput: TextInput<string> | undefined;
+	
+	window.onfocus = focusInput;
+	afterNavigate(focusInput);
+
+	function focusInput() {
+		refInput?.focus();
 	}
 	
-	let input = "message";
-	let messages: string[] = [];
-	let gun: IGunInstance<IGunChainReference<AppState, any, 'pre_root'>> | undefined;
-
-	onMount(() => {
-		return;
-		gun = new Gun<IGunChainReference<AppState, any, 'pre_root'>>({
-			peers: [import.meta.env.VITE_WS_GUN]
-		});
-		gun.get('messages')
-			.map()
-			.once((message: string) => {
-				messages.push(message);
-				messages = [...messages];
-			});
-	});
-
 	function sendMessage() {
-		const index = new Date().toISOString();
-		gun?.get('messages')
-			.get(index)
-			.put(input);
-	}
-
-	function deleteAllMessages() {
-		gun?.get('messages').map().put(null);
+		input = "";
+		focusInput();
 	}
 </script>
 
 <div id="text-channel">
 	<main>
-		<div class="messages">
-			<Button
-				icon={Icons.Delete}
-				variant={ButtonVariant.Secondary}
-				on:click={deleteAllMessages}/>
-			{#each messages as message}
-				<p class="text">{message}</p>
+		{#if data.channel._messages}
+			<div class="spacer"/>
+			{#each data.channel._messages as message}
+				<ChatMessage data={message}/>
 			{/each}
-		</div>
+		{/if}
 	</main>
 	<footer>
 		<TextInput
+			bind:this={refInput}
 			name="message"
 			bind:value={input}
+			on:enter={sendMessage}
 			hideLabel
-			autofocus/>
+			autofocus
+			disableAutocomplete/>
 		<Button
 			icon={Icons.Send}
 			text="Send"
@@ -72,14 +55,22 @@
 <style global lang="postcss">
 	#text-channel {
 		@apply flex flex-col
-		h-full;
+		h-full overflow-hidden;
 
 		& > main {
-			@apply flex-1 overflow-auto;
+			@apply flex-1 overflow-y-auto
+			flex flex-col items-stretch p-2;
+			& > .spacer {
+				@apply flex-1;
+			}
+			& > .chat-message {
+				@apply flex-none;
+			}
 		}
 
 		& > footer {
-			@apply flex-none flex;
+			@apply flex-none flex p-2
+			border-t border-gray-300 dark:border-gray-700;
 			& > .input-container {
 				@apply flex-1 mr-2;
 			}

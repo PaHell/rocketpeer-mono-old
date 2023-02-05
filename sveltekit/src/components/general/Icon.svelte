@@ -29,6 +29,9 @@
 		Microphone = 'mic-line',
 		Speakers = 'headphone-line',
 		UserImagePlaceholder = 'user-6-line',
+		Users = 'contacts-line',
+		Notification = 'notification-line',
+		Pinned = 'pushpin-line',
 	}
 </script>
 

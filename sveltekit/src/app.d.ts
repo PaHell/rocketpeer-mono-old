@@ -44,10 +44,15 @@ declare global {
 			}
 		}
 		namespace Database {
-			interface DatabaseElement {
+			interface Element {
 				id: number;
 			}
-			interface User extends DatabaseElement {
+			interface Timestamped {
+				created_at: string;
+				updated_at: string | null;
+				deleted_at: string | null;
+			}
+			interface User extends Element, Timestamped {
 				username: string;
 				display_name: string;
 				img: string;
@@ -63,24 +68,35 @@ declare global {
 					refresh_token: string;
 				}
 			}
-			namespace ServerModels {
-				interface Server extends DatabaseElement {
+			namespace Chat {
+				interface Message extends Element, Timestamped {
+					user_id: User["id"];
+					_user?: User;
+					channel_id: Servers.Channels.Channel["id"];
+					content: string;
+				}
+			}
+			namespace Servers {
+				interface Server extends Element {
 					name: string;
 					unread: number;
-					text_channel_id: number;
-					channels: Channel[];
+					main_text_channel_id: number;
+					_channels?: Channels.Channel[];
 				}
-				interface ChannelGroup extends DatabaseElement {
-					name: string;
-					order: number;
-					_channels: Channel[];
-				}
-				interface Channel extends DatabaseElement {
-					server_id: Server["id"];
-					name: string;
-					order: number;
-					is_voice_channel: boolean;
-					channel_group_id?: ChannelGroup["id"];
+				namespace Channels {
+					interface ChannelGroup extends Element {
+						name: string;
+						order: number;
+						_channels?: Channel[];
+					}
+					interface Channel extends Element {
+						server_id: Server["id"];
+						name: string;
+						order: number;
+						is_voice_channel: boolean;
+						channel_group_id: null | ChannelGroup["id"];
+						_messages?: Chat.Message[];
+					}
 				}
 			}
 		}

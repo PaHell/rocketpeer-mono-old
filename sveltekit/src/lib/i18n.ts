@@ -13,22 +13,25 @@ import {
 
 export interface Locale {
 	iso2: string;
+	moment: string;
 	name: string;
 }
-export const locales: App.General.Locale[] = [
+export const locales: Locale[] = [
 	{
 		iso2: 'en',
+		moment: 'en-gb',
 		name: 'English'
 	},
 	{
 		iso2: 'de',
+		moment: 'de',
 		name: 'Deutsch'
 	}
 ];
 
 export const localeInitialized = writable<boolean>(false);
 
-let userLocale: App.General.Locale | undefined;
+let userLocale: Locale | undefined;
 export const initLocale: Function = (function () {
 	if (!browser) return () => {};
 	console.log('init locale');
@@ -78,8 +81,8 @@ async function loadLocale(iso2: string): Promise<any> {
 }
 
 export const locale = (function () {
-	const { set, subscribe } = writable<App.General.Locale | undefined>(userLocale);
-	function setLocale(loc: App.General.Locale) {
+	const { set, subscribe } = writable<Locale | undefined>(userLocale);
+	function setLocale(loc: Locale) {
 		loadLocale(loc.iso2).then((_) => {
 			set(loc);
 			localStorage.setItem('locale', loc.iso2);

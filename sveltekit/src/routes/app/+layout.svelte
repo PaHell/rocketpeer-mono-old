@@ -129,7 +129,7 @@
 				@apply flex items-center
 				p-2;
 				&:first-child {
-					@apply flex-1;
+					@apply flex-1 overflow-hidden;
 				}
 				&:last-child {
 					@apply flex-none;
@@ -157,7 +157,7 @@
 		}
 
 		& > #sidebar {
-			@apply flex-none w-80
+			@apply flex-none w-72
 			flex flex-col;
 			& > header {
 				@apply border-gray-300 dark:border-gray-800;
@@ -229,6 +229,7 @@
 
 		& > #content {
 			@apply flex-1 flex flex-col
+			overflow-hidden
 			bg-gray-100 dark:bg-dark-card
 			border-l
 			border-gray-300 dark:border-gray-700
@@ -243,7 +244,6 @@
 				flex items-stretch justify-items-stretch;
 
 				& > div {
-					@apply p-2;
 					&:first-child {
 						@apply flex-1;
 					}
@@ -253,10 +253,6 @@
 						border-gray-300 dark:border-gray-700;
 					}
 				}
-			}
-
-			& > .footer {
-				@apply flex-none border-t border-gray-300 dark:border-gray-700;
 			}
 		}
 	}

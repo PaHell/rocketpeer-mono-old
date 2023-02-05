@@ -30,8 +30,8 @@
     <UserImage {user} />
     <div class="status {classes[user.status]}"></div>
     <main>
-        <p class="text bold">{user.display_name}</p>
-        <p class="text text-label sec">#{user.username}</p>
+        <p class="text bold ellipsis">{user.display_name}</p>
+        <p class="text text-label sec ellipsis">#{user.username}</p>
     </main>
 </Button>
 
@@ -47,7 +47,7 @@
             rounded-full;
         }
         & > main {
-            @apply ml-2 flex-1;
+            @apply ml-1 flex-1 overflow-hidden;
             & > .text {
                 @apply leading-none;
                 &:first-child {

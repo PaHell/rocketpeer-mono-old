@@ -35,6 +35,7 @@
 	export let type: string = 'text';
 	export let alignRight: boolean = false;
 	export let disableTabIndex: boolean = false;
+	export let disableAutocomplete: boolean = false;
 	export let autofocus: boolean = false;
 	export let rules: [ValidationRuleName, ...number[]][] = [];
 	export let keyFocusSwitch: boolean = true;
@@ -139,6 +140,7 @@
 				placeholder=""
 				{disabled}
 				{name}
+				autocomplete={disableAutocomplete ? 'off': name}
 				on:input={debouncedChange}
 				on:change={debouncedChange}
 				on:focus={onFocus}

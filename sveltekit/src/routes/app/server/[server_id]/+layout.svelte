@@ -17,9 +17,9 @@
 	import UserDisplay from '$src/components/user/UserDisplay.svelte';
 	
 	export let data: LayoutData;
-	let server: App.Database.ServerModels.Server | undefined;
-	let serverChannels: (App.Database.ServerModels.Channel | App.Database.ServerModels.ChannelGroup)[] = [];
-
+	let server: App.Database.Servers.Server | undefined;
+	let serverChannels: (App.Database.Servers.Channels.Channel |
+		App.Database.Servers.Channels.ChannelGroup)[] = [];
 
 	let micOff = false;
 	let speakersOff = false;
@@ -36,8 +36,8 @@
 		var serverId = parseInt($page.params.server_id);
 		// find matching server
 		server = data.servers.find(s => s.id === serverId);
-		const ungrouped: App.Database.ServerModels.Channel[] = [];
-		const groups: App.Database.ServerModels.ChannelGroup[] = [...data.channel_groups];
+		const ungrouped: App.Database.Servers.Channels.Channel[] = [];
+		const groups: App.Database.Servers.Channels.ChannelGroup[] = [...data.channel_groups];
 		// clear channels in groups
 		groups.forEach(g => g._channels = []);
 		// find ungrouped channels, add others to groups
@@ -186,7 +186,8 @@
 				line-height: 1.125;
 			}
 			& > .user-display {
-				@apply flex-1 h-14 pl-2 pr-1 mr-2
+				@apply flex-1 h-14 pl-2 pr-2 mr-2
+				overflow-hidden
 				border-y-0 border-l-0 border-gray-300 dark:border-gray-800
 				rounded-none text-left;
 				&:hover {
