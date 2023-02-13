@@ -1,9 +1,9 @@
-<script lang="ts" context="module">
+<script lang="typescript" context="module">
 	import { afterNavigate, goto } from '$app/navigation';
 	import { createEventDispatcher, onMount } from 'svelte';
 </script>
 
-<script lang="ts">
+<script lang="typescript">
     interface $$Slots {
         default: {
             active: boolean,

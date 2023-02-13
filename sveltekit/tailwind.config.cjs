@@ -18,11 +18,23 @@ module.exports = {
 			transparent: colors.transparent,
 			black: colors.black,
 			white: colors.white,
-			gray: colors.gray,
+			gray: {
+				50: '#f9fafb',
+				100: '#f3f4f6',
+				200: '#e5e7eb',
+				300: '#d1d5db',
+				400: '#9ca3af',
+				500: '#6b7280',
+				600: '#4b5563',
+				700: '#374151',
+				800: '#1f2937',
+				900: '#111827',
+				1000: '#0A0A0A'
+			},
 			accent: colors.indigo,
 			success: colors.indigo,
 			warning: colors.amber,
-			danger: colors.red,
+			danger: colors.red
 		}),
 		columns: {
 			auto: 'auto',
@@ -120,15 +132,7 @@ module.exports = {
 		backdropOpacity: ({ theme }) => theme('opacity'),
 		backdropSaturate: ({ theme }) => theme('saturate'),
 		backdropSepia: ({ theme }) => theme('sepia'),
-		backgroundColor: ({ theme }) => ({
-			page: theme('colors.gray.200'),
-			card: theme('colors.gray.200'),
-			dark: {
-				page: theme('colors.gray.900'),
-				card: theme('colors.gray.800'),
-			},
-			...theme('colors')
-		}),
+		backgroundColor: ({ theme }) => theme('colors'),
 		backgroundImage: {
 			none: 'none',
 			'gradient-to-t': 'linear-gradient(to top, var(--tw-gradient-stops))',
@@ -196,8 +200,8 @@ module.exports = {
 				hover: theme('colors.gray.600', 'currentColor'),
 				active: theme('colors.gray.700', 'currentColor'),
 				disabled: theme('colors.gray.600', 'currentColor'),
-				divider: theme('colors.gray.800', 'currentColor'),
-			},
+				divider: theme('colors.gray.800', 'currentColor')
+			}
 		}),
 		borderOpacity: ({ theme }) => theme('opacity'),
 		borderRadius: {
@@ -835,7 +839,7 @@ module.exports = {
 			dark: {
 				pri: theme('colors.gray.100'),
 				sec: theme('colors.gray.400'),
-				tri: theme('colors.gray.600'),
+				tri: theme('colors.gray.600')
 			},
 			icon: {
 				pri: theme('colors.gray.800'),
@@ -844,10 +848,10 @@ module.exports = {
 				dark: {
 					pri: theme('colors.gray.200'),
 					sec: theme('colors.gray.400'),
-					tri: theme('colors.gray.600'),
-				},
+					tri: theme('colors.gray.600')
+				}
 			},
-			...theme('colors'),
+			...theme('colors')
 		}),
 		textDecorationColor: ({ theme }) => theme('colors'),
 		textDecorationThickness: {

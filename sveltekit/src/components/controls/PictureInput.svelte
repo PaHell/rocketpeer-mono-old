@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="typescript" context="module">
 	import { default as Icon, Icons } from '$comps/general/Icon.svelte';
 	import Overlay, { OverlayPosition } from '$comps/controls/Overlay.svelte';
 	import { createEventDispatcher, onDestroy, onMount, SvelteComponent } from 'svelte';
@@ -15,7 +15,7 @@
 	}
 </script>
 
-<script lang="ts">
+<script lang="typescript">
 	export let value: string | undefined = undefined;
 	export let css: string = '';
 	let preview: string | undefined;

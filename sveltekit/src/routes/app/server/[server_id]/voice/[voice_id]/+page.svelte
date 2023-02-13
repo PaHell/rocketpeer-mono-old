@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="typescript">
 	import Button from '$comps/controls/Button.svelte';
 	import { default as Icon, Icons } from '$comps/general/Icon.svelte';
 	import TextInput from '$comps/controls/TextInput.svelte';

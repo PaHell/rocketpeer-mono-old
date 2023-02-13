@@ -1,21 +1,24 @@
-<script lang="ts" context="module">
+<script lang="typescript" context="module">
 	import { _ } from 'svelte-i18n';
 	import { default as Icon, Icons } from '$comps/general/Icon.svelte';
 	export enum ButtonVariant {
 		Primary = 'button-pri',
 		Secondary = 'button-sec',
 		Transparent = 'button-trans',
-		Card = 'button-card',
-		None = ''
+		None = '',
 	}
 	export enum ButtonAlignment {
 		Left = 'button-left',
 		Center = 'button-center',
-		Right = 'button-right'
+		Right = 'button-right',
+	}
+	export enum ButtonStyle {
+		None = '',
+		Card = 'button-card',
 	}
 </script>
 
-<script lang="ts">
+<script lang="typescript">
 	export let text: string | undefined = undefined;
 	export let icon: Icons | undefined = undefined;
 	export let variant: ButtonVariant = ButtonVariant.Secondary;
@@ -25,6 +28,7 @@
 	export { classes as class };
 	export let disableTabIndex: boolean = false;
 	export let align: ButtonAlignment = ButtonAlignment.Left;
+	export let style: ButtonStyle = ButtonStyle.None;
 </script>
 
 
@@ -33,7 +37,7 @@
 		type="button"
 		{disabled}
 		class:active
-		class="button {variant} {align} {classes}"
+		class="button {variant} {align} {style} {classes}"
 		tabindex={disabled || disableTabIndex ? -1 : 0}
 	>
 		{#if icon}
@@ -52,11 +56,7 @@
         h-10 px-3 border rounded font-medium
         select-none outline-0
 		transition-all;
-
-		&:focus {
-			@apply relative;
-		}
-
+		/* CONTENT LAYOUT */
 		& * {
 			@apply border-inherit text-inherit transition-colors;
 		}
@@ -76,7 +76,7 @@
 		& > .icon:first-child + .text:last-child {
 			@apply mr-[4px];
 		}
-
+		/* ALIGNMENT */
 		&.button-center {
 			@apply justify-center;
 		}
@@ -93,42 +93,38 @@
 			& > .icon {
 			}
 		}
-
-		&.active {
+		/* LIFT WHEN FOCUSED/ACTIVE */
+		&.active,
+		&:focus,
+		&:active {
 			@apply relative;
 		}
-
-		/* GENERAL STYLES */
-
+		/* FOCUS RING */
 		&.button-pri,
 		&.button-sec {
-			@apply shadow-sm;
-			&:hover {
-				@apply shadow;
-			}
-		}
-		&.button-pri,
-		&.button-sec,
-		&.button-card {
-			/* CLICK/FOCUS RING */
 			&:focus {
 				@apply shadow-inner ring-2 ring-accent-500
-				ring-offset-2 ring-offset-gray-100
-				dark:ring-offset-gray-900;
+				ring-offset-0;
+				@apply border-transparent !important;
+			}
+		}
+		/* SHADOW */
+		&.button-pri,
+		&.button-sec {	
+			@apply shadow-sm;
+			&.active {
+				@apply shadow-sm;
+			}
+			&:hover {
+				@apply shadow;
 			}
 			&:active {
 				@apply shadow-inner;
 			}
-			&.active {
-				@apply shadow-sm;
-			}
 		}
-
-		/* VARIANTS */
-
+		/* TEXT/ICON STYLES */
 		&.button-sec,
-		&.button-trans,
-		&.button-card {
+		&.button-trans {
 			& > .text {
 				@apply text-sec dark:text-dark-sec;
 			}
@@ -155,7 +151,7 @@
 				}
 			}
 		}
-
+		/* PRIMARY */
 		&.button-pri {
 			@apply bg-accent-500 border-accent-600
       		dark:bg-accent-600 dark:border-accent-500;
@@ -169,57 +165,32 @@
 				@apply bg-accent-600 border-accent-600 dark:bg-accent-400 dark:border-accent-400;
 			}
 		}
-
+		/* SECONDARY */
 		&.button-sec {
-			@apply bg-gray-50 border-gray-300
+			@apply bg-white border-gray-300
 			dark:bg-gray-800 dark:border-gray-700;
-			&:hover {
-				@apply bg-white dark:bg-gray-700;
-			}
-			&:focus {
-				@apply ring-2 ring-accent-500
-			ring-offset-2 ring-offset-gray-100
-			dark:ring-offset-gray-900;
-			}
-			&:active {
-				@apply bg-gray-100 dark:bg-gray-800;
-			}
 		}
-
+		/* TRANSPARENT */
 		&.button-trans {
 			@apply bg-transparent border-transparent;
 			&:hover,
 			&:focus {
-				@apply bg-gray-200 border-gray-100
-	  			dark:bg-gray-700 dark:border-gray-700;
-			}
-			&:focus {
-				@apply ring-2 ring-accent-500
-			ring-offset-2 ring-offset-gray-100
-			dark:ring-offset-gray-900;
+				@apply bg-gray-200 border-gray-300
+	  			dark:bg-gray-800 dark:border-gray-700;
 			}
 			&:active {
 				@apply bg-gray-300 dark:bg-gray-800;
 			}
 		}
-
+		/* CARD */
 		&.button-card {
-			@apply border-transparent dark:border-transparent;
-			&:hover {
-				@apply border-gray-300 dark:border-gray-800;
-			}
-			&:focus {
-				@apply bg-gray-200 dark:bg-gray-900
-				border-gray-300 dark:border-gray-800;
-			}
 			&.active {
-				@apply bg-gray-50 dark:bg-gray-800
+				@apply shadow-sm
+				bg-white dark:bg-gray-800
 				border-gray-300 dark:border-gray-700;
 			}
 		}
-
 		/* DISABLED */
-
 		&:disabled {
 			@apply pointer-events-none;
 			@apply shadow-none

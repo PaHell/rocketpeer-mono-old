@@ -1,14 +1,14 @@
-<script lang="ts">
-	import Button, { ButtonVariant } from '$comps/controls/Button.svelte';
+<script lang="typescript">
+	import Button, { ButtonAlignment, ButtonStyle, ButtonVariant } from '$comps/controls/Button.svelte';
 	import Icon, { Icons } from '$comps/general/Icon.svelte';
-	import type { NavigationItem as NavItem } from '$src/components/controls/Navigation.svelte';
-	import Navigation from "$src/components/controls/Navigation.svelte";
 	import { goto } from '$app/navigation';
 	import Font from '$src/components/branding/Font.svelte';
 	import type { LayoutData } from './$types';
 	import { browser } from '$app/environment';
 	import { onMount } from 'svelte';
 	import NavigationItem from '$src/components/controls/NavigationItem.svelte';
+	import type { NavItem } from '$src/components/controls/Navigation.svelte';
+	import { connectedVoiceChannel } from '$src/store';
 	
 	export let data: LayoutData;
 
@@ -16,98 +16,95 @@
 		acc.push({
 			title: server.name,
 			icon: Icons.Home,
-			path: `/app/server/${server.id}/text/${server.text_channel_id}`
+			path: `/app/server/${server.id}/text/${server.main_text_channel_id}`,
 		});
 		return acc;
 	}, [] as NavItem[]);
 </script>
 
-
-	<div id="layout-main">
-		<nav id="dock">
-			<Button
-				variant={ButtonVariant.None}
-				on:click={() => goto('/app')}>
-				<Font/>
-			</Button>
-			<Navigation
-				match={3}
-				pathSelector={item => item.path}
-				items={_servers}
-				let:item
-				let:active
-				let:redirect>
-				<Button
-					variant={ButtonVariant.Card}
-					on:click={redirect}
-					{active}>
-					<Icon name={item.icon} class="large" />
-				</Button>
-			</Navigation>
-			<div class="navigation">
+<template>
+	<div id="layout-app" class="layout-pane row items-stretch">
+		<nav class="layout-pane {$connectedVoiceChannel ? 'padded' : ''}">
+			<div>
 				<NavigationItem
-					path="/app/settings"
-					match={2}
+					path={'/app'}
+					match={1}
 					let:active
 					let:redirect>
 					<Button
-						variant={ButtonVariant.Card}
-						on:click={redirect}
-						{active}>
-						<Icon name={Icons.Settings} class="large" />
+						variant={ButtonVariant.Transparent}
+						style={ButtonStyle.Card}
+						class="branding"
+						active={false}
+						on:click={redirect}>
+						<Font/>
 					</Button>
 				</NavigationItem>
+			</div>
+			<div id="servers" class="fill">
+				{#each _servers as item (item.path)}
+					<NavigationItem
+						path={item.path}
+						match={3}
+						let:active
+						let:redirect>
+							<Button
+								variant={ButtonVariant.Transparent}
+								style={ButtonStyle.Card}
+								align={ButtonAlignment.Center}
+								on:click={redirect}
+								{active}>
+								<Icon name={item.icon} class="large" />
+							</Button>
+					</NavigationItem>
+				{/each}
 			</div>
 		</nav>
 		<slot/>
 	</div>
-
+</template>
 
 <style global lang="postcss">
-	#layout-main {
-		@apply h-full flex;
-
-		& > #dock {
-			@apply flex-none
-			flex flex-col items-center justify-center
-			bg-gray-200 dark:bg-gray-900
+	#layout-app.layout-pane {
+		& > nav.layout-pane {
+			@apply w-20 items-stretch
 			border-r
 			border-gray-300 dark:border-gray-800;
-
-			& > .button {
-				@apply w-full relative h-14
-				bg-transparent shadow-none rounded-none
-				border-x-0 border-t-0
-				border-gray-300 dark:border-gray-800;
+			&.padded {
+				padding-bottom: calc(7rem + 2px);
+			}
+			& .branding.button {
+				@apply w-full h-14 mr-[-1px]
+				relative
+				border-l-0 border-t-0
+				rounded-none;
 				width: calc(100% + 1px);
 				& > svg > path {
-					@apply fill-accent-500 transition-colors;
-				}
-
-				&:hover {
-					@apply bg-accent-500 border-accent-500;
-					& > svg > path {
-						@apply fill-white;
-					}
+					@apply fill-accent-500;
 				}
 			}
 
-			& > .navigation {
-				@apply flex flex-col p-2;
-				&:not(:last-child) {
-					@apply flex-1;
-				}
+			& > #servers {
+				@apply p-2;
 				& > .button {
 					@apply flex-none
-					flex items-center justify-center
 					w-16 h-16 rounded-lg;
 					&:not(:last-child) {
 						@apply mb-1;
+					}
+					&:hover,
+					&.active {
+						& > svg > path {
+							@apply fill-white;
+						}
 					}
 					&.active {
 						@apply rounded-3xl;
 						&:hover {
 							@apply rounded-lg delay-200;
+						}
+						& > .icon {
+							@apply text-accent-500;
 						}
 					}
 					&:not(.active) {
@@ -118,8 +115,8 @@
 					}
 				}
 			}
-		}
 
+		}
 		& > #sidebar > header,
 		& > #content > header {
 			@apply flex items-center
@@ -155,102 +152,40 @@
 				}
 			}
 		}
-
 		& > #sidebar {
-			@apply flex-none w-72
-			flex flex-col;
+			@apply w-72 ml-[-1px]
+			border-x border-l
+			border-gray-300 dark:border-gray-800;
 			& > header {
 				@apply border-gray-300 dark:border-gray-800;
 			}
-			& > main {
-				@apply flex-1;
-			}
-			& > footer {
-				@apply border-t border-gray-300 dark:border-gray-800;
-			}
-			& .grouped-navigation {
-				& > .button {
-					@apply w-full px-2
-					border-x-0 border-b-0 rounded-none
-					shadow-none ring-0 ring-offset-0;
-					&:focus,
-					&:active {
-						@apply border-transparent;
-						& > .text {
-							@apply text-accent-500;
-						}
-					}
-					&:hover {
-						@apply border-gray-300 dark:border-gray-800;
-					}
-					& > .icon {
-						@apply text-icon-sec dark:text-icon-dark-sec;
-					}
-					& > .text {
-						@apply text-label uppercase
-						text-sec dark:text-dark-sec;
-						letter-spacing: .1px;
-					}
-					&:not(.expanded) {
-						& > .icon {
-							@apply rotate-180;
-						}
-					}
-				}
-			}
-			& .navigation {
-				@apply flex flex-col px-2;
-				&:nth-child(2) {
-					@apply my-2;
-				}
-				& > header {
-					@apply flex mb-1;
-					& > .button {
-						&:first-child {
-							@apply flex-1;
-							&:hover {
-								@apply border-gray-300 dark:border-gray-800;
-							}
-						}
-						&:last-child {
-							@apply relative opacity-0 pointer-events-none
-							bg-transparent rounded-l-none
-							transition-[opacity];
-							margin-left: calc(-2.5rem - 2px);
-						}
-					}
-					&:hover > .button:last-child {
-						@apply opacity-100 pointer-events-auto
-						border-gray-300 dark:border-gray-800;
-					}
-				}
-			}
 		}
-
 		& > #content {
-			@apply flex-1 flex flex-col
-			overflow-hidden
-			bg-gray-100 dark:bg-dark-card
+			@apply flex-1 ml-[-1px]
+			overflow-y-hidden
+			bg-white dark:bg-gray-800
 			border-l
 			border-gray-300 dark:border-gray-700
 			shadow-sm;
 
 			& > header {
-				@apply border-gray-300 dark:border-gray-700;
+				@apply border-gray-300 dark:border-gray-700
+				shadow-sm relative;
 			}
 
 			& > main {
-				@apply flex-1 h-full overflow-hidden
+				@apply overflow-y-hidden
 				flex items-stretch justify-items-stretch;
 
 				& > div {
 					&:first-child {
-						@apply flex-1;
+						flex: 3 2 auto;
 					}
 					&:nth-child(2) {
-						@apply flex-none w-80
-						border-l
+						@apply border-l
+						bg-gray-100 dark:bg-gray-800
 						border-gray-300 dark:border-gray-700;
+						flex: 1 1 20rem;
 					}
 				}
 			}

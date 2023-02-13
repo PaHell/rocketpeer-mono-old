@@ -1,8 +1,9 @@
-<script lang="ts">
+<script lang="typescript">
 	import Button, { ButtonVariant } from '$comps/controls/Button.svelte';
 	import Icon, { Icons } from '$comps/general/Icon.svelte';
 	import TextInput from '$src/components/controls/TextInput.svelte';
-	import UserDisplay, { UserStatus } from '$src/components/user/UserDisplay.svelte';
+	import { UserStatus } from '$src/components/user/user';
+	import UserDisplay from '$src/components/user/UserDisplay.svelte';
 	import type { LayoutData } from './$types';
 
 	export let data: LayoutData;
@@ -42,7 +43,7 @@
 			class="ml-2"/>
 	</div>
 </header>
-<main>
+<main class="fill">
 	<div>
 		<slot />
 	</div>
@@ -51,7 +52,7 @@
 			{#each grouped as group}
 				<p class="text sec bold">{group[0]}</p>
 				{#each group[1] as user}
-					<UserDisplay {user} />
+					<UserDisplay {user} variant={ButtonVariant.Transparent} showStatus />
 				{/each}
 			{/each}
 		{/if}
@@ -74,8 +75,12 @@
 			}
 		}
 
-		& > .user-display {
-			@apply h-12 px-1 text-left;
+		& > .button.user-display {
+			@apply h-12 px-1 text-left border-transparent shadow-none;
+			& > .user-image {
+				@apply border-gray-300 dark:border-gray-600;
+			}
 		}
+
 	}
 </style>

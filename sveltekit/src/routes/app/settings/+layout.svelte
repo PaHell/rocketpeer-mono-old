@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="typescript">
 	import Button, { ButtonVariant } from '$comps/controls/Button.svelte';
 	import Icon, { Icons } from '$comps/general/Icon.svelte';
 	import { onMount } from 'svelte';

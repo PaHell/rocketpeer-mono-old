@@ -1,8 +1,8 @@
-<script lang="ts" context="module">
+<script lang="typescript" context="module">
 	import Logo from '$comps/branding/Logo.svelte';
 </script>
 
-<script lang="ts">
+<script lang="typescript">
 </script>
 
 

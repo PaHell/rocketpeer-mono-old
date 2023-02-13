@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="typescript">
 	import { goto } from '$app/navigation';
 	import Font from '$comps/branding/Font.svelte';
 	import Copyright from "$comps/templates/Copyright.svelte";
@@ -42,8 +42,8 @@
 			@apply flex flex-col
 				w-full max-w-md p-8 my-6
 				rounded-lg shadow-lg
-				border border-card dark:border-dark-card
-				bg-card dark:bg-dark-card;
+				border border-gray-300 dark:border-gray-700
+				bg-gray-50 dark:bg-gray-800;
 		}
 		& > footer {
 			@apply text-center;

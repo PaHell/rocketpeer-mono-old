@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="typescript">
 	import Select from '$comps/controls/selects/Select.svelte';
 	import { locale, locales } from '$lib/i18n';
 </script>

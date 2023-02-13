@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="typescript" context="module">
 	import { default as Icon, Icons } from '$comps/general/Icon.svelte';
 	import { _ } from 'svelte-i18n';
 	export enum AlertVariant {
@@ -8,7 +8,7 @@
 	}
 </script>
 
-<script lang="ts">
+<script lang="typescript">
 	export let title: string | undefined = undefined;
 	export let text: string | undefined = undefined;
 	export let icon: Icons | undefined = undefined;

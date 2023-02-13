@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="typescript">
 	import { onDestroy, onMount, setContext, SvelteComponent } from 'svelte';
 	import Column from '$comps/table/Column.svelte';
 	import Row, { classes, RowState, translations } from '$comps/table/Row.svelte';

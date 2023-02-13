@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="typescript" context="module">
 	// import css bootstrap
 	import '$src/app.postcss';
 	// other imports
@@ -22,7 +22,9 @@
 	export const redirectUnauthed = '/auth/login';
 </script>
 
-<script lang="ts">
+<script lang="typescript">
+	import MusicPlayer from "$src/components/MusicPlayer.svelte";
+
 	let refDevTools: Overlay;
 	let devToolsOpened = false;
 	initLocale();
@@ -55,7 +57,7 @@
 	}
 </script>
 
-
+<template>
 	{#if import.meta.env.DEV}
 		<Overlay
 			bind:this={refDevTools}
@@ -74,10 +76,12 @@
 		</Overlay>
 	{/if}
 	{#if $localeInitialized}
+		<MusicPlayer/>
 		<slot />
 	{:else}
 		<FullscreenLoading />
 	{/if}
+</template>
 
 
 <style global lang="postcss">

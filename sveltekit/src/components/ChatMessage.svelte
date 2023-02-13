@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="typescript" context="module">
     import UserImage from "$comps/user/UserImage.svelte";
     import Button, { ButtonAlignment, ButtonVariant } from "$comps/controls/Button.svelte";
     import moment from "moment";
@@ -7,7 +7,7 @@
 	import { time } from "$lib/time";
 </script>
 
-<script lang="ts">
+<script lang="typescript">
     export let data: App.Database.Chat.Message;
 
     locale.subscribe((locale) => {
@@ -29,12 +29,23 @@
 
 <style global lang="postcss">
     .chat-message {
-        @apply flex items-start mb-2;
+        @apply flex items-start p-2
+        border-y border-transparent
+        transition-colors;
+        &:hover {
+            @apply bg-gray-100 dark:bg-gray-900
+            border-gray-300 dark:border-gray-700;
+        }
+        &:active {
+            @apply bg-gray-200 dark:bg-gray-900
+            border-gray-300 dark:border-gray-700;
+        }
         &:first-child {
             @apply mt-2;
         }
         & > .user-image {
-            @apply flex-none mr-2;
+            @apply flex-none mr-2
+            border-gray-300 dark:border-gray-600;
         }
         & > main {
             @apply flex-1 grid grid-cols-2 items-center;

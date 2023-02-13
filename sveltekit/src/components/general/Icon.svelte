@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="typescript" context="module">
 	export enum Icons {
 		Home = 'home-line',
 		Settings = 'settings-line',
@@ -32,10 +32,11 @@
 		Users = 'contacts-line',
 		Notification = 'notification-line',
 		Pinned = 'pushpin-line',
+		ScrollDown = 'arrow-down-s-line',
 	}
 </script>
 
-<script lang="ts">
+<script lang="typescript">
 	export let name: Icons = Icons.Home;
 	let classes: string = '';
 	export { classes as class };

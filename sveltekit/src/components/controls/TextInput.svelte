@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="typescript" context="module">
 	import { default as Icon, Icons } from '$comps/general/Icon.svelte';
 	import {
 		createEventDispatcher,
@@ -14,7 +14,7 @@
 	import type { FormContext } from '../general/Form.svelte';
 </script>
 
-<script lang="ts" strictEvents>
+<script lang="typescript" strictEvents>
 	// TYPE
 	type T = $$Generic<string | number>;
 	interface $$Events {

@@ -1,4 +1,4 @@
-<script lang="ts" strictEvents>
+<script lang="typescript" strictEvents>
 	import Button, { ButtonVariant } from '$comps/controls/Button.svelte';
 	import { default as Icon, Icons } from '$comps/general/Icon.svelte';
 	import { createEventDispatcher, onMount, SvelteComponent, type ComponentEvents } from 'svelte';

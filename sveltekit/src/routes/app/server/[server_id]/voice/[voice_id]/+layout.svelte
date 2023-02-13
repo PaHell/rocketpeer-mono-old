@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="typescript">
 	import Button, { ButtonVariant } from '$comps/controls/Button.svelte';
 	import Icon, { Icons } from '$comps/general/Icon.svelte';
 	import TextInput from '$src/components/controls/TextInput.svelte';
@@ -17,7 +17,7 @@
 	<div>
 	</div>
 </header>
-<main>
+<main class="fill">
 	<div>
 		<slot />
 	</div>

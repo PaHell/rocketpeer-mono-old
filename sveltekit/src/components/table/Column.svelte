@@ -1,6 +1,6 @@
 <svelte:options accessors />
 
-<script lang="ts">
+<script lang="typescript">
 	import { getContext, onDestroy, onMount, setContext, SvelteComponent } from 'svelte';
 
 	type T = $$Generic;

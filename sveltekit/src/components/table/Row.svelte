@@ -1,6 +1,6 @@
 <svelte:options accessors />
 
-<script lang="ts" context="module">
+<script lang="typescript" context="module">
 	import { getContext, onDestroy, onMount, setContext, SvelteComponent } from 'svelte';
 	import Column from '$comps/table/Column.svelte';
 	import Button, { ButtonVariant } from '$comps/controls/Button.svelte';
@@ -28,7 +28,7 @@
 	};
 </script>
 
-<script lang="ts">
+<script lang="typescript">
 	type T = $$Generic;
 	interface $$Slots {
 		default: {

@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="typescript">
 	import Select from '$comps/controls/selects/Select.svelte';
 	import { _ } from 'svelte-i18n';
 	import { theme, themes } from '$lib/theme';

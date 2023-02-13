@@ -6,23 +6,24 @@ const config = {
 	// Consult https://kit.svelte.dev/docs/integrations#preprocessors
 	// for more information about preprocessors
 	preprocess: sveltePreprocess({
+		typescript: true,
 		postcss: true
 	}),
 
 	kit: {
 		adapter: adapter({
-			out: 'build',
+			out: 'build'
 		}),
 		alias: {
-			'$src': './src',
-			'$comps': './src/components',
-			'$lib': './src/lib',
-			'$routes': './src/routes',
+			$src: './src',
+			$comps: './src/components',
+			$lib: './src/lib',
+			$routes: './src/routes'
 		},
 		files: {
-			assets: '../public',
-		},
-	},
+			assets: '../public'
+		}
+	}
 };
 
 export default config;

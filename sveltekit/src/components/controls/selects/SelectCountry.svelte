@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="typescript">
 	import Select from '$comps/controls/selects/Select.svelte';
 	import { countries } from '$lib/countries';
 	import { createEventDispatcher, onMount } from 'svelte';

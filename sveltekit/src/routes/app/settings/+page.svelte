@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="typescript">
 	import SelectViewSize from '$comps/controls/selects/SelectViewSize.svelte';
 	import SelectLanguage from '$comps/controls/selects/SelectLanguage.svelte';
 	import SelectTheme from '$comps/controls/selects/SelectTheme.svelte';

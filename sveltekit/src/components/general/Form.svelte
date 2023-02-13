@@ -1,15 +1,15 @@
-<script lang="ts" context="module">
+<script lang="typescript" context="module">
+	import { setContext } from 'svelte';
 	export interface FormContext {
 		(field: string, valid: boolean): void;
 	}
 </script>
 
-<script lang="ts">
-	import { setContext } from 'svelte';
-
+<script lang="typescript">
 	export let id: string = '';
 	export let allValid: boolean = false;
 	let fields: { [field: string]: boolean } = {};
+	let method: RequestInit["method"] = 'POST';
 
 	setContext<FormContext>('form', (field: string, valid: boolean) => {
 		fields[field] = valid;
@@ -18,7 +18,7 @@
 </script>
 
 
-	<form {id}>
+	<form {id} action={method}>
 		<slot />
 	</form>
 

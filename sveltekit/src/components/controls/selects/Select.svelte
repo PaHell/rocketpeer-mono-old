@@ -1,6 +1,6 @@
 <svelte:options accessors={true} immutable={true} />
 
-<script lang="ts" context="module">
+<script lang="typescript" context="module">
 	// IMPORT
 	import Button, { ButtonVariant } from '$comps/controls/Button.svelte';
 	import { default as Icon, Icons } from '$comps/general/Icon.svelte';
@@ -20,7 +20,7 @@
 	import type { FormContext } from '$src/components/general/Form.svelte';
 </script>
 
-<script lang="ts" strictEvents>
+<script lang="typescript" strictEvents>
 	// TYPE
 	type T = $$Generic;
 	interface $$Slots {

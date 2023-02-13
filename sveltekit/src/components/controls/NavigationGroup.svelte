@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="typescript" context="module">
 	import Button, { ButtonVariant } from '$comps/controls/Button.svelte';
 	import Icon, { Icons } from '$comps/general/Icon.svelte';
 	import type { NavItem } from '$src/components/controls/Navigation.svelte';
@@ -16,9 +16,10 @@
 	}
 </script>
 
-<script lang="ts">
+<script lang="typescript">
 	export let items: NavGroup[] = [];
 	export let match: number = 0;
+	export let variant = ButtonVariant.Transparent;
 </script>
 
 <div class="navigation-group">
@@ -32,7 +33,7 @@
 		let:active
 		let:redirect>
 		<Button
-			variant={ButtonVariant.Card}
+			{variant}
 			text={item.title}
 			icon={item.icon}
 			on:click={redirect}

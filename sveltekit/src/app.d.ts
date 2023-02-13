@@ -70,9 +70,9 @@ declare global {
 			}
 			namespace Chat {
 				interface Message extends Element, Timestamped {
-					user_id: User["id"];
+					user_id: User['id'];
 					_user?: User;
-					channel_id: Servers.Channels.Channel["id"];
+					channel_id: Servers.Channels.Channel['id'];
 					content: string;
 				}
 			}
@@ -81,26 +81,35 @@ declare global {
 					name: string;
 					unread: number;
 					main_text_channel_id: number;
-					_channels?: Channels.Channel[];
 				}
 				namespace Channels {
 					interface ChannelGroup extends Element {
 						name: string;
 						order: number;
-						_channels?: Channel[];
+						_channels?: (TextChannel | VoiceChannel)[];
+					}
+					interface VoiceChannelUser extends Element {
+						user_id: User['id'];
+						_user?: User;
+						channel_id: VoiceChannel['id'];
+						is_live: boolean;
+						is_talking: boolean;
 					}
 					interface Channel extends Element {
-						server_id: Server["id"];
+						server_id: Server['id'];
 						name: string;
 						order: number;
-						is_voice_channel: boolean;
-						channel_group_id: null | ChannelGroup["id"];
+						channel_group_id: null | ChannelGroup['id'];
+					}
+					interface TextChannel extends Channel {
 						_messages?: Chat.Message[];
+					}
+					interface VoiceChannel extends Channel {
+						_voice_users?: VoiceChannelUser[];
 					}
 				}
 			}
 		}
-
 	}
 }
 

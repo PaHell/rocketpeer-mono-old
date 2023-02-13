@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="typescript">
 	import Button, { ButtonVariant } from '$comps/controls/Button.svelte';
 	import Icon, { Icons } from '$comps/general/Icon.svelte';
 	import { getContext, onMount, setContext } from 'svelte';
@@ -12,17 +12,33 @@
 	import type { LayoutData } from './$types';
 	import { page } from '$app/stores';
 	import NavigationItem from '$src/components/controls/NavigationItem.svelte';
-	import Channel from './Channel.svelte';
 	import UserImage from '$src/components/user/UserImage.svelte';
 	import UserDisplay from '$src/components/user/UserDisplay.svelte';
+	import VoiceConnection from '$src/components/user/VoiceConnection.svelte';
+	import { connectedVoiceChannel } from '$src/store';
+	import VoiceChannel from '$src/components/VoiceChannel.svelte';
+	import TextChannel from '$src/components/TextChannel.svelte';
+
+	enum ChannelType {
+		Text,
+		Voice,
+	}
+
+	const components = [
+		TextChannel,
+		VoiceChannel,
+	]
+
+	interface TypedChannel {
+		type: ChannelType;
+	}
 	
 	export let data: LayoutData;
 	let server: App.Database.Servers.Server | undefined;
-	let serverChannels: (App.Database.Servers.Channels.Channel |
-		App.Database.Servers.Channels.ChannelGroup)[] = [];
-
-	let micOff = false;
-	let speakersOff = false;
+	let serverChannels: (
+		App.Database.Servers.Channels.TextChannel
+		| App.Database.Servers.Channels.TextChannel
+		| App.Database.Servers.Channels.ChannelGroup)[] = [];
 
 	onMount(() => {
 		refreshServer();
@@ -36,38 +52,68 @@
 		var serverId = parseInt($page.params.server_id);
 		// find matching server
 		server = data.servers.find(s => s.id === serverId);
-		const ungrouped: App.Database.Servers.Channels.Channel[] = [];
+		const ungrouped: (App.Database.Servers.Channels.TextChannel | App.Database.Servers.Channels.VoiceChannel)[] = [];
 		const groups: App.Database.Servers.Channels.ChannelGroup[] = [...data.channel_groups];
+		// clear users in voice channels
+		data.voice_channels.forEach((channel) => {
+			channel._voice_users = [];
+		});
+		// add users to voice channels
+		data.voice_channel_users.forEach((vcu) => {
+			const channel = data.voice_channels.find((channel) => channel.id === vcu.channel_id);
+			if (channel) {
+				const user = data.users.find((user) => user.id === vcu.user_id);
+				if (!channel._voice_users) channel._voice_users = [];
+				if (user) vcu._user = user;
+				channel._voice_users.push(vcu);
+			}
+		});
 		// clear channels in groups
 		groups.forEach(g => g._channels = []);
+		// collect all channels
+		const channels: (App.Database.Servers.Channels.TextChannel | App.Database.Servers.Channels.VoiceChannel) & TypedChannel = [
+			...data.text_channels.map(c => {
+				c.type = ChannelType.Text;
+				return c;
+			}),
+			...data.voice_channels.map(c => {
+				c.type = ChannelType.Voice;
+				return c;
+			}),
+		];
 		// find ungrouped channels, add others to groups
-		data.channels.forEach((channel) => {
+		channels.forEach((channel) => {
 			// set server id
 			channel.server_id = serverId;
 			// find group
 			const group = groups.find((group) => group.id === channel.channel_group_id);
-			if (group) group._channels.push({...channel});
+			if (group) {
+				if (!group._channels) group._channels = [];
+				group._channels.push({...channel});
+			}
 			else ungrouped.push({...channel});
 		});
 		// sort channels in groups
-		groups.forEach(g => g._channels = g._channels.sort(c => c.order));
+		groups.forEach(g => g._channels = g._channels?.sort(c => c.order));
 		// add ungrouped channels and sort
 		serverChannels = [...groups, ...ungrouped].sort((a,b) => a.order - b.order);
 	}
 
-	function toggleMicrophone() {
-		if (speakersOff) speakersOff = false;
-		micOff = !micOff;
-	}
-
-	function toggleSpeakers() {
-		speakersOff = !speakersOff;
-		if (speakersOff) micOff = true;
+	function onChannelClick(channel: (App.Database.Servers.Channels.VoiceChannel | App.Database.Servers.Channels.TextChannel) & TypedChannel, redirect: () => void) {
+		switch (channel.type) {
+			case ChannelType.Text:
+				redirect();
+				break;
+			case ChannelType.Voice:
+				if ($connectedVoiceChannel?.id !== channel.id) connectedVoiceChannel.set(channel);
+				else redirect();
+				break;
+		}
 	}
 </script>
 
 
-<nav id="sidebar">
+<aside id="sidebar" class="layout-pane items-stretch">
 	<header>
 		<div>
 			<p class="pl-2 text font-bold">{server?.name}</p>
@@ -80,7 +126,7 @@
 				/>
 		</div>
 	</header>
-	<main class="list-channel-groups">
+	<div class="fill list-channel-groups">
 		{#each serverChannels as item}
 			{#if Object.hasOwn(item, "_channels")}
 				<Button
@@ -91,64 +137,22 @@
 				</Button>
 				<div class="list-channels">
 					{#each item._channels as channel}
-						<Channel {channel}/>
+						<svelte:component this={components[channel.type]} {channel}/>
 					{/each}
 				</div>
 			{:else}
-				<Channel channel={item}/>
+				<svelte:component this={components[item.type]} channel={item}/>
 			{/if}
 		{/each}
-	</main>
-	<footer class="voice-connection">
-		<section class="pl-2">
-			<div>
-				<div class="flex items-center">
-					<Icon name={Icons.VoiceConnectionMedium} class="mr-1 text-success-500 small" />
-					<p class="text text-label bold">Voice Connected!</p>
-				</div>
-				<p class="text text-label sec">Channel: Voice Channel 1</p>
-			</div>
-			<Button
-				variant={ButtonVariant.Card}
-				on:click={() => {}}>
-				<Icon name={Icons.VoiceDisconnect} class="!text-danger-500" />
-			</Button>
-		</section>
-		<section class="h-14">
-			{#if data.user}
-				<UserDisplay user={data.user} variant={ButtonVariant.None} />
-			{/if}
-			<Button
-				variant={ButtonVariant.Card}
-				active={micOff}
-				icon={Icons.Microphone}
-				class="items-center {micOff ? 'button-red-line' : ''}"
-				on:click={toggleMicrophone}/>
-			<Button
-				variant={ButtonVariant.Card}
-				active={speakersOff}
-				icon={Icons.Speakers}
-				class="items-center {speakersOff ? 'button-red-line' : ''}"
-				on:click={toggleSpeakers}/>
-		</section>
-	</footer>
-</nav>
-<div id="content">
+	</div>
+	<VoiceConnection user={data.user}/>
+</aside>
+<div id="content" class="layout-pane items-stretch">
 	<slot/>
 </div>
 
 
 <style global lang="postcss">
-	.button.button-red-line {
-		&:after {
-			content: '';
-			@apply block fixed w-[2px] h-[30px] ml-[6px]
-				rotate-45 origin-center bg-danger-500;
-		}
-		&.active > .icon {
-			@apply text-icon-sec dark:text-icon-dark-sec;
-		}
-	}
 	.list-channel-groups {
 		@apply flex flex-col items-stretch;
 		& > .button,
@@ -156,8 +160,8 @@
 			@apply border-gray-300 dark:border-gray-800 !important;
 		}
 		& > .button {
-			@apply px-1
-			border-x-0 border-b-0 rounded-none;
+			@apply px-1 rounded-none
+			border-x-0 border-b-0;
 			&:not(:first-child) {
 				@apply mt-[-1px];
 			}
@@ -175,31 +179,46 @@
 			@apply mt-2;
 		}
 	}
-	.voice-connection {
-		& > section {
-			@apply flex items-center;
-			&:not(:last-child) {
-				@apply border-b border-gray-300 dark:border-gray-800;
-			}
-			& > div {
-				@apply flex-1;
-				line-height: 1.125;
-			}
-			& > .user-display {
-				@apply flex-1 h-14 pl-2 pr-2 mr-2
-				overflow-hidden
-				border-y-0 border-l-0 border-gray-300 dark:border-gray-800
-				rounded-none text-left;
-				&:hover {
-					@apply bg-gray-50 dark:bg-gray-800;
-				}
-			}
-			& > button:not(:first-child) {
-				@apply my-2 mr-1;
-				&:last-child {
-					@apply mr-2;
-				}
-			}
-		}
-	}
+	.channel {
+        @apply flex mb-2 px-2;
+        &:hover > .button {
+            @apply bg-gray-200 border-gray-300
+            dark:bg-gray-800 dark:border-gray-700;
+            &:last-child {
+                @apply pointer-events-auto
+                border-gray-300 dark:border-gray-700
+                opacity-100;
+            }
+        }
+        & > .button {
+            @apply transition-colors !important;
+            &:first-child {
+                @apply w-full px-2;
+                & > .icon {
+                    @apply mr-2;
+                }
+            }
+            &:last-child {
+                @apply relative pointer-events-none
+                rounded-l-none opacity-0
+                transition-all;
+                margin-left: calc(-2.5rem - 2px);
+            }
+        }
+    }
+    .channel-users {
+        @apply flex flex-col px-2 -mt-1;
+        & > .button {
+            @apply pl-1 pr-2;
+            &:last-child {
+                @apply mb-2;
+            }
+            & > .user-image {
+                @apply mr-2;
+            }
+            &.talking > .user-image {
+                @apply border-accent-500 ring-1 ring-accent-500;
+            }
+        }
+    }
 </style>

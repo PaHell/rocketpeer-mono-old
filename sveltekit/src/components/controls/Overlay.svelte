@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="typescript" context="module">
 	import { arrow, autoUpdate, computePosition, flip, inline, offset, shift, type Placement, type Platform, type Strategy} from '@floating-ui/dom';
 	import { default as Icon, Icons } from '$comps/general/Icon.svelte';
 	import { createEventDispatcher, getContext, onDestroy, onMount, setContext } from 'svelte';
@@ -19,7 +19,7 @@
 	
 </script>
 
-<script lang="ts">
+<script lang="typescript">
 	interface $$Slots {
 		item: {};
 		menu: {};

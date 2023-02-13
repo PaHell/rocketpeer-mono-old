@@ -1,14 +1,14 @@
 {
   "$schema": "..\\..\\..\\node_modules/@tauri-apps/cli\\schema.json",
   "build": {
-    "beforeBuildCommand": "",
+    "beforeBuildCommand": "npm run build -w rocketpeer-sveltekit",
     "beforeDevCommand": "npm run dev -w rocketpeer-sveltekit",
     "devPath": "http://localhost:3000",
     "distDir": "../sveltekit/static"
   },
   "package": {
     "productName": "rocketpeer-tauri",
-    "version": "0.1.0"
+    "version": "0.0.1"
   },
   "tauri": {
     "allowlist": {
@@ -16,7 +16,7 @@
     },
     "bundle": {
       "active": true,
-      "category": "DeveloperTool",
+      "category": "SocialNetworking",
       "copyright": "",
       "deb": {
         "depends": []
@@ -44,7 +44,9 @@
       "windows": {
         "certificateThumbprint": null,
         "digestAlgorithm": "sha256",
-        "timestampUrl": ""
+        "timestampUrl": "",
+        "allowDowngrades": false,
+        "tsp": true
       }
     },
     "security": {
@@ -55,12 +57,21 @@
     },
     "windows": [
       {
-        "fullscreen": false,
-        "height": 900,
-        "resizable": true,
         "title": "rocketpeer",
-        "width": 1200
+        "label": "main",
+        "fullscreen": false,
+        "resizable": true,
+        "width": 1366,
+        "height": 864,
+        "minWidth": 800,
+        "minHeight": 600,
+        "center": true,
+        "focus": true,
+        "decorations": true
       }
-    ]
+    ],
+    "systemTray": {
+      "iconPath": "icons/32x32.png"
+    }
   }
 }

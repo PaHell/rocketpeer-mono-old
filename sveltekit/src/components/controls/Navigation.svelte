@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="typescript" context="module">
 	import { afterNavigate, goto } from '$app/navigation';
 	import { createEventDispatcher, onMount } from 'svelte';
 	import type { Icons } from '$comps/general/Icon.svelte';
@@ -9,7 +9,7 @@
     }
 </script>
 
-<script lang="ts">
+<script lang="typescript">
     type T = $$Generic<object>;
     interface $$Slots {
         default: {
