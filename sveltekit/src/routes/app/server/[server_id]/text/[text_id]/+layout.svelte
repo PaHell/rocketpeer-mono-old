@@ -3,7 +3,7 @@
 	import Icon, { Icons } from '$comps/general/Icon.svelte';
 	import TextInput from '$src/components/controls/TextInput.svelte';
 	import { UserStatus } from '$src/components/user/user';
-	import UserDisplay from '$src/components/user/UserDisplay.svelte';
+	import UserView from '$src/components/user/UserView.svelte';
 	import type { LayoutData } from './$types';
 
 	export let data: LayoutData;
@@ -52,7 +52,7 @@
 			{#each grouped as group}
 				<p class="text sec bold">{group[0]}</p>
 				{#each group[1] as user}
-					<UserDisplay {user} variant={ButtonVariant.Transparent} showStatus />
+					<UserView {user} variant={ButtonVariant.Transparent} showStatus />
 				{/each}
 			{/each}
 		{/if}

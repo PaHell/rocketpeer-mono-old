@@ -4,7 +4,7 @@
 <script lang="typescript">
 	import Icon, { Icons } from "$comps/general/Icon.svelte";
 	import Button, { ButtonVariant } from "$comps/controls/Button.svelte";
-	import UserDisplay from "./UserDisplay.svelte";
+	import UserView from "./UserView.svelte";
 	import { connectedVoiceChannel } from "$src/store";
 
     export let user: App.Database.User | undefined;
@@ -48,7 +48,7 @@
 		{/if}
 		<section class="h-14">
 			{#if user}
-				<UserDisplay {user} variant={ButtonVariant.Transparent} showStatus />
+				<UserView {user} variant={ButtonVariant.Transparent} showStatus />
 			{/if}
 			<Button
 				variant={ButtonVariant.Transparent}

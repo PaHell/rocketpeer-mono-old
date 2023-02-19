@@ -3,13 +3,9 @@
 	import { default as Icon, Icons } from '$comps/general/Icon.svelte';
 	import { createEventDispatcher, onMount, SvelteComponent, type ComponentEvents } from 'svelte';
 	import { _ } from 'svelte-i18n';
-	import { debounce, searchByKeys } from '$lib/helpers';
-	import { clickOutside } from '$lib/use';
-	import Overlay, { OverlayPosition } from '$comps/controls/Overlay.svelte';
-	import TextInput from '$comps/controls/TextInput.svelte';
 
 	interface $$Events {
-		change: boolean;
+		change: void;
 	}
 
 	export let value: boolean = false;
@@ -23,7 +19,7 @@
 
 	function toggle() {
 		value = !value;
-		dispatch('change', value);
+		dispatch('change');
 	}
 </script>
 

@@ -102,10 +102,11 @@ declare global {
 						channel_group_id: null | ChannelGroup['id'];
 					}
 					interface TextChannel extends Channel {
-						_messages?: Chat.Message[];
+						messages: Chat.Message[];
 					}
 					interface VoiceChannel extends Channel {
-						_voice_users?: VoiceChannelUser[];
+						voice_users: VoiceChannelUser[];
+						messages: Chat.Message[];
 					}
 				}
 			}

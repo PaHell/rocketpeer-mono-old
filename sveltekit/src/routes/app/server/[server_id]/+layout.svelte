@@ -13,11 +13,12 @@
 	import { page } from '$app/stores';
 	import NavigationItem from '$src/components/controls/NavigationItem.svelte';
 	import UserImage from '$src/components/user/UserImage.svelte';
-	import UserDisplay from '$src/components/user/UserDisplay.svelte';
+	import UserView from '$src/components/user/UserView.svelte';
 	import VoiceConnection from '$src/components/user/VoiceConnection.svelte';
 	import { connectedVoiceChannel } from '$src/store';
 	import VoiceChannel from '$src/components/VoiceChannel.svelte';
 	import TextChannel from '$src/components/TextChannel.svelte';
+	import { playSound, Sounds } from '$src/components/MusicPlayer.svelte';
 
 	enum ChannelType {
 		Text,
@@ -98,18 +99,6 @@
 		// add ungrouped channels and sort
 		serverChannels = [...groups, ...ungrouped].sort((a,b) => a.order - b.order);
 	}
-
-	function onChannelClick(channel: (App.Database.Servers.Channels.VoiceChannel | App.Database.Servers.Channels.TextChannel) & TypedChannel, redirect: () => void) {
-		switch (channel.type) {
-			case ChannelType.Text:
-				redirect();
-				break;
-			case ChannelType.Voice:
-				if ($connectedVoiceChannel?.id !== channel.id) connectedVoiceChannel.set(channel);
-				else redirect();
-				break;
-		}
-	}
 </script>
 
 
@@ -137,7 +126,7 @@
 				</Button>
 				<div class="list-channels">
 					{#each item._channels as channel}
-						<svelte:component this={components[channel.type]} {channel}/>
+						<svelte:component this={components[channel.type]} {channel} />
 					{/each}
 				</div>
 			{:else}
@@ -154,7 +143,8 @@
 
 <style global lang="postcss">
 	.list-channel-groups {
-		@apply flex flex-col items-stretch;
+		@apply flex flex-col items-stretch
+		overflow-x-hidden overflow-y-auto;
 		& > .button,
 		& > .list-channels {
 			@apply border-gray-300 dark:border-gray-800 !important;
@@ -179,33 +169,6 @@
 			@apply mt-2;
 		}
 	}
-	.channel {
-        @apply flex mb-2 px-2;
-        &:hover > .button {
-            @apply bg-gray-200 border-gray-300
-            dark:bg-gray-800 dark:border-gray-700;
-            &:last-child {
-                @apply pointer-events-auto
-                border-gray-300 dark:border-gray-700
-                opacity-100;
-            }
-        }
-        & > .button {
-            @apply transition-colors !important;
-            &:first-child {
-                @apply w-full px-2;
-                & > .icon {
-                    @apply mr-2;
-                }
-            }
-            &:last-child {
-                @apply relative pointer-events-none
-                rounded-l-none opacity-0
-                transition-all;
-                margin-left: calc(-2.5rem - 2px);
-            }
-        }
-    }
     .channel-users {
         @apply flex flex-col px-2 -mt-1;
         & > .button {

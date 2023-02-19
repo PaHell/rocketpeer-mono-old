@@ -183,7 +183,7 @@
 			}
 		}
 		/* CARD */
-		&.button-card {
+		&.button.button-card {
 			&.active {
 				@apply shadow-sm
 				bg-white dark:bg-gray-800

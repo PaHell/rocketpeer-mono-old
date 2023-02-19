@@ -123,13 +123,12 @@
 			border-b h-14;
 
 			& > div {
-				@apply flex items-center
-				p-2;
+				@apply flex items-center;
 				&:first-child {
-					@apply flex-1 overflow-hidden;
+					@apply flex-1 overflow-hidden px-2;
 				}
 				&:last-child {
-					@apply flex-none;
+					@apply flex-none pr-2;
 				}
 				& > .icon {
 					@apply mr-1;

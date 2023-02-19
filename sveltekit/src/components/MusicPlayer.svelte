@@ -1,68 +1,63 @@
 <script lang="typescript" context="module">
     import { browser } from "$app/environment";
-    import { onMount } from "svelte";
 
-    const sources = [
-        "/sounds/beep.mp3",
-        "/sounds/dial.mp3",
-        "/sounds/melancholy-ui-chime.mp3",
-        "/sounds/ping.mp3",
-        "/sounds/ringtone.mp3",
-        "/sounds/telephone-connect.mp3",
-        "/sounds/ui_correct_button.mp3",
-        "/sounds/ui-click.mp3",
-        "/sounds/userinterface.mp3",
+    export enum Sounds {
+        Beep,
+        Dial,
+        Melancholy,
+        Ping,
+        Ringtone,
+        Telephone,
+        UiCorrect,
+        UiClick,
+        UserInterface,
+    }
+
+    const sources: [string, number, number][] = [
+        ["/sounds/beep.mp3", 25, 400],
+        ["/sounds/dial.mp3", 0, 0],
+        ["/sounds/melancholy-ui-chime.mp3", 0, 0],
+        ["/sounds/ping.mp3", 0, 0],
+        ["/sounds/ringtone.mp3", 0, 0],
+        ["/sounds/telephone-connect.mp3", 0, 0],
+        ["/sounds/ui_correct_button.mp3", 0, 0],
+        ["/sounds/ui-click.mp3", 0, 0],
+        ["/sounds/userinterface.mp3", 0, 0],
     ];
-</script>
-
-<script lang="typescript">
-	import Button, { ButtonVariant } from "./controls/Button.svelte";
-	import { Icons } from "./general/Icon.svelte";
-
+    
     let audio: HTMLAudioElement | undefined;
     let isPlaying = false;
+    let playTimeout = 0;
 
-    onMount(() => {
-        if (!browser) return;
+    if (browser) {
         audio = new Audio();
         audio.volume = 0.5;
         audio.preload = "auto";
         audio.addEventListener("ended", onEnded);
         audio.addEventListener("canplaythrough", onCanPlay);
-    });
+    }
+
+    export function playSound(sound: Sounds) {
+        if (!audio || isPlaying) return;
+        const [path, from, to] = sources[sound];
+        if (audio.currentSrc === path) {
+            onCanPlay();
+            return;
+        }
+        audio.src = path;
+        audio.currentTime = from;
+        playTimeout = to - from;
+        //audio.load();
+    }
 
     function onCanPlay() {
         if (!audio || isPlaying) return;
         audio.play();
         isPlaying = true;
-    }
-
-    function play(source: string) {
-        if (!audio || isPlaying) return;
-        if (audio.currentSrc === source) {
-            onCanPlay();
-            return;
-        }
-        audio.src = source;
-        audio.currentTime = 0;
-        //audio.load();
+        setTimeout(() => audio?.pause(), playTimeout);
     }
 
     function onEnded() {
         isPlaying = false;
     }
 </script>
-
-<template>
-    <div class="music-player">
-        <Button
-            variant={ButtonVariant.Secondary}
-            icon={Icons.Home}
-            text="Play"
-            active={isPlaying}
-            on:click={() => play(sources[2])}/>
-    </div>
-</template>
-
-<style global lang="postcss">
-</style>

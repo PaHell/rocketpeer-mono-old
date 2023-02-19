@@ -23,8 +23,8 @@
 </template>
 
 <style global lang="postcss">
-    .user-display {
-        @apply items-center justify-start;
+    .button.user-display {
+        @apply items-center justify-start text-left;
         & > .user-image {
             @apply flex-none;
         }
