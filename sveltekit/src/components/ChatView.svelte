@@ -90,7 +90,7 @@
 <style global lang="postcss">
     .chat-view {
 		@apply flex flex-col
-		h-full overflow-y-hidden;
+		h-full overflow-hidden;
 
 		& > main {
 			@apply flex-1 overflow-y-auto

@@ -177,6 +177,7 @@
 				flex items-stretch justify-items-stretch;
 
 				& > div {
+					@apply overflow-hidden;
 					&:first-child {
 						flex: 3 2 auto;
 					}

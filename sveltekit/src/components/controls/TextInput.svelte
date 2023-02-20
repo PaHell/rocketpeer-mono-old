@@ -170,6 +170,7 @@
 
 <style global lang="postcss">
 	.input-container {
+		@apply overflow-hidden;
 		&:focus-within {
 			@apply relative;
 		}

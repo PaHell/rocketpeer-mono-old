@@ -21,8 +21,8 @@
         <UserImage user={data._user} />
     {/if}
     <main>
-        <p class="text bold">{data._user?.display_name}</p>
-        <p class="text tri text-label">{$time(data.created_at).format()}</p>
+        <p class="text bold ellipsis">{data._user?.display_name}</p>
+        <p class="text tri text-label ellipsis">{$time(data.created_at).format()}</p>
         <p class="text col-span-2">{data.content}</p>
     </main>
 </div>
@@ -49,10 +49,13 @@
         }
         & > main {
             @apply flex-1 grid grid-cols-2 items-center;
-            margin-top: -.0875rem;
+            margin-top: -1px;
             grid-template-columns: 1fr auto;
             & > .text {
                 @apply leading-tight;
+                &.text-label {
+                    @apply mt-[-2px];
+                }
             }
         }
     }

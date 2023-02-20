@@ -19,9 +19,7 @@
 		</div>
 	-->
 </header>
-<main class="fill">
-	<slot />
-</main>
+<slot />
 
 
 <style global lang="postcss">
