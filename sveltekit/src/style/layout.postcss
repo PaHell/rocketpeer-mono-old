@@ -2,11 +2,10 @@
     @apply flex flex-col items-center justify-center
     w-full h-full;
     &.row { @apply flex-row; }
-
     & > * {
         @apply flex-none;
         &.fill {
-            @apply flex-grow;
+            @apply flex-grow flex-shrink;
         }
     }
 }

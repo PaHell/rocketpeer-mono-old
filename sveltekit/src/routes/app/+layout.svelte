@@ -173,21 +173,7 @@
 			}
 
 			& > main {
-				@apply overflow-y-hidden
-				flex items-stretch justify-items-stretch;
-
-				& > div {
-					@apply overflow-hidden;
-					&:first-child {
-						flex: 3 2 auto;
-					}
-					&:nth-child(2) {
-						@apply border-l
-						bg-gray-100 dark:bg-gray-800
-						border-gray-300 dark:border-gray-700;
-						flex: 1 1 20rem;
-					}
-				}
+				@apply overflow-hidden;
 			}
 		}
 	}

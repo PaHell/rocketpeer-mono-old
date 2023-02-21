@@ -13,7 +13,7 @@
         <Button
             class="user-voice-view"
             variant={ButtonVariant.None}
-            on:click={() => console.log("clicked")}>
+            on:click>
             <main>
                 <UserImage user={data._user} />
                 <p class="text bold ellipsis">{data._user.display_name}</p>

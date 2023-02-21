@@ -113,7 +113,47 @@ let users: App.Database.User[] = [
 		created_at: '2021-01-01T00:00:00.000Z',
 		updated_at: null,
 		deleted_at: null
-	}
+	},
+	{
+		id: 5,
+		username: 'boba_fett',
+		display_name: 'Boba Fett',
+		img: '',
+		status: UserStatus.Online,
+		created_at: '2021-01-01T00:00:00.000Z',
+		updated_at: null,
+		deleted_at: null
+	},
+	{
+		id: 6,
+		username: 'yoda',
+		display_name: 'Master Yoda',
+		img: '',
+		status: UserStatus.Away,
+		created_at: '2021-01-01T00:00:00.000Z',
+		updated_at: null,
+		deleted_at: null
+	},
+	{
+		id: 7,
+		username: 'jar_jar_binks',
+		display_name: 'Jar Jar Binks',
+		img: '',
+		status: UserStatus.Busy,
+		created_at: '2021-01-01T00:00:00.000Z',
+		updated_at: null,
+		deleted_at: null
+	},
+	{
+		id: 8,
+		username: 'ashoka_tano',
+		display_name: 'Ashoka Tano',
+		img: '',
+		status: UserStatus.Offline,
+		created_at: '2021-01-01T00:00:00.000Z',
+		updated_at: null,
+		deleted_at: null
+	},
 ];
 
 let voice_channel_users: App.Database.Servers.Channels.VoiceChannelUser[] = [
@@ -135,11 +175,39 @@ let voice_channel_users: App.Database.Servers.Channels.VoiceChannelUser[] = [
 		id: 3,
 		user_id: 3,
 		channel_id: 2,
+		is_live: false,
+		is_talking: true,
+	},
+	{
+		id: 4,
+		user_id: 4,
+		channel_id: 2,
+		is_live: false,
+		is_talking: false,
+	},
+	{
+		id: 5,
+		user_id: 5,
+		channel_id: 2,
+		is_live: false,
+		is_talking: true,
+	},
+	{
+		id: 6,
+		user_id: 6,
+		channel_id: 2,
+		is_live: false,
+		is_talking: false,
+	},	
+	{
+		id: 7,
+		user_id: 3,
+		channel_id: 2,
 		is_live: true,
 		is_talking: false,
 	},
 	{
-		id: 4,
+		id: 8,
 		user_id: 4,
 		channel_id: 2,
 		is_live: true,

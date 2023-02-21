@@ -170,7 +170,7 @@
 
 <style global lang="postcss">
 	.input-container {
-		@apply overflow-hidden;
+		@apply flex flex-col min-w-0;
 		&:focus-within {
 			@apply relative;
 		}
@@ -182,7 +182,7 @@
 		}
 	}
 	.input {
-		@apply flex flex-col flex-shrink-0;
+		@apply flex flex-col;
 
 		/* layout, div overlays input exactly
          * and <input/> is before the styled content -> input:focus + *

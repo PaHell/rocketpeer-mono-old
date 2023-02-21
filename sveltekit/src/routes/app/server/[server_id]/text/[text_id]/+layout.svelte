@@ -43,7 +43,7 @@
 			class="ml-2"/>
 	</div>
 </header>
-<main class="fill">
+<main id="server-text" class="fill">
 	<div>
 		<slot />
 	</div>
@@ -61,6 +61,21 @@
 
 
 <style global lang="postcss">
+	#server-text {
+		@apply flex;
+		& > div {
+			@apply overflow-hidden;
+			&:first-child {
+				flex: 3 2 auto;
+			}
+			&:nth-child(2) {
+				@apply border-l
+				bg-gray-100 dark:bg-gray-800
+				border-gray-300 dark:border-gray-700;
+				flex: 1 1 20rem;
+			}
+		}
+	}
 	.text-input-search {
 		@apply w-48;
 	}
