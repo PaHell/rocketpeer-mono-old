@@ -9,27 +9,65 @@
 	import ChatMessage from '$src/components/ChatMessage.svelte';
 	import ChatView from '$src/components/ChatView.svelte';
 	import UserVoiceView from '$src/components/user/UserVoiceView.svelte';
+	import Alert, { AlertVariant } from '$src/components/general/Alert.svelte';
+	import { onDestroy } from 'svelte';
 
 	export let data: LayoutData;
 
-	let refVideo: HTMLVideoElement | undefined;
+	let video: HTMLVideoElement | undefined;
 	let stream: MediaStream | undefined;
+	let showStream = false;
+	let videoWidth = 0;
+	let videoHeight = 0;
+
+	onDestroy(() => {
+		closeStream();
+	});
 
 	function openStream() {
-		navigator.mediaDevices.getUserMedia({ audio: true, video: true })
-			.then((s) => {
-				stream = s;
-				if (refVideo) refVideo.srcObject = s;
-				refVideo?.play();
-			});
+		showStream = true;
+		navigator.mediaDevices.getUserMedia({
+			audio: false,
+			video: true
+		})
+		.then((mediaStream) => {
+			if (!video) return;	
+			stream = mediaStream;
+			video.srcObject = mediaStream;
+		});
+	}
+
+	function closeStream() {
+		if (!stream) return;
+		stream.getTracks().forEach((track) => {
+			track.stop();
+		});
+		showStream = false;
+	}
+
+	function onCanPlay() {
+		if (!video) return;
+		videoWidth = video.videoWidth;
+		videoHeight = video.videoHeight;
 	}
 </script>
 
 <template>
 	<main id="server-voice" class="fill">
-		{#if stream}
+		{#if showStream}
 			<div id="server-voice-stream">
-				<video bind:this={refVideo}/>
+				<video bind:this={video} on:canplay={onCanPlay} autoplay playsinline>
+					<Alert variant={AlertVariant.Danger}
+						title="Error!"
+						text="Your browser does not support video streaming." />
+					<track kind="captions" />
+				</video>
+				<footer class="fixed">
+					<Button variant={ButtonVariant.Primary}
+						icon={Icons.Logout}
+						text="Close"
+						on:click={closeStream}/>
+				</footer>
 			</div>
 		{:else}
 			<div id="server-voice-users">
@@ -53,29 +91,26 @@
 		@apply flex flex-col;
 		& > div {
 			&:first-child {
-				@apply h-full overflow-auto;
-				flex: 0 1 80vw;
+				@apply min-h-[60vh]
+				flex items-center justify-center;
 			}
 			&:nth-child(2) {
-				@apply h-full overflow-auto
+				@apply flex-1 overflow-hidden
 				bg-white dark:bg-gray-800;
-				flex: 1 1 auto;
 			}
 		}
 	}
 
 	#server-voice-stream {
-		@apply flex items-center justify-center
-		bg-black;
+		@apply content-center bg-black;
 		& > video {
-			@apply h-full aspect-video;
+			@apply h-full;
 		}
 	}
 
 	#server-voice-users {
-		@apply flex flex-wrap
-		items-center justify-center
-		border-b border-gray-300 dark:border-gray-700
+		@apply flex-wrap content-center border-b
+		border-gray-300 dark:border-gray-700
 		bg-gray-100 dark:bg-gray-900;
 		& > .button.user-voice-view {
 			@apply m-2;
