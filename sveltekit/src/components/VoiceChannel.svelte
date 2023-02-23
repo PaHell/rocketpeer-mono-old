@@ -4,7 +4,7 @@
 	import Button, { ButtonStyle, ButtonVariant } from '$src/components/controls/Button.svelte';
 	import NavigationItem from '$src/components/controls/NavigationItem.svelte';
 	import { Icons } from '$src/components/general/Icon.svelte';
-	import { createEventDispatcher } from "svelte";
+	import { createEventDispatcher, onMount } from "svelte";
 	import { connectedVoiceChannel } from "$src/store";
 	import { playSound, Sounds } from "./MusicPlayer.svelte";
 </script>
@@ -15,15 +15,20 @@
     }
 	export let channel: App.Database.Servers.Channels.VoiceChannel;
     const dispatch = createEventDispatcher<$$Events>();
-    let connected = false;
 
-    function connectVoice(channel: App.Database.Servers.Channels.VoiceChannel, redirect: () => void) {
-        if ($connectedVoiceChannel?.id !== channel.id) {
-            connectedVoiceChannel.set(channel);
-            //TODO: playSound(Sounds.Telephone);
-            connected = true;
-        }
+    onMount(() => {
+        if ($connectedVoiceChannel) return;
+        connectVoice(channel);
+    });
+
+    function onClick(channel: App.Database.Servers.Channels.VoiceChannel, redirect: () => void) {
+        if ($connectedVoiceChannel?.id !== channel.id) connectVoice(channel);
         else redirect();
+    }
+
+    function connectVoice(channel: App.Database.Servers.Channels.VoiceChannel) {
+        connectedVoiceChannel.set(channel);
+        //TODO: playSound(Sounds.Telephone);
     }
 </script>
 
@@ -37,7 +42,7 @@
             style={ButtonStyle.Card}
             icon={Icons.VoiceChannel}
             text={channel.name}
-            on:click={() => connectVoice(channel, redirect)}
+            on:click={() => onClick(channel, redirect)}
             active={$connectedVoiceChannel?.id === channel.id}/>
         <Button
             variant={ButtonVariant.Transparent}

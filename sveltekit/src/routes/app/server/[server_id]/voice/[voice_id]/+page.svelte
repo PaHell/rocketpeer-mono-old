@@ -122,7 +122,7 @@
 			@apply h-full;
 		}
 		& > footer {
-			@apply h-0 -top-14
+			@apply h-0 top-[-3rem]
 			flex relative
 			opacity-0 transition-opacity;
 		}
