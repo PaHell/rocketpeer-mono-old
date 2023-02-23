@@ -37,7 +37,7 @@
 	function onChatScroll() {
 		if (!refChat) return;
 		showChatScrollButton = refChat.scrollHeight - refChat.scrollTop - refChat.clientHeight
-			> 320;
+			> refChat.clientHeight / 2;
 	}
 
 	function scrollToBottom() {

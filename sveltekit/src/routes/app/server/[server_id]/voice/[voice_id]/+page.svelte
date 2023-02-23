@@ -62,7 +62,7 @@
 						text="Your browser does not support video streaming." />
 					<track kind="captions" />
 				</video>
-				<footer class="fixed">
+				<footer>
 					<Button variant={ButtonVariant.Primary}
 						icon={Icons.Logout}
 						text="Close"
@@ -71,9 +71,18 @@
 			</div>
 		{:else}
 			<div id="server-voice-users">
-				{#each data.channel.voice_users as vcu}
-					<UserVoiceView data={vcu} on:click={openStream}/>
-				{/each}
+				<div>
+					{#each data.channel.voice_users as vcu}
+						<UserVoiceView data={vcu} on:click={openStream}/>
+					{/each}
+				</div>
+				<footer>
+					<Button variant={ButtonVariant.Secondary}
+						on:click={() => {}}>
+						<Icon name={Icons.VoiceDisconnect} class="!text-danger-500" />
+						<p class="text">Disconnect</p>
+					</Button>
+				</footer>
 			</div>
 		{/if}
 		<div>
@@ -91,8 +100,7 @@
 		@apply flex flex-col;
 		& > div {
 			&:first-child {
-				@apply min-h-[60vh]
-				flex items-center justify-center;
+				@apply min-h-[60vh];
 			}
 			&:nth-child(2) {
 				@apply flex-1 overflow-hidden
@@ -102,19 +110,38 @@
 	}
 
 	#server-voice-stream {
-		@apply content-center bg-black;
+		@apply flex flex-col items-center justify-center content-center
+		bg-black;
+		&:hover,
+		&:focus-within {
+			& > footer {
+				@apply opacity-100;
+			}
+		}
 		& > video {
 			@apply h-full;
+		}
+		& > footer {
+			@apply h-0 -top-14
+			flex relative
+			opacity-0 transition-opacity;
 		}
 	}
 
 	#server-voice-users {
-		@apply flex-wrap content-center border-b
+		@apply flex flex-col border-b
 		border-gray-300 dark:border-gray-700
 		bg-gray-100 dark:bg-gray-900;
-		& > .button.user-voice-view {
-			@apply m-2;
-			flex: 0 1 15rem;
-		}
+		& > div {
+			@apply flex-1 flex items-center justify-center
+			flex-wrap content-center;
+			& > .button.user-voice-view {
+				@apply m-2;
+				flex: 0 1 15rem;
+			}
+		}	
+		& >	footer {
+			@apply flex justify-center p-2;
+		}	
 	}
 </style>
