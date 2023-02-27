@@ -21,8 +21,14 @@
 
 <script lang="typescript">
 	interface $$Slots {
-		item: {};
-		menu: {};
+		item: {
+			open: () => void;
+			close: () => void;
+			toggle: () => void;
+		};
+		menu: {
+			close: () => void;
+		};
 	}
 	interface $$Events {
 		open: {};
@@ -55,17 +61,17 @@
 		debouncedUpdate();
 	});
 
-	export function toggleOpened() {
+	function toggle() {
 		opened ? close() : open();
 	}
 
-	export function close() {
+	function close() {
 		if (!refMenu || !opened) return;
 		opened = false;
 		dispatch('close');
 	}
 
-	export function open() {
+	function open() {
 		if (!refMenu || opened) return;
 		// first view is lazy, items stay rendered afterwards
 		if (!render) {
@@ -104,11 +110,11 @@
 
 
 	<div bind:this={refContainer} class="overlay {position} {classes}" class:opened use:clickOutside={close}>
-		<slot name="item" />
+		<slot name="item" {open} {close} {toggle} />
 		<menu bind:this={refMenu} class={strategy}>
 			<main>
 				{#if render}
-					<slot name="menu" />
+					<slot name="menu" {close} />
 				{/if}
 			</main>
 		</menu>

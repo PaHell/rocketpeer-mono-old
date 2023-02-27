@@ -23,13 +23,12 @@
 
 <template>
     <Overlay
-        bind:this={refDevTools}
         bind:opened={devToolsOpened}
         position="bottom-end"
         class="overlay-dev-tools"
         >
-        <svelte:fragment slot="item">
-            <Button icon={Icons.DevTools} active={devToolsOpened} on:click={refDevTools.toggleOpened} />
+        <svelte:fragment slot="item" let:toggle>
+            <Button icon={Icons.DevTools} active={devToolsOpened} on:click={toggle} />
         </svelte:fragment>
         <svelte:fragment slot="menu">
             <p class="text text-center">{$_('routes.dev_tools')}</p>

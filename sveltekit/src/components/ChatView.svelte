@@ -9,6 +9,7 @@
 	import { debounce } from "$src/lib/helpers";
 	import { afterNavigate } from "$app/navigation";
 	import { Icons } from "./general/Icon.svelte";
+	import ChatMessage from "./ChatMessage.svelte";
 </script>
 
 <script lang="typescript">
@@ -16,6 +17,8 @@
     interface $$Events {
         message: string;
     }
+
+	export let messages: App.Database.Chat.Message[] = [];
 
     let input = "message";
 	let refInput: TextInput<string> | undefined;
@@ -56,10 +59,12 @@
     <div class="chat-view">
         <main bind:this={refChat} on:scroll={debouncedOnChatScroll}>
             <div class="spacer"/>
-            <slot/>
+            {#each messages as msg}
+				<ChatMessage data={msg}/>
+			{/each}
             <div class="scroll-top">
                 <Button
-                    icon={Icons.ScrollDown}
+                    icon={Icons.Down}
                     active={showChatScrollButton}
                     variant={ButtonVariant.None}
                     on:click={scrollToBottom}/>

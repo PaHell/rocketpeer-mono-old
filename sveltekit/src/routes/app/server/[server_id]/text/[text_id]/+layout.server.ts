@@ -90,13 +90,13 @@ export const load = (async ({ params, parent }) => {
 	const pageData = await parent();
 	const textId = parseInt(params.text_id);
 	messages.forEach((m) => {
-		m._user = pageData.users.find((u) => u.id === m.user_id);
+		m._user = pageData.all_users.find((u) => u.id === m.user_id);
 		m.channel_id = textId;
 	});
 	return {
 		channel: {
 			...pageData.text_channels.find((c) => c.id === textId),
-			_messages: messages
+			messages: messages
 		} as App.Database.Servers.Channels.TextChannel
 	};
 }) satisfies LayoutServerLoad;

@@ -1,6 +1,6 @@
 <script lang="typescript" context="module">
 	import { default as Icon, Icons } from '$comps/general/Icon.svelte';
-	import Overlay, { OverlayPosition } from '$comps/controls/Overlay.svelte';
+	import Overlay from '$comps/controls/Overlay.svelte';
 	import { createEventDispatcher, onDestroy, onMount, SvelteComponent } from 'svelte';
 	import Button, { ButtonVariant } from '$comps/controls/Button.svelte';
 	import Alert, { AlertVariant } from '$comps/general/Alert.svelte';
@@ -20,7 +20,6 @@
 	export let css: string = '';
 	let preview: string | undefined;
 
-	let refOverlay: SvelteComponent | undefined;
 	let webcam: Webcam | undefined;
 	let video: HTMLVideoElement | undefined;
 
@@ -68,23 +67,22 @@
 		currentState = State.Viewing;
 	}
 
-	function savePhoto() {
+	function savePhoto(close: () => void) {
 		value = preview;
 		preview = undefined;
-		refOverlay?.close();
+		close();
 	}
 </script>
 
 
 	<Overlay
-		bind:this={refOverlay}
-		position={OverlayPosition.Right}
+		position="top-end"
 		on:open={onOpen}
 		on:close={onClose}
 		class="picture-input {css}"
 	>
-		<svelte:fragment slot="item">
-			<Button variant={ButtonVariant.Secondary} on:click={refOverlay.toggleOpened}>
+		<svelte:fragment slot="item" let:toggle>
+			<Button variant={ButtonVariant.Secondary} on:click={toggle}>
 				{#if value}
 					<img id="photo" src={value} alt="" />
 				{:else}
@@ -93,7 +91,7 @@
 				{/if}
 			</Button>
 		</svelte:fragment>
-		<svelte:fragment slot="menu">
+		<svelte:fragment slot="menu" let:close>
 			{#if preview}
 				<img id="photo" src={preview} alt="" />
 			{/if}
@@ -113,7 +111,7 @@
 				{:else if currentState === State.Streaming}
 					<Button
 						text="lib.controls.picture_input.take_picture"
-						icon={Icons.TakePicture}
+						icon={Icons.Home}
 						variant={ButtonVariant.Primary}
 						on:click={takePicture}
 					/>
@@ -128,7 +126,7 @@
 						text="lib.controls.picture_input.save"
 						icon={Icons.SaveChanges}
 						variant={ButtonVariant.Primary}
-						on:click={savePhoto}
+						on:click={() => savePhoto(close)}
 					/>
 				{/if}
 			</footer>

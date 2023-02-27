@@ -54,7 +54,7 @@
             & > .text {
                 @apply leading-tight;
                 &.text-label {
-                    @apply mt-[-2px];
+                    @apply mt-[-5px];
                 }
             }
         }

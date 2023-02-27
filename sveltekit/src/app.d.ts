@@ -1,5 +1,8 @@
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
+
+import type { RoleColor } from "./lib/enum";
+
 // and what to do when importing types
 declare global {
 	namespace App {
@@ -44,7 +47,7 @@ declare global {
 			}
 		}
 		namespace Database {
-			interface Element {
+			interface PrimaryKeyed {
 				id: number;
 			}
 			interface Timestamped {
@@ -52,7 +55,7 @@ declare global {
 				updated_at: string | null;
 				deleted_at: string | null;
 			}
-			interface User extends Element, Timestamped {
+			interface User extends PrimaryKeyed, Timestamped {
 				username: string;
 				display_name: string;
 				img: string;
@@ -69,7 +72,7 @@ declare global {
 				}
 			}
 			namespace Chat {
-				interface Message extends Element, Timestamped {
+				interface Message extends PrimaryKeyed, Timestamped {
 					user_id: User['id'];
 					_user?: User;
 					channel_id: Servers.Channels.Channel['id'];
@@ -77,36 +80,52 @@ declare global {
 				}
 			}
 			namespace Servers {
-				interface Server extends Element {
+				interface Server extends PrimaryKeyed {
 					name: string;
 					unread: number;
 					main_text_channel_id: number;
 				}
+				interface ServerUser {
+					server_id: Server['id'];
+					user_id: User['id'];
+					display_name: string;
+					_user?: User;
+				}
+				interface ServerRole extends PrimaryKeyed {
+					server_id: Server['id'];
+					name: string;
+					color: RoleColor;
+					order: number;
+				}
+				interface ServerRoleUser {
+					server_role_id: ServerRole['id'];
+					server_user_id: ServerUser['id'];
+				}
 				namespace Channels {
-					interface ChannelGroup extends Element {
+					interface ChannelGroup extends PrimaryKeyed {
 						name: string;
 						order: number;
 						_channels?: (TextChannel | VoiceChannel)[];
 					}
-					interface VoiceChannelUser extends Element {
+					interface VoiceChannelUser extends PrimaryKeyed {
 						user_id: User['id'];
 						_user?: User;
 						channel_id: VoiceChannel['id'];
 						is_live: boolean;
 						is_talking: boolean;
 					}
-					interface Channel extends Element {
+					interface Channel extends PrimaryKeyed {
 						server_id: Server['id'];
 						name: string;
 						order: number;
 						channel_group_id: null | ChannelGroup['id'];
 					}
 					interface TextChannel extends Channel {
-						messages: Chat.Message[];
+						messages?: Chat.Message[];
 					}
 					interface VoiceChannel extends Channel {
-						voice_users: VoiceChannelUser[];
-						messages: Chat.Message[];
+						voice_users?: VoiceChannelUser[];
+						messages?: Chat.Message[];
 					}
 				}
 			}

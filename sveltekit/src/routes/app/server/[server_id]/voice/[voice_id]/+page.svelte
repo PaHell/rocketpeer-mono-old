@@ -11,14 +11,13 @@
 	import UserVoiceView from '$src/components/user/UserVoiceView.svelte';
 	import Alert, { AlertVariant } from '$src/components/general/Alert.svelte';
 	import { onDestroy } from 'svelte';
+	import VideoPlayer from '$src/components/VideoPlayer.svelte';
 
 	export let data: LayoutData;
 
-	let video: HTMLVideoElement | undefined;
 	let stream: MediaStream | undefined;
 	let showStream = false;
-	let videoWidth = 0;
-	let videoHeight = 0;
+	let showChat = true;
 
 	onDestroy(() => {
 		closeStream();
@@ -31,9 +30,7 @@
 			video: true
 		})
 		.then((mediaStream) => {
-			if (!video) return;	
 			stream = mediaStream;
-			video.srcObject = mediaStream;
 		});
 	}
 
@@ -45,30 +42,25 @@
 		showStream = false;
 	}
 
-	function onCanPlay() {
-		if (!video) return;
-		videoWidth = video.videoWidth;
-		videoHeight = video.videoHeight;
-	}
 </script>
 
 <template>
-	<main id="server-voice" class="fill">
+	<main id="server-voice" class="fill" class:show-chat={showChat}>
 		{#if showStream}
-			<div id="server-voice-stream">
-				<video bind:this={video} on:canplay={onCanPlay} autoplay playsinline>
-					<Alert variant={AlertVariant.Danger}
-						title="Error!"
-						text="Your browser does not support video streaming." />
-					<track kind="captions" />
-				</video>
-				<footer>
-					<Button variant={ButtonVariant.Primary}
+			<VideoPlayer {stream}>
+				<svelte:fragment slot="left">
+					<Button variant={ButtonVariant.Transparent}
+						icon={Icons.Down}
+						text={showChat ? "Hide" : "Show"}
+						on:click={() => showChat = !showChat}/>
+				</svelte:fragment>
+				<svelte:fragment slot="center">
+					<Button variant={ButtonVariant.Transparent}
 						icon={Icons.Logout}
 						text="Close"
 						on:click={closeStream}/>
-				</footer>
-			</div>
+				</svelte:fragment>
+			</VideoPlayer>
 		{:else}
 			<div id="server-voice-users">
 				<div>
@@ -86,11 +78,7 @@
 			</div>
 		{/if}
 		<div>
-			<ChatView>
-				{#each data.channel.messages as message}
-					<ChatMessage data={message}/>
-				{/each}
-			</ChatView>
+			<ChatView messages={data.channel.messages}/>
 		</div>
 	</main>
 </template>
@@ -100,31 +88,23 @@
 		@apply flex flex-col;
 		& > div {
 			&:first-child {
-				@apply min-h-[60vh];
+				@apply relative z-10;
+				@apply min-h-[60vh] transition-[min-height];
 			}
 			&:nth-child(2) {
 				@apply flex-1 overflow-hidden
 				bg-white dark:bg-gray-800;
 			}
 		}
-	}
-
-	#server-voice-stream {
-		@apply flex flex-col items-center justify-center content-center
-		bg-black;
-		&:hover,
-		&:focus-within {
-			& > footer {
-				@apply opacity-100;
+		&:not(.show-chat) {
+			& > div {
+				&:first-child {
+					@apply min-h-full;
+				}
+				&:nth-child(2) {
+					@apply flex-shrink flex-grow-0;
+				}
 			}
-		}
-		& > video {
-			@apply h-full;
-		}
-		& > footer {
-			@apply h-0 top-[-3rem]
-			flex relative
-			opacity-0 transition-opacity;
 		}
 	}
 

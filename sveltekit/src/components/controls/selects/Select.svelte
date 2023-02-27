@@ -60,7 +60,6 @@
 	export let disabled: boolean = false;
 	export let required: boolean = false;
 	// REFS
-	let refOverlay: SvelteComponent | undefined;
 	let refSearch: SvelteComponent | undefined;
 	// DATA
 	let opened: boolean = false;
@@ -80,8 +79,7 @@
 	function validate() {
 		if (form) form(name, !required || !!value || !!values.length);
 	}
-	function select(item: T, _index: number, userCall: boolean = true) {
-		if (!refOverlay) return;
+	function select(item: T, _index: number, close: () => void) {
 		if (allowMultiple) {
 			if (values.includes(item)) {
 				values = values.filter((v) => v != item);
@@ -93,27 +91,24 @@
 			index = _index;
 		}
 		validate();
-		if (userCall) {
-			dispatch('change', { item, index });
-			if (!allowMultiple) refOverlay.toggleOpened();
-		}
+		dispatch('change', { item, index });
+		if (!allowMultiple) close();
 	}
 
-	function selectFirst() {
+	function selectFirst(close: () => void) {
 		if (searchItems.length == 0) return;
-		select(searchItems[0], 0);
+		select(searchItems[0], 0, close);
 	}
 </script>
 
 
 	<Overlay
-		bind:this={refOverlay}
 		bind:opened
 		position="bottom-start"
 		class="select"
 		on:open={refSearch?.focus}
 	>
-		<svelte:fragment slot="item">
+		<svelte:fragment slot="item" let:toggle>
 			{#if !hideLabel}
 				<p class="text label">{$_(`lib.controls.select.${name}`)}</p>
 			{/if}
@@ -121,7 +116,7 @@
 				active={opened}
 				{disabled}
 				variant={ButtonVariant.Secondary}
-				on:click={refOverlay.toggleOpened}
+				on:click={toggle}
 			>
 				{#if allowMultiple && values.length}
 					<slot name="values" items={values} {index} />
@@ -135,7 +130,7 @@
 				<Icon name={Icons.SelectDown} />
 			</Button>
 		</svelte:fragment>
-		<svelte:fragment slot="menu">
+		<svelte:fragment slot="menu" let:close>
 			{#if enableSearch}
 				<header>
 					<TextInput
@@ -144,7 +139,7 @@
 						name={searchName}
 						disableTabIndex={!opened}
 						on:change={debouncedSearch}
-						on:enter={selectFirst}
+						on:enter={() => selectFirst(close)}
 						hideLabel
 					/>
 				</header>
@@ -154,7 +149,7 @@
 					<Button
 						variant={ButtonVariant.Transparent}
 						active={item == value || values.includes(item)}
-						on:click={() => select(item, index)}
+						on:click={() => select(item, index, close)}
 					>
 						<slot name="item" {item} {index} />
 						<Icon name={Icons.SelectSelected} />

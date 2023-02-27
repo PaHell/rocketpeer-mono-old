@@ -32,7 +32,9 @@
 		Users = 'contacts-line',
 		Notification = 'notification-line',
 		Pinned = 'pushpin-line',
-		ScrollDown = 'arrow-down-s-line',
+		Down = 'arrow-down-s-line',
+		Fullscreen = 'fullscreen-line',
+		Volume = 'volume-up-line',
 	}
 </script>
 

@@ -57,22 +57,22 @@
 		const groups: App.Database.Servers.Channels.ChannelGroup[] = [...data.channel_groups];
 		// clear users in voice channels
 		data.voice_channels.forEach((channel) => {
-			channel._voice_users = [];
+			channel.voice_users = [];
 		});
 		// add users to voice channels
 		data.voice_channel_users.forEach((vcu) => {
 			const channel = data.voice_channels.find((channel) => channel.id === vcu.channel_id);
 			if (channel) {
-				const user = data.users.find((user) => user.id === vcu.user_id);
-				if (!channel._voice_users) channel._voice_users = [];
+				const user = data.all_users.find((user) => user.id === vcu.user_id);
+				if (!channel.voice_users) channel.voice_users = [];
 				if (user) vcu._user = user;
-				channel._voice_users.push(vcu);
+				channel.voice_users.push(vcu);
 			}
 		});
 		// clear channels in groups
 		groups.forEach(g => g._channels = []);
 		// collect all channels
-		const channels: (App.Database.Servers.Channels.TextChannel | App.Database.Servers.Channels.VoiceChannel) & TypedChannel = [
+		const channels: ((App.Database.Servers.Channels.TextChannel | App.Database.Servers.Channels.VoiceChannel) & TypedChannel)[] = [
 			...data.text_channels.map(c => {
 				c.type = ChannelType.Text;
 				return c;

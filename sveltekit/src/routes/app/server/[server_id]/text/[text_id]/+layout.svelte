@@ -4,19 +4,59 @@
 	import TextInput from '$src/components/controls/TextInput.svelte';
 	import { UserStatus } from '$src/components/user/user';
 	import UserView from '$src/components/user/UserView.svelte';
+	import { RoleColor } from '$src/lib/enum';
 	import type { LayoutData } from './$types';
 
 	export let data: LayoutData;
 	let search = "";
 
-	const groups: [UserStatus, string][]  = [
-		[UserStatus.Online, "Online"],
-		[UserStatus.Away, "Abwesend"],
-		[UserStatus.Busy, "Beschäftigt"],
-		[UserStatus.Offline, "Offline"],
-	]
+	type ServerRoleView = App.Database.Servers.ServerRole & {
+		users: App.Database.User[];
+	};
 
-	const grouped: [string, App.Database.User[]][] = groups.map(g => [g[1], data.users.filter(u => u.status === g[0])]);
+	let roles: ServerRoleView[] = data.roles
+		.sort((a, b) => a.order - b.order)
+		.map(role => {
+			return { ...role, users: [] };
+		});
+	const roleOnline : ServerRoleView = {
+		id: -2,
+		server_id: -2,
+		name: "Online",
+		color: RoleColor._Online,
+		order: -2,
+		users: [],
+	};
+	const roleOffline : ServerRoleView = {
+		id: -1,
+		server_id: -1,
+		name: "Offline",
+		color: RoleColor._Offline,
+		order: -1,
+		users: [],
+	};
+	for (let su of data.server_users) {
+		const user = data.all_users.find(u => u.id === su.user_id);
+		if (!user) continue;
+		if (user.status === UserStatus.Offline) {
+			roleOffline.users.push(user);
+			continue;
+		}
+		const rolesUsers = data.rolesUsers.filter(ru => ru.server_user_id === su.user_id);
+		const highestRole = roles.find(r => rolesUsers.find(ru => ru.server_role_id === r.id));
+		if (highestRole) {
+			if (!highestRole.users) {
+				highestRole.users = [];
+			}
+			highestRole.users.push(user);
+		} else {
+			roleOnline.users.push(user);
+		}
+	}
+	roles.push(roleOnline);
+	roles.forEach(role => role.users = role.users.sort((a, b) => a.status - b.status));
+	roles.push(roleOffline);
+
 </script>
 
 
@@ -48,14 +88,12 @@
 		<slot />
 	</div>
 	<div class="list-users">
-		{#if data.users}
-			{#each grouped as group}
-				<p class="text sec bold">{group[0]}</p>
-				{#each group[1] as user}
-					<UserView {user} variant={ButtonVariant.Transparent} showStatus />
-				{/each}
+		{#each roles as role}
+			<p class="text bold {role.color}">{role.name}</p>
+			{#each role.users as user}
+				<UserView {user} variant={ButtonVariant.Transparent} showStatus />
 			{/each}
-		{/if}
+		{/each}
 	</div>
 </main>
 
