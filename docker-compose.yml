@@ -5,12 +5,12 @@ services:
     image: mysql:5.7
     restart: always
     environment:
-      MYSQL_DATABASE: 'db'
-      MYSQL_USER: 'user'
-      MYSQL_PASSWORD: 'password'
-      MYSQL_ROOT_PASSWORD: 'root'
+      MYSQL_DATABASE: '${MYSQL_DATABASE}'
+      MYSQL_USER: '${MYSQL_USER}'
+      MYSQL_PASSWORD: '${MYSQL_PASSWORD}'
+      MYSQL_ROOT_PASSWORD: '${MYSQL_ROOT_PASSWORD}'
     ports:
-      - '3306:3306'
+      - '${DB_PORT}:3306'
     networks:
       - db
     volumes:
@@ -21,15 +21,19 @@ services:
       - db
     image: phpmyadmin
     restart: always
+    environment:
+      PMA_ARBITRARY: 1
+      PMA_HOST: db
+      PMA_PORT: '${DB_PORT}'
+      PMA_USER: '${MYSQL_USER}'
+      PMA_PASSWORD: '${MYSQL_PASSWORD}'
+      MEMORY_LIMIT: 1G
+      UPLOAD_LIMIT: 256M
+      HIDE_PHP_VERSION: true
     ports:
-      - 8080:80
+      - '${PMA_PORT}:80'
     networks:
       - db
-    environment:
-      PMA_HOST: db
-      PMA_PORT: 3306
-      PMA_ARBITRARY: 1
-      MYSQL_ROOT_PASSWORD: 'root'
 networks:
   db:
 volumes:
