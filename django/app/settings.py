@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'app'
 ]
 
 MIDDLEWARE = [
@@ -85,7 +86,7 @@ WSGI_APPLICATION = 'app.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'HOST': 'localhost',	
+        'HOST': env('MYSQL_HOST'),	
         'PORT': env('MYSQL_PORT'),
         'NAME': env('MYSQL_DATABASE'),
         'USER': env('MYSQL_USER'),
