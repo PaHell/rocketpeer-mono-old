@@ -1,3 +1,6 @@
+export const prerender = false;
+export const ssr = false;
+
 import { Icons } from '$src/components/general/Icon.svelte';
 import type { LayoutServerLoad } from './$types';
 

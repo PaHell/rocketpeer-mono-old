@@ -1,0 +1,12 @@
+# rocketpeer
+## Initial setup
+1. Install Docker Desktop ([Download](https://www.docker.com/))
+2. On Windows: Install WSL
+3. Clone this repository
+4. Copy example.env to .env
+5. Run `docker-compose up`
+## Fetching Updates
+1. Run `git pull origin master`
+2. Run `docker-compose up --build`
+## Running specific containers
+`docker-compose up -d database phpmyadmin backend frontend`

@@ -1,0 +1,23 @@
+# base image
+FROM node:18-alpine
+
+# create directories 
+RUN mkdir -p /home/repo
+RUN mkdir -p /home/app
+
+WORKDIR /home/repo
+
+# copy repository and install dependencies
+COPY . /home/repo
+COPY ../public /home/public
+COPY ../.env /home/.env
+RUN npm install
+
+# build and copy to app directory
+#RUN cd /home/repo && npm run build
+#RUN cp -r /home/repo/build /home/app
+
+# run app
+WORKDIR /home/repo
+#WORKDIR /home/app
+ENTRYPOINT npm run dev
