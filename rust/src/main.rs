@@ -1,15 +1,7 @@
-use rocket::form::FromForm;
-use rocket::{get, post, serde::json::Json};
-use rocket_okapi::okapi::schemars;
-use rocket_okapi::okapi::schemars::JsonSchema;
-use rocket_okapi::{openapi, openapi_get_routes, swagger_ui::*};
-use serde::{Deserialize, Serialize};
+use rocket_okapi::{openapi_get_routes, swagger_ui::*};
+mod routes;
+use routes::user_related::{example_email, okapi_add_operation_for_example_email_};
 
-#[openapi]
-#[get("/example")]
-fn example_email() -> &'static str {
-    "test@example.com"
-}
 #[rocket::main]
 async fn main() {
     let launch_result = rocket::build()
