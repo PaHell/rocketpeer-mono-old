@@ -6,11 +6,9 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-okapi = { version = "0.7.0-rc.1", features = ["impl_json_schema"] }
 prisma-client-rust = { git = "https://github.com/Brendonovich/prisma-client-rust", tag = "0.6.5" }
 prisma-client-rust-cli = { git = "https://github.com/Brendonovich/prisma-client-rust", tag = "0.6.5" }
-rocket = "=0.5.0-rc.2"
-rocket_okapi = { git = "https://github.com/GREsau/okapi.git", features = ["swagger"] }
-schemars = { version = "0.8.12", features = ["impl_json_schema", "derive_json_schema"] }
-serde = "1.0.157"
+actix-web = "4.3.0"
+serde = "1.0.152"
+tokio = {version = "1.25.0", features = ["full"]}
 

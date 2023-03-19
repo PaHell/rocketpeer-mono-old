@@ -1,22 +1,25 @@
-use rocket_okapi::{openapi_get_routes, swagger_ui::*};
-mod routes;
-use routes::user_related::{example_email, okapi_add_operation_for_example_email_};
+use actix_web::web::get;
+use actix_web::{web, App, HttpResponse, HttpServer};
 
-#[rocket::main]
-async fn main() {
-    let launch_result = rocket::build()
-        .mount("/", openapi_get_routes![example_email])
-        .mount(
-            "/swagger/",
-            make_swagger_ui(&SwaggerUIConfig {
-                url: "../openapi.json".to_owned(),
-                ..Default::default()
-            }),
+async fn hello() -> HttpResponse {
+    HttpResponse::Ok().body("hello")
+}
+async fn bye() -> HttpResponse {
+    HttpResponse::Ok().body("bye")
+}
+
+#[tokio::main]
+async fn main() -> std::io::Result<()> {
+    HttpServer::new(move || {
+        App::new().service(
+            web::scope("/api").service(
+                web::scope("/users")
+                    .route("/hello", get().to(hello))
+                    .route("/bye", get().to(bye)),
+            ),
         )
-        .launch()
-        .await;
-    match launch_result {
-        Ok(_) => println!("Rocket shut down gracefully."),
-        Err(err) => println!("Rocket had an error: {}", err),
-    };
+    })
+    .bind(("127.0.0.1", 8000))?
+    .run()
+    .await
 }

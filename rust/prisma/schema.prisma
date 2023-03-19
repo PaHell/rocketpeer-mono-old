@@ -171,35 +171,35 @@ model text_channel_messages {
 }
 
 enum users_status {
-  online
-  away
-  do_not_disturb
-  offline
+  Online
+  Away
+  DoNotDisturb
+  Offline
 }
 
 enum colors {
-  black
-  white
-  purple
+  Black
+  White
+  Purple
 }
 
 enum users_privacy_level {
-  default
+  Default
 }
 
 enum users_role {
-  administrator
-  default
+  Administrator
+  Default
 }
 
 enum server_role {
-  administrator
-  default
+  Administrator
+  Default
 }
 
 enum message_type {
-  text
-  picture
-  video
-  gif
+  Text
+  Picture
+  Video
+  Gif
 }
