@@ -1,6 +1,6 @@
 <script lang="typescript">
 	import { goto } from '$app/navigation';
-	import Font from '$comps/branding/Font.svelte';
+	import Logo from '$comps/Logo.svelte';
 	import Copyright from "$comps/templates/Copyright.svelte";
 	import Button, { ButtonVariant } from '$src/components/controls/Button.svelte';
 	import { Icons } from '$src/components/general/Icon.svelte';

@@ -8,8 +8,7 @@
 	import Footer from "$src/components/templates/Footer.svelte";
 	import TextInput from '$src/components/controls/TextInput.svelte';
 	import { goto } from '$app/navigation';
-	import Logo from '$src/components/branding/Logo.svelte';
-	import Font from '$src/components/branding/Font.svelte';
+	import Logo from '$src/components/Logo.svelte';
 	import type { NavGroup } from '$src/components/controls/NavigationGroup.svelte';
 	import NavigationGroup from '$src/components/controls/NavigationGroup.svelte';
 

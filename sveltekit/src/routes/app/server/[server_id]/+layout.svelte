@@ -7,8 +7,7 @@
 	import Footer from "$src/components/templates/Footer.svelte";
 	import TextInput from '$src/components/controls/TextInput.svelte';
 	import { afterNavigate, goto } from '$app/navigation';
-	import Logo from '$src/components/branding/Logo.svelte';
-	import Font from '$src/components/branding/Font.svelte';
+	import Logo from '$src/components/Logo.svelte';
 	import type { LayoutData } from './$types';
 	import { page } from '$app/stores';
 	import NavigationItem from '$src/components/controls/NavigationItem.svelte';

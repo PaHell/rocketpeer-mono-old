@@ -12,3 +12,11 @@ export enum RoleColor {
     _Online = "pri",
     _Offline = "sec",
 }
+
+export enum ContentType {
+    Text,
+    Image,
+    Video,
+    Audio,
+    File,
+}

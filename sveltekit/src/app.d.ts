@@ -1,7 +1,7 @@
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
 
-import type { RoleColor } from "./lib/enum";
+import type { ContentType, RoleColor } from "./lib/enum";
 
 // and what to do when importing types
 declare global {
@@ -69,6 +69,16 @@ declare global {
 				interface Token {
 					access_token: string;
 					refresh_token: string;
+				}
+			}
+			namespace Messages {
+				interface Message extends PrimaryKeyed, Timestamped {
+					sender_id: User['id'];
+					_sender?: User;
+					recipient_id: User['id'];
+					_recipient?: User;
+					type: ContentType;
+					payload: string;
 				}
 			}
 			namespace Chat {

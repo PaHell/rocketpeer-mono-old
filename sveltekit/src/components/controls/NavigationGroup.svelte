@@ -4,7 +4,7 @@
 	import type { NavItem } from '$src/components/controls/Navigation.svelte';
 	import Navigation from "$src/components/controls/Navigation.svelte";
 	import { goto } from '$app/navigation';
-	import Font from '$src/components/branding/Font.svelte';
+	import Logo from '$src/components/Logo.svelte';
 	import { browser } from '$app/environment';
 	import { onMount } from 'svelte';
 	import NavigationItem from '$src/components/controls/NavigationItem.svelte';
