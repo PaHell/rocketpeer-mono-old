@@ -2,13 +2,13 @@
 </script>
 
 <script lang="typescript">
-	import Overlay from "$comps/controls/Overlay.svelte";
-    import Button, { ButtonVariant } from '$comps/controls/Button.svelte';
-    import SelectLanguage from '$comps/controls/selects/SelectLanguage.svelte';
-    import SelectTheme from '$comps/controls/selects/SelectTheme.svelte';
-    import { Icons } from '$comps/general/Icon.svelte';
+	import Overlay from "$src/components/controls/Overlay.svelte";
+    import Button, { ButtonVariant } from '$src/components/controls/Button.svelte';
+    import SelectLanguage from '$src/components/controls/selects/SelectLanguage.svelte';
+    import SelectTheme from '$src/components/controls/selects/SelectTheme.svelte';
+    import { Icons } from '$src/components/general/Icon.svelte';
     import { _ } from 'svelte-i18n';
-	import Checkbox from "$comps/controls/Checkbox.svelte";
+	import Checkbox from "$src/components/controls/Checkbox.svelte";
 
     let refDevTools: Overlay;
     let devToolsOpened = false;

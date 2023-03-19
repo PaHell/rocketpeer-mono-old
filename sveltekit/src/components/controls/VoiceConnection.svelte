@@ -2,9 +2,9 @@
 </script>
 
 <script lang="typescript">
-	import Icon, { Icons } from "$comps/general/Icon.svelte";
-	import Button, { ButtonVariant } from "$comps/controls/Button.svelte";
-	import UserView from "./UserView.svelte";
+	import Icon, { Icons } from "$src/components/general/Icon.svelte";
+	import Button, { ButtonVariant } from "$src/components/controls/Button.svelte";
+	import UserView from "$src/components/views/user/View.svelte";
 	import { connectedVoiceChannel } from "$src/store";
 
     export let user: App.Database.User | undefined;
@@ -90,7 +90,7 @@
 				@apply flex-1;
 				line-height: 1.125;
 			}
-			& > .user-display {
+			& > .user-view {
 				@apply flex-1 h-14 pl-2 pr-2 mr-2
 				overflow-hidden
 				border-y-0 border-l-0 border-gray-300 dark:border-gray-800

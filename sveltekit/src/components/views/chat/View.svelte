@@ -1,15 +1,15 @@
 <script lang="typescript" context="module">
-    import UserImage from "$comps/user/UserImage.svelte";
-    import Button, { ButtonAlignment, ButtonVariant } from "$comps/controls/Button.svelte";
+    import UserImage from "$src/components/views/user/Image.svelte";
+    import Button, { ButtonAlignment, ButtonVariant } from "$src/components/controls/Button.svelte";
     import moment from "moment";
 	import { locale } from "$src/lib/i18n";
 	import { createEventDispatcher, onMount } from "svelte";
-	import { time } from "$lib/time";
-	import TextInput from "./controls/TextInput.svelte";
+	import { time } from "$src/lib/time";
+	import TextInput from "../../controls/TextInput.svelte";
 	import { debounce } from "$src/lib/helpers";
 	import { afterNavigate } from "$app/navigation";
-	import { Icons } from "./general/Icon.svelte";
-	import ChatMessage from "./ChatMessage.svelte";
+	import { Icons } from "../../general/Icon.svelte";
+	import ChatMessage from "./Message.svelte";
 </script>
 
 <script lang="typescript">
@@ -18,7 +18,10 @@
         message: string;
     }
 
-	export let messages: App.Database.Chat.Message[] = [];
+	type T = $$Generic<App.Database.User, App.Database.Timestamped>;
+    export let data: T[];
+    export let user: keyof T;
+    export let payload: keyof T; 
 
     let input = "message";
 	let refInput: TextInput<string> | undefined;
@@ -59,8 +62,8 @@
     <div class="chat-view">
         <main bind:this={refChat} on:scroll={debouncedOnChatScroll}>
             <div class="spacer"/>
-            {#each messages as msg}
-				<ChatMessage data={msg}/>
+            {#each data as msg}
+				<ChatMessage data={msg} {user} {payload}/>
 			{/each}
             <div class="scroll-top">
                 <Button

@@ -1,10 +1,10 @@
 <script lang="typescript">
 	import { onDestroy, onMount, setContext, SvelteComponent } from 'svelte';
-	import Column from '$comps/table/Column.svelte';
-	import Row, { classes, RowState, translations } from '$comps/table/Row.svelte';
+	import Column from '$src/components/table/Column.svelte';
+	import Row, { classes, RowState, translations } from '$src/components/table/Row.svelte';
 	import { writable, type Writable } from 'svelte/store';
-	import Button, { ButtonVariant } from '$comps/controls/Button.svelte';
-	import Icon, { Icons } from '$comps/general/Icon.svelte';
+	import Button, { ButtonVariant } from '$src/components/controls/Button.svelte';
+	import Icon, { Icons } from '$src/components/general/Icon.svelte';
 	import { _ } from 'svelte-i18n';
 
 	type T = $$Generic<App.Models.DatabaseElement>;

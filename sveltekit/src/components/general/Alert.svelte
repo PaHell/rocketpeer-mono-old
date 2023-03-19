@@ -1,5 +1,5 @@
 <script lang="typescript" context="module">
-	import { default as Icon, Icons } from '$comps/general/Icon.svelte';
+	import { default as Icon, Icons } from '$src/components/general/Icon.svelte';
 	import { _ } from 'svelte-i18n';
 	export enum AlertVariant {
 		Success = 'success',

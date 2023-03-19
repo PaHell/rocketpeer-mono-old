@@ -81,14 +81,6 @@ declare global {
 					payload: string;
 				}
 			}
-			namespace Chat {
-				interface Message extends PrimaryKeyed, Timestamped {
-					user_id: User['id'];
-					_user?: User;
-					channel_id: Servers.Channels.Channel['id'];
-					content: string;
-				}
-			}
 			namespace Servers {
 				interface Server extends PrimaryKeyed {
 					name: string;
@@ -136,6 +128,12 @@ declare global {
 					interface VoiceChannel extends Channel {
 						voice_users?: VoiceChannelUser[];
 						messages?: Chat.Message[];
+					}
+					interface Message extends PrimaryKeyed, Timestamped {
+						user_id: User['id'];
+						_user?: User;
+						channel_id: TextChannel['id'];
+						content: string;
 					}
 				}
 			}

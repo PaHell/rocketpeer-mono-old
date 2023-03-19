@@ -2,8 +2,8 @@
 
 <script lang="typescript" context="module">
 	// IMPORT
-	import Button, { ButtonVariant } from '$comps/controls/Button.svelte';
-	import { default as Icon, Icons } from '$comps/general/Icon.svelte';
+	import Button, { ButtonVariant } from '$src/components/controls/Button.svelte';
+	import { default as Icon, Icons } from '$src/components/general/Icon.svelte';
 	import {
 		createEventDispatcher,
 		getContext,
@@ -13,10 +13,10 @@
 		type ComponentEvents
 	} from 'svelte';
 	import { _ } from 'svelte-i18n';
-	import { debounce, searchByKeys } from '$lib/helpers';
-	import { clickOutside } from '$lib/use';
-	import Overlay from '$comps/controls/Overlay.svelte';
-	import TextInput from '$comps/controls/TextInput.svelte';
+	import { debounce, searchByKeys } from '$src/lib/helpers';
+	import { clickOutside } from '$src/lib/use';
+	import Overlay from '$src/components/controls/Overlay.svelte';
+	import TextInput from '$src/components/controls/TextInput.svelte';
 	import type { FormContext } from '$src/components/general/Form.svelte';
 </script>
 

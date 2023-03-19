@@ -1,12 +1,12 @@
 <script lang="typescript" context="module">
-    import Badge, { BadgeVariant } from "./general/Badge.svelte";
-    import UserImage from "./user/UserImage.svelte";
+    import Badge, { BadgeVariant } from "$src/components/general/Badge.svelte";
+    import UserImage from "$src/components/views/user/Image.svelte";
 	import Button, { ButtonStyle, ButtonVariant } from '$src/components/controls/Button.svelte';
 	import NavigationItem from '$src/components/controls/NavigationItem.svelte';
 	import { Icons } from '$src/components/general/Icon.svelte';
 	import { createEventDispatcher, onMount } from "svelte";
 	import { connectedVoiceChannel } from "$src/store";
-	import { playSound, Sounds } from "./MusicPlayer.svelte";
+	import { playSound, Sounds } from "$src/components/controls/MusicPlayer.svelte";
 </script>
 
 <script lang="typescript">

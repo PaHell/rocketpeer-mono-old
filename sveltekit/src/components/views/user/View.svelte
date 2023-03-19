@@ -1,20 +1,24 @@
 <script lang="typescript" context="module">
-    import UserImage from "$comps/user/UserImage.svelte";
-    import Button, { ButtonVariant } from "$comps/controls/Button.svelte";
+    import Image from "$src/components/views/user/Image.svelte";
+    import Button, { ButtonStyle, ButtonVariant } from "$src/components/controls/Button.svelte";
 </script>
 
 <script lang="typescript">
     export let user: App.Database.User;
     export let variant: ButtonVariant = ButtonVariant.Transparent;
+    export let style: ButtonStyle = ButtonStyle.None;
+    export let active = false;
     export let showStatus = false;
 </script>
 
 <template>
     <Button
         {variant}
-        class="user-display"
-        on:click={() => console.log("clicked")}>
-        <UserImage {user} {showStatus} />
+        {active}
+        style={ButtonStyle.Card}
+        class="user-view"
+        on:click>
+        <Image {user} {showStatus} />
         <main>
             <p class="text bold ellipsis">{user.display_name}</p>
             <p class="text text-label sec ellipsis">#{user.username}</p>
@@ -23,7 +27,7 @@
 </template>
 
 <style global lang="postcss">
-    .button.user-display {
+    .button.user-view {
         @apply items-center justify-start text-left;
         & > .user-image {
             @apply flex-none;

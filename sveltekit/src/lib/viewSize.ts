@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
 import { browser } from '$app/environment';
-import { isMobile } from '$lib/helpers';
+import { isMobile } from '$src/lib/helpers';
 
 export interface ViewSize {
 	text: string;

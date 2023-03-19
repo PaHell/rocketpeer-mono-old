@@ -20,3 +20,12 @@ export enum ContentType {
     Audio,
     File,
 }
+
+export enum UserStatus {
+	Online,
+	Busy,
+	Away,
+	Offline
+}
+
+export const UserStatusColors = ['bg-success-500', 'bg-warning-500', 'bg-danger-500', 'hidden'];

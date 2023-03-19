@@ -2,16 +2,16 @@
 	// import css bootstrap
 	import '$src/app.postcss';
 	// other imports
-	import { initLocale, localeInitialized } from '$lib/i18n';
-	import FullscreenLoading from '$comps/general/FullscreenLoading.svelte';
+	import { initLocale, localeInitialized } from '$src/lib/i18n';
+	import FullscreenLoading from '$src/components/general/FullscreenLoading.svelte';
 	import { afterNavigate, beforeNavigate, goto } from '$app/navigation';
 	import type { AfterNavigate, BeforeNavigate } from '@sveltejs/kit';
 	import { onMount } from 'svelte';
 	import { authenticated } from '$src/store';
 	import { _ } from 'svelte-i18n';
 	import { browser } from '$app/environment';
-	import DeveloperTools from "$src/components/DeveloperTools.svelte";
-	import MusicPlayer, { playSound, Sounds } from "$src/components/MusicPlayer.svelte";
+	import DeveloperTools from "$src/components/controls/DeveloperTools.svelte";
+	import MusicPlayer, { playSound, Sounds } from "$src/components/controls/MusicPlayer.svelte";
 
 	const routeAuthed = '/app';
 	const routeUnauthed = '/auth';

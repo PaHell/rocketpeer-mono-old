@@ -1,17 +1,16 @@
 <script lang="typescript">
-	import Button, { ButtonVariant } from '$comps/controls/Button.svelte';
-	import { default as Icon, Icons } from '$comps/general/Icon.svelte';
-	import TextInput from '$comps/controls/TextInput.svelte';
+	import Button, { ButtonVariant } from '$src/components/controls/Button.svelte';
+	import { default as Icon, Icons } from '$src/components/general/Icon.svelte';
+	import TextInput from '$src/components/controls/TextInput.svelte';
 	import { _ } from 'svelte-i18n';
 	import { afterNavigate } from '$app/navigation';
 	import { debounce } from '$src/lib/helpers';
-	import ChatMessage from '$src/components/ChatMessage.svelte';
-	import ChatView from '$src/components/ChatView.svelte';
-	import UserVoiceView from '$src/components/user/UserVoiceView.svelte';
+	import ChatView from '$src/components/views/chat/View.svelte';
+	import UserVoiceView from '$src/components/views/user/Voice.svelte';
 	import Alert, { AlertVariant } from '$src/components/general/Alert.svelte';
 	import { onDestroy } from 'svelte';
-	import Overlay from './controls/Overlay.svelte';
-	import Slider from './controls/Slider.svelte';
+	import Overlay from './Overlay.svelte';
+	import Slider from './Slider.svelte';
 
 	export let stream: MediaStream | undefined;
     

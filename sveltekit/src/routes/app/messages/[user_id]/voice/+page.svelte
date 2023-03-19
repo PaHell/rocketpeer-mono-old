@@ -1,17 +1,17 @@
 <script lang="typescript">
-	import Button, { ButtonVariant } from '$comps/controls/Button.svelte';
-	import { default as Icon, Icons } from '$comps/general/Icon.svelte';
-	import TextInput from '$comps/controls/TextInput.svelte';
+	import Button, { ButtonVariant } from '$src/components/controls/Button.svelte';
+	import { default as Icon, Icons } from '$src/components/general/Icon.svelte';
+	import TextInput from '$src/components/controls/TextInput.svelte';
 	import { _ } from 'svelte-i18n';
 	import { afterNavigate } from '$app/navigation';
 	import { debounce } from '$src/lib/helpers';
 	import type { LayoutData } from './$types';
-	import ChatMessage from '$src/components/ChatMessage.svelte';
-	import ChatView from '$src/components/ChatView.svelte';
-	import UserVoiceView from '$src/components/user/UserVoiceView.svelte';
+	import ChatMessage from '$src/components/views/chat/Message.svelte';
+	import ChatView from '$src/components/views/chat/View.svelte';
+	import UserVoiceView from '$src/components/views/user/Voice.svelte';
 	import Alert, { AlertVariant } from '$src/components/general/Alert.svelte';
 	import { onDestroy } from 'svelte';
-	import VideoPlayer from '$src/components/VideoPlayer.svelte';
+	import VideoPlayer from '$src/components/controls/VideoPlayer.svelte';
 
 	export let data: LayoutData;
 
@@ -64,9 +64,6 @@
 		{:else}
 			<div id="server-voice-users">
 				<div>
-					{#each data.channel.voice_users as vcu}
-						<UserVoiceView data={vcu} on:click={openStream}/>
-					{/each}
 				</div>
 				<footer>
 					<Button variant={ButtonVariant.Secondary}
@@ -78,7 +75,7 @@
 			</div>
 		{/if}
 		<div>
-			<ChatView messages={data.channel.messages}/>
+			<ChatView data={data.channel.messages} user="_user" payload="content"/>
 		</div>
 	</main>
 </template>
@@ -115,7 +112,7 @@
 		& > div {
 			@apply flex-1 flex items-center justify-center
 			flex-wrap content-center;
-			& > .button.user-voice-view {
+			& > .button.user-voice {
 				@apply m-2;
 				flex: 0 1 15rem;
 			}

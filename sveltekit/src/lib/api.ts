@@ -1,4 +1,4 @@
-import { http } from '$lib/http';
+import { http } from '$src/lib/http';
 
 export class Auth {
 	static async login(user: App.Database.Auth.Login) {

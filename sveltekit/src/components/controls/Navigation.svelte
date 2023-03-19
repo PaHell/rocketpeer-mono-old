@@ -1,7 +1,7 @@
 <script lang="typescript" context="module">
 	import { afterNavigate, goto } from '$app/navigation';
 	import { createEventDispatcher, onMount } from 'svelte';
-	import type { Icons } from '$comps/general/Icon.svelte';
+	import type { Icons } from '$src/components/general/Icon.svelte';
     export interface NavItem {
         title: string;
         icon: Icons;

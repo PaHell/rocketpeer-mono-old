@@ -1,6 +1,6 @@
 <script lang="typescript" context="module">
 	import { _ } from 'svelte-i18n';
-	import { default as Icon, Icons } from '$comps/general/Icon.svelte';
+	import { default as Icon, Icons } from '$src/components/general/Icon.svelte';
 	export enum ButtonVariant {
 		Primary = 'button-pri',
 		Secondary = 'button-sec',

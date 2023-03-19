@@ -1,8 +1,8 @@
 <script lang="typescript">
-	import Button, { ButtonVariant } from '$comps/controls/Button.svelte';
-	import Icon, { Icons } from '$comps/general/Icon.svelte';
+	import Button, { ButtonStyle, ButtonVariant } from '$src/components/controls/Button.svelte';
+	import Icon, { Icons } from '$src/components/general/Icon.svelte';
 	import { getContext, onMount, setContext } from 'svelte';
-	import { mobile } from '$lib/viewSize';
+	import { mobile } from '$src/lib/viewSize';
 	import Navigation from "$src/components/controls/Navigation.svelte";
 	import Footer from "$src/components/templates/Footer.svelte";
 	import TextInput from '$src/components/controls/TextInput.svelte';
@@ -11,15 +11,19 @@
 	import type { LayoutData } from './$types';
 	import { page } from '$app/stores';
 	import NavigationItem from '$src/components/controls/NavigationItem.svelte';
-	import UserImage from '$src/components/user/UserImage.svelte';
-	import UserView from '$src/components/user/UserView.svelte';
-	import VoiceConnection from '$src/components/user/VoiceConnection.svelte';
+	import UserImage from '$src/components/views/user/Image.svelte';
+	import UserView from '$src/components/views/user/View.svelte';
+	import VoiceConnection from '$src/components/controls/VoiceConnection.svelte';
 	import { connectedVoiceChannel } from '$src/store';
-	import VoiceChannel from '$src/components/VoiceChannel.svelte';
-	import TextChannel from '$src/components/TextChannel.svelte';
-	import { playSound, Sounds } from '$src/components/MusicPlayer.svelte';
+	import VoiceChannel from '$src/components/views/channel/VoiceChannel.svelte';
+	import TextChannel from '$src/components/views/channel/TextChannel.svelte';
+	import { playSound, Sounds } from '$src/components/controls/MusicPlayer.svelte';
 	
 	export let data: LayoutData;
+
+	function open(user: App.Database.User) {
+		goto(`/app/messages/${user.id}/text`);
+	}
 </script>
 
 
@@ -36,9 +40,14 @@
 				/>
 		</div>
 	</header>
-	<div class="fill list-channel-groups">
-		{#each data.messages as entry}
-			<UserView user={entry[0]} variant={ButtonVariant.Transparent} showStatus />
+	<div class="fill list-users">
+		{#each data.chats as entry}
+			<UserView user={entry[0]}
+				variant={ButtonVariant.Transparent}
+				style={ButtonStyle.Card}
+				active={$page.params.user_id == entry[0].id}
+				on:click={() => open(entry[0])}
+				showStatus />
 		{/each}
 	</div>
 	<VoiceConnection user={data.user}/>

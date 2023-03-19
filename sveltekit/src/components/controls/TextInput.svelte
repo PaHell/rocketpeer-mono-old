@@ -1,14 +1,14 @@
 <script lang="typescript" context="module">
-	import { default as Icon, Icons } from '$comps/general/Icon.svelte';
+	import { default as Icon, Icons } from '$src/components/general/Icon.svelte';
 	import {
 		createEventDispatcher,
 		getContext,
 		onMount,
 		type ComponentConstructorOptions
 	} from 'svelte';
-	import Alert, { AlertVariant } from '$comps/general/Alert.svelte';
-	import { debounce } from '$lib/helpers';
-	import { validate as _validate, ValidationRuleName } from '$lib/validate';
+	import Alert, { AlertVariant } from '$src/components/general/Alert.svelte';
+	import { debounce } from '$src/lib/helpers';
+	import { validate as _validate, ValidationRuleName } from '$src/lib/validate';
 	import { format, _ } from 'svelte-i18n';
 	import type { stringify } from 'postcss';
 	import type { FormContext } from '../general/Form.svelte';

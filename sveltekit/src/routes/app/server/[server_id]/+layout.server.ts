@@ -2,8 +2,7 @@ import { browser } from '$app/environment';
 import { goto } from '$app/navigation';
 import { page } from '$app/stores';
 import { Icons } from '$src/components/general/Icon.svelte';
-import { UserStatus } from '$src/components/user/user';
-import { RoleColor } from '$src/lib/enum';
+import { RoleColor, UserStatus } from '$src/lib/enum';
 import type { LayoutServerLoad } from './$types';
 
 let all_users: App.Database.User[] = [

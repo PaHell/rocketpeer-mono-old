@@ -1,6 +1,6 @@
 <script lang="typescript" context="module">
-    import { classes } from "./user";
-    import Icon, { Icons } from "$comps/general/Icon.svelte";
+    import Icon, { Icons } from "$src/components/general/Icon.svelte";
+	import { UserStatusColors } from "$src/lib/enum";
 </script>
 
 <script lang="typescript">
@@ -17,7 +17,7 @@
             <Icon name={Icons.UserImagePlaceholder} class="sec {small ? 'small': ''}" />
         {/if}
         {#if showStatus}
-            <div class="status {classes[user.status]}"></div>
+            <div class="status {UserStatusColors[user.status]}"></div>
         {/if}
     {/if}
 </div>
