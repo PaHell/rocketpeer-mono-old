@@ -2,7 +2,7 @@ import { browser } from '$app/environment';
 import { goto } from '$app/navigation';
 import { page } from '$app/stores';
 import { Icons } from '$src/components/general/Icon.svelte';
-import { ContentType, RoleColor, UserStatus } from '$src/lib/enum';
+import { PayloadType, RoleColor, UserStatus } from '$src/lib/enum';
 import type { LayoutServerLoad } from './$types';
 
 let all_users: App.Database.User[] = [
@@ -133,7 +133,7 @@ let messages: App.Database.Messages.Message[] = [
 		id: 0,
 		sender_id: 1,
 		recipient_id: 2,
-		type: ContentType.Text,
+		type: PayloadType.Text,
 		payload: 'Hello there!',
 		created_at: '2021-01-01T00:00:00.000Z',
 		updated_at: null,
@@ -143,7 +143,7 @@ let messages: App.Database.Messages.Message[] = [
 		id: 1,
 		sender_id: 2,
 		recipient_id: 1,
-		type: ContentType.Text,
+		type: PayloadType.Text,
 		payload: 'General Kenobi!',
 		created_at: '2021-01-01T00:00:00.000Z',
 		updated_at: null,
@@ -153,7 +153,7 @@ let messages: App.Database.Messages.Message[] = [
 		id: 2,
 		sender_id: 1,
 		recipient_id: 2,
-		type: ContentType.Text,
+		type: PayloadType.Text,
 		payload: 'You are a bold one!',
 		created_at: '2021-01-01T00:00:00.000Z',
 		updated_at: null,
@@ -163,7 +163,7 @@ let messages: App.Database.Messages.Message[] = [
 		id: 3,
 		sender_id: 2,
 		recipient_id: 1,
-		type: ContentType.Text,
+		type: PayloadType.Text,
 		payload: 'I have been waiting for you, Obi-Wan.',
 		created_at: '2021-01-01T00:00:00.000Z',
 		updated_at: null,
@@ -173,7 +173,7 @@ let messages: App.Database.Messages.Message[] = [
 		id: 4,
 		sender_id: 1,
 		recipient_id: 2,
-		type: ContentType.Text,
+		type: PayloadType.Text,
 		payload: 'A long time, General.',
 		created_at: '2021-01-01T00:00:00.000Z',
 		updated_at: null,
@@ -183,7 +183,7 @@ let messages: App.Database.Messages.Message[] = [
 		id: 5,
 		sender_id: 1,
 		recipient_id: 3,
-		type: ContentType.Text,
+		type: PayloadType.Text,
 		payload: 'Hello there!',
 		created_at: '2021-01-01T00:00:00.000Z',
 		updated_at: null,

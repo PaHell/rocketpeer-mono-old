@@ -13,7 +13,7 @@ export enum RoleColor {
     _Offline = "sec",
 }
 
-export enum ContentType {
+export enum PayloadType {
     Text,
     Image,
     Video,

@@ -1,7 +1,7 @@
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
 
-import type { ContentType, RoleColor } from "./lib/enum";
+import type { PayloadType, RoleColor } from "./lib/enum";
 
 // and what to do when importing types
 declare global {
@@ -77,7 +77,7 @@ declare global {
 					_sender?: User;
 					recipient_id: User['id'];
 					_recipient?: User;
-					type: ContentType;
+					type: PayloadType;
 					payload: string;
 				}
 			}
@@ -133,7 +133,8 @@ declare global {
 						user_id: User['id'];
 						_user?: User;
 						channel_id: TextChannel['id'];
-						content: string;
+						type: PayloadType;
+						payload: string;
 					}
 				}
 			}

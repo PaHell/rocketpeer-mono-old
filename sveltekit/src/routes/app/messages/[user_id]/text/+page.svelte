@@ -8,12 +8,23 @@
 	import { afterNavigate } from '$app/navigation';
 	import { debounce } from '$src/lib/helpers';
 	import ChatView from '$src/components/views/chat/View.svelte';
+	import ChatMessage from "$src/components/views/chat/Message.svelte";
 
 	export let data: LayoutData;
 </script>
 
 <template>
-	<ChatView data={data.messages} user="_sender" payload="payload"/>
+	<ChatView>
+		{#if data.messages}
+			{#each data.messages as message (message.id)}
+				<ChatMessage
+					sender={message._sender}
+					time={message.created_at}
+					type={message.type}
+					payload={message.payload}/>
+			{/each}
+		{/if}
+	</ChatView>
 </template>
 
 

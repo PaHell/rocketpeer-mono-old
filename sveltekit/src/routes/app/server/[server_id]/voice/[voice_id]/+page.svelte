@@ -78,7 +78,17 @@
 			</div>
 		{/if}
 		<div>
-			<ChatView data={data.channel.messages} user="_user" payload="content"/>
+			<ChatView>
+				{#if data.channel.messages}
+					{#each data.channel.messages as message}
+						<ChatMessage
+							sender={message._user}
+							time={message.created_at}
+							type={message.type}
+							payload={message.payload}/>
+					{/each}
+				{/if}
+			</ChatView>
 		</div>
 	</main>
 </template>

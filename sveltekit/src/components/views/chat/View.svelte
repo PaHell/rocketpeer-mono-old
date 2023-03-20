@@ -5,23 +5,17 @@
 	import { locale } from "$src/lib/i18n";
 	import { createEventDispatcher, onMount } from "svelte";
 	import { time } from "$src/lib/time";
-	import TextInput from "../../controls/TextInput.svelte";
+	import TextInput from "$src/components/controls/TextInput.svelte";
 	import { debounce } from "$src/lib/helpers";
 	import { afterNavigate } from "$app/navigation";
-	import { Icons } from "../../general/Icon.svelte";
-	import ChatMessage from "./Message.svelte";
+	import { Icons } from "$src/components/general/Icon.svelte";
+	import { PayloadType } from "$src/lib/enum";
 </script>
 
 <script lang="typescript">
-
     interface $$Events {
         message: string;
     }
-
-	type T = $$Generic<App.Database.User, App.Database.Timestamped>;
-    export let data: T[];
-    export let user: keyof T;
-    export let payload: keyof T; 
 
     let input = "message";
 	let refInput: TextInput<string> | undefined;
@@ -62,9 +56,7 @@
     <div class="chat-view">
         <main bind:this={refChat} on:scroll={debouncedOnChatScroll}>
             <div class="spacer"/>
-            {#each data as msg}
-				<ChatMessage data={msg} {user} {payload}/>
-			{/each}
+			<slot/>
             <div class="scroll-top">
                 <Button
                     icon={Icons.Down}

@@ -4,16 +4,15 @@
     import moment from "moment";
 	import { locale } from "$src/lib/i18n";
 	import { onMount } from "svelte";
-	import { time } from "$src/lib/time";
+	import { time as _time } from "$src/lib/time";
+import type { PayloadType } from "$src/lib/enum";
 </script>
 
 <script lang="typescript">
-	import { stringify } from "postcss";
-
-    type T = $$Generic<App.Database.User, App.Database.Timestamped>;
-    export let data: T;
-    export let user: keyof T;
-    export let payload: keyof T; 
+    export let sender: App.Database.User | undefined;
+    export let time: string;
+    export let type: PayloadType;
+    export let payload: string;
 
     locale.subscribe((locale) => {
         if (!locale) return; 
@@ -22,13 +21,13 @@
 </script>
 
 <div class="chat-message">
-    {#if user}
-        <UserImage user={data[user]} />
+    {#if sender}
+        <UserImage user={sender} />
     {/if}
     <main>
-        <p class="text bold ellipsis">{data[user]?.display_name}</p>
-        <p class="text tri text-label ellipsis">{$time(data.created_at).format()}</p>
-        <p class="text col-span-2">{data[payload]}</p>
+        <p class="text bold ellipsis">{sender?.display_name}</p>
+        <p class="text tri text-label ellipsis">{$_time(time).format()}</p>
+        <p class="text col-span-2">{payload}</p>
     </main>
 </div>
 

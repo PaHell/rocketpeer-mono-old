@@ -3,7 +3,7 @@ import { goto } from '$app/navigation';
 import { page } from '$app/stores';
 import { Icons } from '$src/components/general/Icon.svelte';
 import { UserStatus } from '$src/lib/enum';
-import { ContentType, RoleColor } from '$src/lib/enum';
+import { PayloadType, RoleColor } from '$src/lib/enum';
 import type { LayoutServerLoad } from './$types';
 
 export const load = (async ({params, parent}) => {
