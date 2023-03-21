@@ -37,106 +37,148 @@ declare global {
 			}
 		}
 		namespace Lib {
-			interface RequestError {
-				error: string;
-			}
 			interface Country {
 				iso3: string;
 				name: string;
 				flag: string;
 			}
 		}
-		namespace Database {
-			interface PrimaryKeyed {
+		namespace P2P {
+			interface VoiceChannelUser extends PrimaryKey {
+				user_id: User['id'];
+				_user?: User;
+				channel_id: VoiceChannel['id'];
+				is_live: boolean;
+				is_talking: boolean;
+			}
+		}
+		namespace API {
+			interface RequestError {
+				error: string;
+			}
+		}
+		namespace DB {
+			interface PrimaryKey {
 				id: number;
 			}
-			interface Timestamped {
+			interface CreatedAt {
 				created_at: string;
+			}
+			interface Timestamp extends CreatedAt {
 				updated_at: string | null;
 				deleted_at: string | null;
 			}
-			interface User extends PrimaryKeyed, Timestamped {
+			interface Login {
+				usernameEmail: string;
+				password: string;
+			}
+			interface Register {
 				username: string;
+				password: string;
+				first_name: string;
+				last_name: string;
+				email: string;
+			}
+			interface AccessToken extends PrimaryKey, CreatedAt {
+				user_id: User['id'];
+				access_token: string;
+				refresh_token: string;
+				expires_at: string;
+			}
+			interface User extends PrimaryKey, CreatedAt {
+				username: string;
+				//password: string;
 				display_name: string;
-				img: string;
+				first_name: string;
+				last_name: string;
+				image: string;
 				status: UserStatus;
+				email: string;
+				_friends?: UserFriend[];
+				_friends_pending?: UserFriend[];
+				_friend_requests?: UserFriend[];
 			}
-			namespace Auth {
-				interface Login {
-					username: string;
-					password: string;
-				}
-				interface Token {
-					access_token: string;
-					refresh_token: string;
-				}
+			interface UserFriend extends PrimaryKey, CreatedAt {
+				sender_id: User['id'];
+				recipient_id: User['id'];
+				status: UserFriendStatus;
 			}
-			namespace Messages {
-				interface Message extends PrimaryKeyed, Timestamped {
-					sender_id: User['id'];
-					_sender?: User;
-					recipient_id: User['id'];
-					_recipient?: User;
-					type: PayloadType;
-					payload: string;
-				}
+			interface UserChat extends PrimaryKey, CreatedAt {
+				user_id: User['id'];
+				chat_id: Chat['id'];
 			}
-			namespace Servers {
-				interface Server extends PrimaryKeyed {
-					name: string;
-					unread: number;
-					main_text_channel_id: number;
-				}
-				interface ServerUser {
-					server_id: Server['id'];
-					user_id: User['id'];
-					display_name: string;
-					_user?: User;
-				}
-				interface ServerRole extends PrimaryKeyed {
-					server_id: Server['id'];
-					name: string;
-					color: RoleColor;
-					order: number;
-				}
-				interface ServerRoleUser {
-					server_role_id: ServerRole['id'];
-					server_user_id: ServerUser['id'];
-				}
-				namespace Channels {
-					interface ChannelGroup extends PrimaryKeyed {
-						name: string;
-						order: number;
-						_channels?: (TextChannel | VoiceChannel)[];
-					}
-					interface VoiceChannelUser extends PrimaryKeyed {
-						user_id: User['id'];
-						_user?: User;
-						channel_id: VoiceChannel['id'];
-						is_live: boolean;
-						is_talking: boolean;
-					}
-					interface Channel extends PrimaryKeyed {
-						server_id: Server['id'];
-						name: string;
-						order: number;
-						channel_group_id: null | ChannelGroup['id'];
-					}
-					interface TextChannel extends Channel {
-						messages?: Chat.Message[];
-					}
-					interface VoiceChannel extends Channel {
-						voice_users?: VoiceChannelUser[];
-						messages?: Chat.Message[];
-					}
-					interface Message extends PrimaryKeyed, Timestamped {
-						user_id: User['id'];
-						_user?: User;
-						channel_id: TextChannel['id'];
-						type: PayloadType;
-						payload: string;
-					}
-				}
+			interface Chat extends PrimaryKey, CreatedAt {
+				name?: string; // null if private chat or group chat without name
+				_users?: User[];
+				_messages?: ChatMessage[];
+			}
+			interface ChatMessage extends PrimaryKey, Timestamp {
+				chat_id: Chat['id'];
+				user_id: User['id'];
+				_user?: User;
+				type: PayloadType;
+				payload: string;
+			}
+			interface Server extends PrimaryKey, CreatedAt {
+				name: string;
+				image: string;
+				text_channel_id: number;
+				description: string;
+			}
+			interface UserServer extends PrimaryKey, CreatedAt {
+				server_id: Server['id'];
+				user_id: User['id'];
+				_user?: User;
+				display_name: string;
+				role: ServerRole;
+			}
+			interface ServerTag extends PrimaryKey {
+				server_id: Server['id'];
+				order: number;
+				name: string;
+				color: ServerTagColor;
+			}
+			interface ServerTagUser extends PrimaryKey {
+				server_tag_id: ServerTag['id'];
+				server_user_id: ServerUser['id'];
+			}
+			interface ServerRole extends PrimaryKey {
+				server_id: Server['id'];
+				name: string;
+				color: RoleColor;
+				order: number;
+			}
+			interface ServerRoleUser {
+				server_role_id: ServerRole['id'];
+				server_user_id: ServerUser['id'];
+			}
+			interface ChannelGroup extends PrimaryKey {
+				server_id: Server['id'];
+				order: number;
+				name: string;
+				_channels?: (TextChannel | VoiceChannel)[];
+			}
+			interface Channel extends PrimaryKey {
+				server_id: Server['id'];
+				channel_group_id: null | ChannelGroup['id'];
+				order: number;
+				name: string;
+			}
+			interface TextChannel extends Channel {
+				description: string;
+				messages?: Chat.Message[];
+			}
+			interface VoiceChannel extends Channel {
+				max_users: number;
+				voice_users?: VoiceChannelUser[];
+				messages?: Chat.Message[];
+			}
+			interface TextChannelMessage extends PrimaryKey, Timestamp {
+				channel_id: TextChannel['id'];
+				user_id: User['id'];
+				_user?: User;
+				type: PayloadType;
+				payload: string;
 			}
 		}
 	}
