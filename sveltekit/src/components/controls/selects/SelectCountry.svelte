@@ -1,6 +1,6 @@
 <script lang="typescript">
-	import Select from '$comps/controls/selects/Select.svelte';
-	import { countries } from '$lib/countries';
+	import Select from '$src/components/controls/selects/Select.svelte';
+	import { countries } from '$src/lib/countries';
 	import { createEventDispatcher, onMount } from 'svelte';
 
 	interface $$Events {

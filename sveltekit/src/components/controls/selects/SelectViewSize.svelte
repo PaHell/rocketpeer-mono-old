@@ -1,7 +1,7 @@
 <script lang="typescript">
-	import Select from '$comps/controls/selects/Select.svelte';
+	import Select from '$src/components/controls/selects/Select.svelte';
 	import { _ } from 'svelte-i18n';
-	import { viewSize, sizes } from '$lib/viewSize';
+	import { viewSize, sizes } from '$src/lib/viewSize';
 </script>
 
 

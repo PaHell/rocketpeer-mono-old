@@ -1,0 +1,18 @@
+.list-users {
+    @apply flex flex-col p-2;
+
+    & > .text {
+        @apply p-1 text-label uppercase;
+        letter-spacing: .25px;
+        &:not(:first-child) {
+            @apply mt-2;
+        }
+    }
+
+    & > .button.user-view {
+        @apply h-12 px-1 text-left border-transparent shadow-none;
+        & > .user-image {
+            @apply border-gray-300 dark:border-gray-600;
+        }
+    }
+}

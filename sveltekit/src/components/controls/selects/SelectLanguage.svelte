@@ -1,6 +1,6 @@
 <script lang="typescript">
-	import Select from '$comps/controls/selects/Select.svelte';
-	import { locale, locales } from '$lib/i18n';
+	import Select from '$src/components/controls/selects/Select.svelte';
+	import { locale, locales } from '$src/lib/i18n';
 </script>
 
 

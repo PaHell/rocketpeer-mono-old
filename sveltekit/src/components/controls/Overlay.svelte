@@ -1,10 +1,10 @@
 <script lang="typescript" context="module">
 	import { arrow, autoUpdate, computePosition, flip, inline, offset, shift, type Placement, type Platform, type Strategy} from '@floating-ui/dom';
-	import { default as Icon, Icons } from '$comps/general/Icon.svelte';
+	import { default as Icon, Icons } from '$src/components/general/Icon.svelte';
 	import { createEventDispatcher, getContext, onDestroy, onMount, setContext } from 'svelte';
-	import { debounce } from '$lib/helpers';
-	import { clickOutside } from '$lib/use';
-	import Button, { ButtonVariant } from '$comps/controls/Button.svelte';
+	import { debounce } from '$src/lib/helpers';
+	import { clickOutside } from '$src/lib/use';
+	import Button, { ButtonVariant } from '$src/components/controls/Button.svelte';
 
 	// fixed
 	// absolute

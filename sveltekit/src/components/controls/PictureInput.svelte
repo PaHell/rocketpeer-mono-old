@@ -1,10 +1,10 @@
 <script lang="typescript" context="module">
-	import { default as Icon, Icons } from '$comps/general/Icon.svelte';
-	import Overlay from '$comps/controls/Overlay.svelte';
+	import { default as Icon, Icons } from '$src/components/general/Icon.svelte';
+	import Overlay from '$src/components/controls/Overlay.svelte';
 	import { createEventDispatcher, onDestroy, onMount, SvelteComponent } from 'svelte';
-	import Button, { ButtonVariant } from '$comps/controls/Button.svelte';
-	import Alert, { AlertVariant } from '$comps/general/Alert.svelte';
-	import { Webcam } from '$lib/webcam';
+	import Button, { ButtonVariant } from '$src/components/controls/Button.svelte';
+	import Alert, { AlertVariant } from '$src/components/general/Alert.svelte';
+	import { Webcam } from '$src/lib/webcam';
 	import { _ } from 'svelte-i18n';
 
 	enum State {

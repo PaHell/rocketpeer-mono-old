@@ -1,14 +1,14 @@
 <script lang="typescript">
-	import TextInput from '$comps/controls/TextInput.svelte';
-	import { Icons } from '$comps/general/Icon.svelte';
+	import TextInput from '$src/components/controls/TextInput.svelte';
+	import { Icons } from '$src/components/general/Icon.svelte';
 	import { _ } from 'svelte-i18n';
 	import { goto } from '$app/navigation';
-	import { Auth } from '$lib/api';
-	import Button, { ButtonAlignment, ButtonVariant } from '$comps/controls/Button.svelte';
-	import Alert, { AlertVariant } from '$comps/general/Alert.svelte';
-	import { setHeaders } from '$lib/http';
+	import { Auth } from '$src/lib/api';
+	import Button, { ButtonAlignment, ButtonVariant } from '$src/components/controls/Button.svelte';
+	import Alert, { AlertVariant } from '$src/components/general/Alert.svelte';
+	import { setHeaders } from '$src/lib/http';
 	import { authenticated } from '$src/store';
-	import { redirectAuthed } from '$routes/+layout.svelte';
+	import { redirectAuthed } from '$src/routes/+layout.svelte';
 
 	let username: string = '';
 	let password: string = '';

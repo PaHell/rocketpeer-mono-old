@@ -71,7 +71,7 @@ services:
       - backend
     restart: always
     ports:
-      - ${VITE_PORT}:3000
+      - ${VITE_PORT}:4173
     expose:
       - ${VITE_PORT}
     networks:

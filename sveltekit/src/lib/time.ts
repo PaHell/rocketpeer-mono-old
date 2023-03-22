@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { locale, type Locale } from '$lib/i18n';
+import { locale, type Locale } from '$src/lib/i18n';
 import { derived } from 'svelte/store';
 import 'moment/dist/locale/en-gb';
 import 'moment/dist/locale/de';

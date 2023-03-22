@@ -64,9 +64,6 @@
 		{:else}
 			<div id="server-voice-users">
 				<div>
-					{#each data.channel.voice_users as vcu}
-						<UserVoiceView data={vcu} on:click={openStream}/>
-					{/each}
 				</div>
 				<footer>
 					<Button variant={ButtonVariant.Secondary}

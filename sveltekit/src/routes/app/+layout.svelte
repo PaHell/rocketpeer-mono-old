@@ -1,8 +1,8 @@
 <script lang="typescript">
-	import Button, { ButtonAlignment, ButtonStyle, ButtonVariant } from '$comps/controls/Button.svelte';
-	import Icon, { Icons } from '$comps/general/Icon.svelte';
+	import Button, { ButtonAlignment, ButtonStyle, ButtonVariant } from '$src/components/controls/Button.svelte';
+	import Icon, { Icons } from '$src/components/general/Icon.svelte';
 	import { goto } from '$app/navigation';
-	import Font from '$src/components/branding/Font.svelte';
+	import Logo from '$src/components/Logo.svelte';
 	import type { LayoutData } from './$types';
 	import { browser } from '$app/environment';
 	import { onMount } from 'svelte';
@@ -27,17 +27,18 @@
 		<nav class="layout-pane {$connectedVoiceChannel ? 'padded' : ''}">
 			<div>
 				<NavigationItem
-					path={'/app'}
-					match={1}
+					path={'/app/messages/2/text'}
+					match={2}
 					let:active
 					let:redirect>
 					<Button
 						variant={ButtonVariant.Transparent}
 						style={ButtonStyle.Card}
+						align={ButtonAlignment.Center}
 						class="branding"
-						active={false}
+						{active}
 						on:click={redirect}>
-						<Font/>
+						<Logo/>
 					</Button>
 				</NavigationItem>
 			</div>

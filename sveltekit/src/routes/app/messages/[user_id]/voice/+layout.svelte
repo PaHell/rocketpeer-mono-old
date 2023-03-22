@@ -12,7 +12,7 @@
 <header>
 	<div>
 		<Icon name={Icons.VoiceChannel} class="text-icon-sec dark:text-icon-dark-sec"/>
-		<p class="text text-headline ellipsis">{data.channel.name}</p>
+		<p class="text text-headline ellipsis">{data.partner?.display_name}</p>
 	</div>
 	<!--
 		<div>

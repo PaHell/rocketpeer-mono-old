@@ -1,7 +1,7 @@
 <script lang="typescript">
-	import Select from '$comps/controls/selects/Select.svelte';
+	import Select from '$src/components/controls/selects/Select.svelte';
 	import { _ } from 'svelte-i18n';
-	import { theme, themes } from '$lib/theme';
+	import { theme, themes } from '$src/lib/theme';
 </script>
 
 

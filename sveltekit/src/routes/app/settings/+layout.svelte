@@ -1,15 +1,14 @@
 <script lang="typescript">
-	import Button, { ButtonVariant } from '$comps/controls/Button.svelte';
-	import Icon, { Icons } from '$comps/general/Icon.svelte';
+	import Button, { ButtonVariant } from '$src/components/controls/Button.svelte';
+	import Icon, { Icons } from '$src/components/general/Icon.svelte';
 	import { onMount } from 'svelte';
-	import { mobile } from '$lib/viewSize';
+	import { mobile } from '$src/lib/viewSize';
 	import type { NavItem } from '$src/components/controls/Navigation.svelte';
 	import Navigation from "$src/components/controls/Navigation.svelte";
 	import Footer from "$src/components/templates/Footer.svelte";
 	import TextInput from '$src/components/controls/TextInput.svelte';
 	import { goto } from '$app/navigation';
-	import Logo from '$src/components/branding/Logo.svelte';
-	import Font from '$src/components/branding/Font.svelte';
+	import Logo from '$src/components/Logo.svelte';
 	import type { NavGroup } from '$src/components/controls/NavigationGroup.svelte';
 	import NavigationGroup from '$src/components/controls/NavigationGroup.svelte';
 

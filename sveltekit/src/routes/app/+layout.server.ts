@@ -1,6 +1,6 @@
 import { getStores } from '$app/stores';
 import { Icons } from '$src/components/general/Icon.svelte';
-import { UserStatus } from '$src/components/user/user';
+import { UserStatus } from '$src/lib/enum';
 import type { LayoutServerLoad } from './$types';
 
 const servers: App.Database.Servers.Server[] = [

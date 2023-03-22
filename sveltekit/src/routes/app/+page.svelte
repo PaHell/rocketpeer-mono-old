@@ -1,6 +1,6 @@
 <script lang="typescript">
-	import Button from '$comps/controls/Button.svelte';
-	import { Icons } from '$comps/general/Icon.svelte';
+	import Button from '$src/components/controls/Button.svelte';
+	import { Icons } from '$src/components/general/Icon.svelte';
 	import { _ } from 'svelte-i18n';
 	import { authenticated } from '$src/store';
 	import { goto } from '$app/navigation';

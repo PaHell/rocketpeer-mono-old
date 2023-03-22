@@ -1,9 +1,9 @@
 <script lang="typescript">
-	import SelectViewSize from '$comps/controls/selects/SelectViewSize.svelte';
-	import SelectLanguage from '$comps/controls/selects/SelectLanguage.svelte';
-	import SelectTheme from '$comps/controls/selects/SelectTheme.svelte';
-	import Button from '$comps/controls/Button.svelte';
-	import { Icons } from '$comps/general/Icon.svelte';
+	import SelectViewSize from '$src/components/controls/selects/SelectViewSize.svelte';
+	import SelectLanguage from '$src/components/controls/selects/SelectLanguage.svelte';
+	import SelectTheme from '$src/components/controls/selects/SelectTheme.svelte';
+	import Button from '$src/components/controls/Button.svelte';
+	import { Icons } from '$src/components/general/Icon.svelte';
 	import { _ } from 'svelte-i18n';
 	import { authenticated } from '$src/store';
 	import { goto } from '$app/navigation';

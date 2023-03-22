@@ -1,9 +1,9 @@
 <script lang="typescript">
-	import Button, { ButtonVariant } from '$comps/controls/Button.svelte';
-	import Icon, { Icons } from '$comps/general/Icon.svelte';
+	import Button, { ButtonVariant } from '$src/components/controls/Button.svelte';
+	import Icon, { Icons } from '$src/components/general/Icon.svelte';
 	import TextInput from '$src/components/controls/TextInput.svelte';
-	import { UserStatus } from '$src/components/user/user';
-	import UserView from '$src/components/user/UserView.svelte';
+	import { UserStatus } from '$src/lib/enum';
+	import UserView from '$src/components/views/user/View.svelte';
 	import { RoleColor } from '$src/lib/enum';
 	import type { LayoutData } from './$types';
 
@@ -116,24 +116,5 @@
 	}
 	.text-input-search {
 		@apply w-48;
-	}
-	.list-users {
-		@apply flex flex-col p-2;
-
-		& > .text {
-			@apply p-1 text-label uppercase;
-			letter-spacing: .25px;
-			&:not(:first-child) {
-				@apply mt-2;
-			}
-		}
-
-		& > .button.user-display {
-			@apply h-12 px-1 text-left border-transparent shadow-none;
-			& > .user-image {
-				@apply border-gray-300 dark:border-gray-600;
-			}
-		}
-
 	}
 </style>

@@ -17,9 +17,6 @@ const config = {
 		}),
 		alias: {
 			$src: './src',
-			$comps: './src/components',
-			$lib: './src/lib',
-			$routes: './src/routes'
 		},
 		files: {
 			assets: '../public'

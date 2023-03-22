@@ -2,9 +2,9 @@
 
 <script lang="typescript" context="module">
 	import { getContext, onDestroy, onMount, setContext, SvelteComponent } from 'svelte';
-	import Column from '$comps/table/Column.svelte';
-	import Button, { ButtonVariant } from '$comps/controls/Button.svelte';
-	import { Icons } from '$comps/general/Icon.svelte';
+	import Column from '$src/components/table/Column.svelte';
+	import Button, { ButtonVariant } from '$src/components/controls/Button.svelte';
+	import { Icons } from '$src/components/general/Icon.svelte';
 
 	export enum RowState {
 		Unmodified,

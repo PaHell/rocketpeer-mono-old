@@ -1,14 +1,18 @@
 <script lang="typescript" context="module">
-    import UserImage from "$comps/user/UserImage.svelte";
-    import Button, { ButtonAlignment, ButtonVariant } from "$comps/controls/Button.svelte";
+    import UserImage from "$src/components/views/user/Image.svelte";
+    import Button, { ButtonAlignment, ButtonVariant } from "$src/components/controls/Button.svelte";
     import moment from "moment";
 	import { locale } from "$src/lib/i18n";
 	import { onMount } from "svelte";
-	import { time } from "$lib/time";
+	import { time as _time } from "$src/lib/time";
+import type { PayloadType } from "$src/lib/enum";
 </script>
 
 <script lang="typescript">
-    export let data: App.Database.Chat.Message;
+    export let sender: App.Database.User | undefined;
+    export let time: string;
+    export let type: PayloadType;
+    export let payload: string;
 
     locale.subscribe((locale) => {
         if (!locale) return; 
@@ -17,13 +21,13 @@
 </script>
 
 <div class="chat-message">
-    {#if data._user}
-        <UserImage user={data._user} />
+    {#if sender}
+        <UserImage user={sender} />
     {/if}
     <main>
-        <p class="text bold ellipsis">{data._user?.display_name}</p>
-        <p class="text tri text-label ellipsis">{$time(data.created_at).format()}</p>
-        <p class="text col-span-2">{data.content}</p>
+        <p class="text bold ellipsis">{sender?.display_name}</p>
+        <p class="text tri text-label ellipsis">{$_time(time).format()}</p>
+        <p class="text col-span-2">{payload}</p>
     </main>
 </div>
 
