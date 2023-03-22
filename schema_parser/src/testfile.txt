@@ -1,113 +1,113 @@
-model users {
+interface users {
   id                    Int                     @id @default(autoincrement())
-  user_name             String                  @unique
-  password              String
-  display_name          String?
-  first_name            String
-  last_name             String
+  user_name             : string;                  @unique
+  password              : string;
+  display_name          : string;?
+  first_name            : string;
+  last_name             : string;
   image                 Bytes                   @db.Blob
   status                users_status
-  email                 String                  @unique
+  email                 : string;                  @unique
   privacy_level         users_privacy_level
   role                  users_role
-  created_at            DateTime                @default(now())
+  created_at            DateTime                
   access_token          access_token?
   text_channel_messages text_channel_messages[]
   users_servers         users_servers[]
 }
-model user_friends {
+interface user_friends {
   id             Int      @id @default(autoincrement())
   user_1_id      Int
   user_2_id      Int
   created_at     DateTime @db.DateTime(0)
 
 }
-model message {
+interface message {
   id               Int          @id @default(autoincrement())
   sender_id        Int
   receiver_id      Int
   type             message_type
-  payload          String       @db.LongText
-  created_at       DateTime     @default(now())
+  payload          : string;       @db.LongText
+  created_at       DateTime     
   deleted_at       DateTime
 
 }
-model access_token {
+interface access_token {
   id            Int    @id @default(autoincrement())
   user_id       Int    @unique
-  access_token  String
-  refresh_token String
+  access_token  : string;
+  refresh_token : string;
 }
-model users_servers {
+interface users_servers {
   id               Int                @id @default(autoincrement())
   user_id          Int
   server_id        Int
-  display_name     String
+  display_name     : string;
   role             server_role
   user_server_tags user_server_tags[]
 
 }
-model servers {
+interface servers {
   id              Int              @id @default(autoincrement())
-  name            String
+  name            : string;
   text_channel_id Int
-  description     String
+  description     : string;
   channel_groups  channel_groups[]
   server_tags     server_tags[]
   text_channels   text_channels[]
   users_servers   users_servers[]
   voice_channel   voice_channel[]
 }
-model server_tags {
+interface server_tags {
   id               Int                @id @default(autoincrement())
   server_id        Int
   order            Int
-  name             String
+  name             : string;
   Color            colors
   user_server_tags user_server_tags[]
 
 }
-model user_server_tags {
+interface user_server_tags {
   id             Int           @id @default(autoincrement())
   server_tag_id  Int
   user_server_id Int
 
 }
-model channel_groups {
+interface channel_groups {
   id            Int             @id @default(autoincrement())
   server_id     Int
   order         Int
-  name          String
+  name          : string;
   text_channels text_channels[]
   voice_channel voice_channel[]
 
 }
-model voice_channel {
+interface voice_channel {
   id               Int             @id @default(autoincrement())
   server_id        Int
   channel_group_id Int?
   order            Int
-  name             String
+  name             : string;
   max_users        Int
 
 }
-model text_channels {
+interface text_channels {
   id                    Int                     @id @default(autoincrement())
   server_id             Int
   channel_group_id      Int?
   order                 Int
-  name                  String
-  topic                 String
+  name                  : string;
+  topic                 : string;
   text_channel_messages text_channel_messages[]
 
 }
-model text_channel_messages {
+interface text_channel_messages {
   id              Int           @id @default(autoincrement())
   sender_id       Int
   text_channel_id Int
   type            message_type
-  payload         String
-  created_at      DateTime      @default(now())
+  payload         : string;
+  created_at      DateTime      
   deleted_at      DateTime
 
 }

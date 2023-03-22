@@ -25,12 +25,21 @@ fn main() {
             models.push(line);
         }
     }
-    let mut models_without_relations = Vec::new();
+    let mut models_without_relations: Vec<String> = Vec::new();
     models.drain(0..8);
     for line in models {
         if line.contains("@relation") || line.contains("@@index") {
+        } else if line.contains("model") {
+            let new_line = line.replace("model", "interface");
+            models_without_relations.push(new_line);
+        } else if line.contains("String") {
+            let new_line = line.replace("String", ": string;");
+            models_without_relations.push(new_line);
+        } else if line.contains("@default") {
+            let new_line = line.replace("@default(now())", "");
+            models_without_relations.push(new_line);
         } else {
-            models_without_relations.push(line);
+            models_without_relations.push(line.to_string());
         }
     }
 
