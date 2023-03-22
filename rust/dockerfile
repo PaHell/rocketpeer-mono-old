@@ -1,12 +1,17 @@
-FROM rust:1.67-alpine
+FROM rust:latest as build
 
-WORKDIR /app
+
+WORKDIR /usr/src/rust
 
 COPY . .
+RUN cargo run --bin prisma -- db push
+RUN cargo build --release
 
-RUN apk add --no-cache musl-dev glib-dev atkmm-dev gtkmm3-dev openssl-dev openssl-libs-static webkit2gtk-dev libc-dev libsoup-dev
-RUN rustup override set nightly
+FROM alpine:latest
 
-WORKDIR /app
-ENTRYPOINT  cargo run --bin rust
-#  cargo run --bin prisma -- db push && 
+COPY --from=build /usr/src/rust/target/release/rust /usr/local/bin
+
+
+WORKDIR /usr/local/bin
+CMD ["rust"]
+
