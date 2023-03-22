@@ -1,0 +1,141 @@
+model users {
+  id                    Int                     @id @default(autoincrement())
+  user_name             String                  @unique
+  password              String
+  display_name          String?
+  first_name            String
+  last_name             String
+  image                 Bytes                   @db.Blob
+  status                users_status
+  email                 String                  @unique
+  privacy_level         users_privacy_level
+  role                  users_role
+  created_at            DateTime                @default(now())
+  access_token          access_token?
+  text_channel_messages text_channel_messages[]
+  users_servers         users_servers[]
+}
+model user_friends {
+  id             Int      @id @default(autoincrement())
+  user_1_id      Int
+  user_2_id      Int
+  created_at     DateTime @db.DateTime(0)
+
+}
+model message {
+  id               Int          @id @default(autoincrement())
+  sender_id        Int
+  receiver_id      Int
+  type             message_type
+  payload          String       @db.LongText
+  created_at       DateTime     @default(now())
+  deleted_at       DateTime
+
+}
+model access_token {
+  id            Int    @id @default(autoincrement())
+  user_id       Int    @unique
+  access_token  String
+  refresh_token String
+}
+model users_servers {
+  id               Int                @id @default(autoincrement())
+  user_id          Int
+  server_id        Int
+  display_name     String
+  role             server_role
+  user_server_tags user_server_tags[]
+
+}
+model servers {
+  id              Int              @id @default(autoincrement())
+  name            String
+  text_channel_id Int
+  description     String
+  channel_groups  channel_groups[]
+  server_tags     server_tags[]
+  text_channels   text_channels[]
+  users_servers   users_servers[]
+  voice_channel   voice_channel[]
+}
+model server_tags {
+  id               Int                @id @default(autoincrement())
+  server_id        Int
+  order            Int
+  name             String
+  Color            colors
+  user_server_tags user_server_tags[]
+
+}
+model user_server_tags {
+  id             Int           @id @default(autoincrement())
+  server_tag_id  Int
+  user_server_id Int
+
+}
+model channel_groups {
+  id            Int             @id @default(autoincrement())
+  server_id     Int
+  order         Int
+  name          String
+  text_channels text_channels[]
+  voice_channel voice_channel[]
+
+}
+model voice_channel {
+  id               Int             @id @default(autoincrement())
+  server_id        Int
+  channel_group_id Int?
+  order            Int
+  name             String
+  max_users        Int
+
+}
+model text_channels {
+  id                    Int                     @id @default(autoincrement())
+  server_id             Int
+  channel_group_id      Int?
+  order                 Int
+  name                  String
+  topic                 String
+  text_channel_messages text_channel_messages[]
+
+}
+model text_channel_messages {
+  id              Int           @id @default(autoincrement())
+  sender_id       Int
+  text_channel_id Int
+  type            message_type
+  payload         String
+  created_at      DateTime      @default(now())
+  deleted_at      DateTime
+
+}
+enum users_status {
+  Online
+  Away
+  DoNotDisturb
+  Offline
+}
+enum colors {
+  Black
+  White
+  Purple
+}
+enum users_privacy_level {
+  Default
+}
+enum users_role {
+  Administrator
+  Default
+}
+enum server_role {
+  Administrator
+  Default
+}
+enum message_type {
+  Text
+  Picture
+  Video
+  Gif
+}
