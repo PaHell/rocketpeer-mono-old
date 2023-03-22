@@ -1,14 +1,12 @@
-FROM rust:1.67-alpine as builder
+FROM rust:1.67-alpine
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
 COPY . .
 
 RUN apk add --no-cache musl-dev glib-dev atkmm-dev gtkmm3-dev openssl-dev openssl-libs-static webkit2gtk-dev libc-dev libsoup-dev
 RUN rustup override set nightly
-RUN cargo install --path "."
 
-FROM alpine:latest
-COPY --from=builder /usr/local/cargo/bin/app /usr/local/bin/app
-#WORKDIR /home/app
-CMD ["app"]
+WORKDIR /app
+ENTRYPOINT  cargo run --bin rust
+#  cargo run --bin prisma -- db push && 
