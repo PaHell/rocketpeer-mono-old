@@ -1,0 +1,14 @@
+FROM rust:1.67-alpine as builder
+
+WORKDIR /usr/src/app
+
+COPY . .
+
+RUN apk add --no-cache musl-dev glib-dev atkmm-dev gtkmm3-dev openssl-dev openssl-libs-static webkit2gtk-dev libc-dev libsoup-dev
+RUN rustup override set nightly
+RUN cargo install --path "."
+
+FROM alpine:latest
+COPY --from=builder /usr/local/cargo/bin/app /usr/local/bin/app
+#WORKDIR /home/app
+CMD ["app"]

@@ -39,13 +39,14 @@ services:
     networks:
       - database
   backend:
-    container_name: django
-    platform: linux/x86_64
-    build: ./django
+    container_name: rust
+    platform: linux/arm64/v8
+    image: rust-backend
     depends_on:
       - database
     restart: always
     environment:
+      RUST_DB_URL: ${RUST_DB_URL}
       MYSQL_HOST: mysql
       MYSQL_PORT: ${MYSQL_PORT}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
