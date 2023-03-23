@@ -15,10 +15,11 @@
 
 <template>
 	<ChatView>
-		{#if data.channel.messages}
-			{#each data.channel.messages as message}
+		{#if data.channel._messages}
+			{#each data.channel._messages as message}
 				<ChatMessage
-					sender={message._user}
+					sender={message._server_user?.user}
+					display_name={message._server_user?.display_name}
 					time={message.created_at}
 					type={message.type}
 					payload={message.payload}/>

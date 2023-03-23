@@ -42,7 +42,7 @@
 	</header>
 	<div class="fill list-users">
 		{#each data.chats as chat}
-			<UserView user={chat._users[0]}
+			<UserView user={chat.users[0]}
 				variant={ButtonVariant.Transparent}
 				style={ButtonStyle.Card}
 				active={$page.params.chat_id == chat.id}

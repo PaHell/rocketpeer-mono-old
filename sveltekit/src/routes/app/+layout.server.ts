@@ -157,7 +157,7 @@ const servers: App.DB.Server[] = [
 	}
 ];
 
-let user_servers: App.DB.UserServer[] = [
+let server_users: App.DB.ServerUser[] = [
 	{
 		id: 1,
 		server_id: 1,
@@ -191,10 +191,10 @@ const user: App.DB.User = {
 };
 
 // API: GET /api/servers
-// output UserServer[] of joined servers
+// output ServerUser[] of joined servers
 // with _server loaded
 // property "order" is not visibile to others
-user_servers.forEach((userServer) => {
+server_users.forEach((userServer) => {
 	userServer._server = servers.find((server) =>
 		server.id === userServer.server_id
 	);
@@ -204,6 +204,6 @@ export const load = (async ({ params }) => {
 	return {
 		_all_users,
 		user,
-		user_servers,
+		server_users,
 	};
 }) satisfies LayoutServerLoad;

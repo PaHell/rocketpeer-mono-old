@@ -5,7 +5,7 @@ import { Icons } from '$src/components/general/Icon.svelte';
 import { ServerTagColor, UserStatus, ServerRole } from '$src/lib/enum';
 import type { LayoutServerLoad } from './$types';
 
-let server_users: App.DB.UserServer[] = [
+let server_users: App.DB.ServerUser[] = [
 	{
 		id: 1,
 		server_id: -1,
@@ -205,27 +205,27 @@ let server_tag_users : App.DB.ServerTagUser[] = [
 	{
 		id: 1,
 		server_tag_id: 1,
-		user_server_id: 1,
+		server_user_id: 1,
 	},
 	{
 		id: 2,
 		server_tag_id: 2,
-		user_server_id: 2,
+		server_user_id: 2,
 	},
 	{
 		id: 3,
 		server_tag_id: 3,
-		user_server_id: 3,
+		server_user_id: 3,
 	},
 	{
 		id: 4,
 		server_tag_id: 3,
-		user_server_id: 4,
+		server_user_id: 4,
 	},
 	{
 		id: 5,
 		server_tag_id: 3,
-		user_server_id: 5,
+		server_user_id: 5,
 	},
 ];
 
@@ -292,23 +292,25 @@ export const load = (async ({ parent, params }) => {
 	const pageData = await parent();
 	const serverId = parseInt(params.server_id);
 	server_users.forEach((userServer) => {
-		userServer._user = pageData._all_users.find((user) =>
+		userServer.user = pageData._all_users.find((user) =>
 			user.id === userServer.user_id
 		);
 		userServer._tags = server_tag_users
-			.filter((stu) => stu.user_server_id === userServer.id)
+			.filter((stu) => stu.server_user_id === userServer.id)
 			.map((stu) =>
 				tags.find((tag) => tag.id === stu.server_tag_id)
 			) as App.DB.ServerTag[];
 	});
+
+	server_users = server_users.sort((a, b) => a.user?.status - b.user?.status);
 	
 	voice_channels.forEach((vc) => {
-		vc.voice_users = voice_channel_users
+		vc._voice_users = voice_channel_users
 			.filter(vcu => vcu.channel_id === vc.id)
 			.map(vcu => server_users.find(su => su.user_id === vcu.user_id));
 	});
 	return {
-		user_server: pageData.user_servers.find((us) => us.server_id === serverId),
+		server_user: pageData.server_users.find((us) => us.server_id === serverId),
 		server_users,
 		channel_groups,
 		text_channels,

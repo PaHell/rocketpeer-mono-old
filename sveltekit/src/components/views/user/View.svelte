@@ -4,7 +4,8 @@
 </script>
 
 <script lang="typescript">
-    export let user: App.Database.User;
+    export let user: App.DB.User;
+    export let display_name: string | null = null;
     export let variant: ButtonVariant = ButtonVariant.Transparent;
     export let style: ButtonStyle = ButtonStyle.None;
     export let active = false;
@@ -20,7 +21,7 @@
         on:click>
         <Image {user} {showStatus} />
         <main>
-            <p class="text bold ellipsis">{user.display_name}</p>
+            <p class="text bold ellipsis">{display_name ?? user.display_name}</p>
             <p class="text text-label sec ellipsis">#{user.username}</p>
         </main>
     </Button>

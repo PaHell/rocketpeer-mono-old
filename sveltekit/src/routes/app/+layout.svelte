@@ -11,7 +11,7 @@
 	import { connectedVoiceChannel } from '$src/store';
 	
 	export let data: LayoutData;
-	data.user_servers = data.user_servers.sort((a, b) => a.order - b.order);
+	data.server_users = data.server_users.sort((a, b) => a.order - b.order);
 </script>
 
 <template>
@@ -35,7 +35,7 @@
 				</NavigationItem>
 			</div>
 			<div id="servers" class="fill">
-				{#each data.user_servers as item (item.id)}
+				{#each data.server_users as item (item.id)}
 					{#if item._server}
 						<NavigationItem
 							path={`/app/servers/${item.id}/text/${item._server.text_channel_id}`}

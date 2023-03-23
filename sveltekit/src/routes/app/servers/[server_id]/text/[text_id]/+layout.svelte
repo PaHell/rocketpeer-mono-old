@@ -10,7 +10,7 @@
 	export let data: LayoutData;
 	let search = "";
 
-	type ServerTagView = [App.DB.ServerTag, App.DB.User[]];
+	type ServerTagView = [App.DB.ServerTag, App.DB.ServerUser[]];
 
 	let tagDict: ServerTagView[] = data.tags
 		.sort((a, b) => a.order - b.order)
@@ -32,9 +32,9 @@
 		order: -1,
 	}, []];
 	for (let su of data.server_users) {
-		if (!su._user) continue;
-		if (su._user.status === UserStatus.Offline) {
-			tagOffline[1].push(su._user);
+		if (!su.user) continue;
+		if (su.user.status === UserStatus.Offline) {
+			tagOffline[1].push(su);
 			continue;
 		}
 		const highest = tagDict.find(r => data.tags.find(ru => ru.id === r[0].id));
@@ -42,9 +42,9 @@
 			if (!highest[1]) {
 				highest[1] = [];
 			}
-			highest[1].push(su._user);
+			highest[1].push(su);
 		} else {
-			tagOnline[1].push(su._user);
+			tagOnline[1].push(su);
 		}
 	}
 	tagDict.push(tagOnline);
@@ -82,10 +82,10 @@
 		<slot />
 	</div>
 	<div class="list-users">
-		{#each tagDict as [tag, users]}
+		{#each tagDict as [tag, server_users]}
 			<p class="text bold {tag.color}">{tag.name}</p>
-			{#each users as user}
-				<UserView {user} variant={ButtonVariant.Transparent} showStatus />
+			{#each server_users as su}
+				<UserView user={su.user} display_name={su.display_name} variant={ButtonVariant.Transparent} showStatus />
 			{/each}
 		{/each}
 	</div>

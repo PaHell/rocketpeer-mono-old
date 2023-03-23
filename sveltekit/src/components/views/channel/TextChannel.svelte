@@ -16,7 +16,7 @@
 </script>
 
 <NavigationItem
-    path={`/app/server/${channel.server_id}/text/${channel.id}`}
+    path={`/app/servers/${channel.server_id}/text/${channel.id}`}
     let:active
     let:redirect>
     <div class="channel" class:opened={active}>

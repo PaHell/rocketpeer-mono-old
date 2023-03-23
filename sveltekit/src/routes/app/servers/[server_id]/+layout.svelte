@@ -34,7 +34,6 @@
 	}
 	
 	export let data: LayoutData;
-	let server: App.DB.Server | undefined;
 	let serverChannels: (App.DB.TextChannel | App.DB.TextChannel | App.DB.ChannelGroup)[] = [];
 
 	onMount(() => {
@@ -85,7 +84,7 @@
 <aside id="sidebar" class="layout-pane items-stretch">
 	<header>
 		<div>
-			<p class="pl-2 text font-bold">{server?.name}</p>
+			<p class="pl-2 text font-bold">{data.server_user?._server?.name}</p>
 		</div>
 		<div>
 			<Button

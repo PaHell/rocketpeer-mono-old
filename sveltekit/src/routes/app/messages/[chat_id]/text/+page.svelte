@@ -19,6 +19,7 @@
 			{#each data.messages as message (message.id)}
 				<ChatMessage
 					sender={message._user}
+					display_name={message._user?.display_name}
 					time={message.created_at}
 					type={message.type}
 					payload={message.payload}/>

@@ -1,9 +1,8 @@
+import type { PayloadType, RoleColor, ServerRole } from "./lib/enum";
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
-
-import type { PayloadType, RoleColor, ServerRole } from "./lib/enum";
-
 // and what to do when importing types
+
 declare global {
 	namespace App {
 		// interface Error {}
@@ -11,8 +10,6 @@ declare global {
 		// interface PageData {}
 		// interface Platform {}
 		interface Message {
-			user_id: User['id'];
-			_user?: User;
 			type: PayloadType;
 			payload: string;
 		}
@@ -52,7 +49,7 @@ declare global {
 		namespace P2P {
 			interface VoiceChannelUser extends DB.PrimaryKey {
 				user_id: DB.User['id'];
-				_user_server?: DB.UserServer;
+				_server_user?: DB.ServerUser;
 				channel_id: DB.VoiceChannel['id'];
 				is_live: boolean;
 				is_talking: boolean;
@@ -67,9 +64,13 @@ declare global {
 			}
 			interface VoiceChannelMessage extends DB.PrimaryKey, DB.Timestamp, Message {
 				channel_id: DB.VoiceChannel['id'];
+				server_user_id: ServerUser['id'];
+				_server_user?: User;
 			}
 			interface VoiceChatMessage extends DB.PrimaryKey, DB.Timestamp, Message {
 				chat_id: DB.VoiceChannel['id'];
+				user_id: User['id'];
+				_user?: User;
 			}
 		}
 		namespace API {
@@ -78,6 +79,7 @@ declare global {
 			}
 		}
 		namespace DB {
+			// underscore keys are not on api
 			interface PrimaryKey {
 				id: number;
 			}
@@ -114,6 +116,7 @@ declare global {
 				image: string | null;
 				status: UserStatus;
 				email: string;
+				// UserFriend result split into 3
 				_friends?: UserFriend[];
 				_friends_pending?: UserFriend[];
 				_friend_requests?: UserFriend[];
@@ -121,7 +124,7 @@ declare global {
 			interface UserFriend extends PrimaryKey, CreatedAt {
 				sender_id: User['id'];
 				recipient_id: User['id'];
-				_other?: User; // not on api
+				_other?: User; // determined chat partner, not yourself
 				status: UserFriendStatus;
 			}
 			interface ChatUser extends PrimaryKey, CreatedAt {
@@ -130,11 +133,13 @@ declare global {
 			}
 			interface Chat extends PrimaryKey, CreatedAt {
 				name: string | null; // null if private chat or group chat without name
-				_users?: User[];
+				users?: User[];
 				_messages?: ChatMessage[];
 			}
 			interface ChatMessage extends PrimaryKey, Timestamp, Message {
 				chat_id: Chat['id'];
+				user_id: User['id'];
+				_user?: User;
 			}
 			interface Server extends PrimaryKey, CreatedAt {
 				name: string;
@@ -142,11 +147,11 @@ declare global {
 				text_channel_id: number;
 				description: string;
 			}
-			interface UserServer extends PrimaryKey, CreatedAt {
+			interface ServerUser extends PrimaryKey, CreatedAt {
 				server_id: Server['id'];
 				_server?: Server;
 				user_id: User['id'];
-				_user?: User;
+				user?: User;
 				order?: number; // only visible for yourself
 				display_name: string | null;
 				role: ServerRole;
@@ -159,7 +164,7 @@ declare global {
 				color: ServerTagColor;
 			}
 			interface ServerTagUser extends PrimaryKey {
-				user_server_id: UserServer['id'];
+				server_user_id: ServerUser['id'];
 				server_tag_id: ServerTag['id'];
 			}
 			interface ChannelGroup extends PrimaryKey {
@@ -175,15 +180,17 @@ declare global {
 				name: string;
 			}
 			interface TextChannel extends Channel {
-				messages?: Chat.Message[];
+				_messages?: TextChannelMessage[];
 			}
 			interface VoiceChannel extends Channel {
 				max_users: null | number;
-				voice_users?: VoiceChannelUser[];
-				messages?: Chat.Message[];
+				_voice_users?: VoiceChannelUser[];
+				_messages?: P2P.VoiceChannelMessage[];
 			}
 			interface TextChannelMessage extends PrimaryKey, Timestamp, Message {
 				channel_id: TextChannel['id'];
+				server_user_id: ServerUser['id'];
+				_server_user?: ServerUser;
 			}
 		}
 	}

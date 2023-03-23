@@ -102,7 +102,7 @@ const messages: App.DB.ChatMessage[] = [
 export const load = (async ({params, parent}) => {
 	const pageData = await parent();
 	messages.forEach((message) => {
-		message.user = pageData._all_users.find((user) => user.id === message.user_id);
+		message._user = pageData._all_users.find((user) => user.id === message.user_id);
 	});
 	return {
 		messages,

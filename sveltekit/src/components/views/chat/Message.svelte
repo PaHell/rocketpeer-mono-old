@@ -9,7 +9,8 @@ import type { PayloadType } from "$src/lib/enum";
 </script>
 
 <script lang="typescript">
-    export let sender: App.Database.User | undefined;
+    export let sender: App.DB.User | undefined;
+    export let display_name: string;
     export let time: string;
     export let type: PayloadType;
     export let payload: string;

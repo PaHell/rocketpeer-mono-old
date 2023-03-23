@@ -22,12 +22,12 @@
 	async function login() {
 		console.log('login');
 		Auth.login({ username, password })
-			.then(async (resp: App.Database.Auth.Token) => {
+			.then(async (resp: App.DB.AccessToken) => {
 				setHeaders({ Authorization: `Bearer ${resp.access_token}` });
 				authenticated.set(true);
 				goto(redirectAuthed);
 			})
-			.catch((msg: App.Lib.RequestError) => {
+			.catch((msg: App.API.RequestError) => {
 				console.log('error', msg);
 				error = msg.error;
 			});

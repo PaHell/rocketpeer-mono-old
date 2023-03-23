@@ -33,7 +33,7 @@
 </script>
 
 <NavigationItem
-    path={`/app/server/${channel.server_id}/voice/${channel.id}`}
+    path={`/app/servers/${channel.server_id}/voice/${channel.id}`}
     let:redirect
     let:active>
     <div class="channel" class:opened={active}>
@@ -51,9 +51,9 @@
             on:click={() => dispatch('settings')}/>
         <div class="spacer"></div>
     </div>
-    {#if channel.voice_users?.length}
+    {#if channel._voice_users?.length}
         <div class="channel-users">
-            {#each channel.voice_users as vcu}
+            {#each channel._voice_users as vcu}
                 <Button
                     variant={ButtonVariant.Transparent}
                     style={ButtonStyle.Card}
