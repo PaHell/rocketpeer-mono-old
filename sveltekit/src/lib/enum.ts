@@ -44,6 +44,8 @@ export enum ServerRole {
 }
 
 export enum ServerTagColor {
+    _Online,
+    _Offline,
     Lime,
     Green,
     Teal,

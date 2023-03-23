@@ -10,6 +10,12 @@ declare global {
 		// interface Locals {}
 		// interface PageData {}
 		// interface Platform {}
+		interface Message {
+			user_id: User['id'];
+			_user?: User;
+			type: PayloadType;
+			payload: string;
+		}
 		namespace Components {
 			namespace Table {
 				interface TableContext<T> {
@@ -44,12 +50,26 @@ declare global {
 			}
 		}
 		namespace P2P {
-			interface VoiceChannelUser extends PrimaryKey {
-				user_id: User['id'];
-				_uer_server?: UserServer;
-				channel_id: VoiceChannel['id'];
+			interface VoiceChannelUser extends DB.PrimaryKey {
+				user_id: DB.User['id'];
+				_user_server?: DB.UserServer;
+				channel_id: DB.VoiceChannel['id'];
 				is_live: boolean;
 				is_talking: boolean;
+			}
+			interface VoiceChatUser extends DB.PrimaryKey {
+				user_id: DB.User['id'];
+				_user?: DB.User;
+				chat_id: DB.VoiceChannel['id'];
+				connected: boolean;
+				is_live: boolean;
+				is_talking: boolean;
+			}
+			interface VoiceChannelMessage extends DB.PrimaryKey, DB.Timestamp, Message {
+				channel_id: DB.VoiceChannel['id'];
+			}
+			interface VoiceChatMessage extends DB.PrimaryKey, DB.Timestamp, Message {
+				chat_id: DB.VoiceChannel['id'];
 			}
 		}
 		namespace API {
@@ -101,22 +121,17 @@ declare global {
 			interface UserFriend extends PrimaryKey, CreatedAt {
 				sender_id: User['id'];
 				recipient_id: User['id'];
+				_other?: User; // not on api
 				status: UserFriendStatus;
 			}
-			interface UserChat extends PrimaryKey, CreatedAt {
-				user_id: User['id'];
+			interface ChatUser extends PrimaryKey, CreatedAt {
 				chat_id: Chat['id'];
+				user_id: User['id'];
 			}
 			interface Chat extends PrimaryKey, CreatedAt {
-				name?: string; // null if private chat or group chat without name
+				name: string | null; // null if private chat or group chat without name
 				_users?: User[];
 				_messages?: ChatMessage[];
-			}
-			interface Message {
-				user_id: User['id'];
-				_user?: User;
-				type: PayloadType;
-				payload: string;
 			}
 			interface ChatMessage extends PrimaryKey, Timestamp, Message {
 				chat_id: Chat['id'];
@@ -129,6 +144,7 @@ declare global {
 			}
 			interface UserServer extends PrimaryKey, CreatedAt {
 				server_id: Server['id'];
+				_server?: Server;
 				user_id: User['id'];
 				_user?: User;
 				order?: number; // only visible for yourself

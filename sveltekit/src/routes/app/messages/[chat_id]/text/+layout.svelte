@@ -4,7 +4,7 @@
 	import TextInput from '$src/components/controls/TextInput.svelte';
 	import { UserStatus } from '$src/lib/enum';
 	import UserView from '$src/components/views/user/View.svelte';
-	import { RoleColor } from '$src/lib/enum';
+	import { ServerTagColor } from '$src/lib/enum';
 	import type { LayoutData } from './$types';
 
 	export let data: LayoutData;
@@ -16,9 +16,13 @@
 <header>
 	<div>
 		<Icon name={Icons.TextChannel} class="text-icon-sec dark:text-icon-dark-sec"/>
-		<p class="text text-headline ellipsis">{data.partner?.display_name}</p>
-		<div class="divider"></div>
-		<p class="text sec ellipsis">{data.partner?.username}</p>
+		{#if data.chat}
+			<p class="text text-headline ellipsis">{data.chat?.name ?? data.chat?._users?.join(", ")}</p>
+			{#if data.chat?.name}
+				<div class="divider"></div>
+				<p class="text sec ellipsis">{data.chat?._users?.join(", ")}</p>
+			{/if}
+		{/if}
 	</div>
 	<div>
 		<Button variant={ButtonVariant.Transparent}

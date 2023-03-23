@@ -4,58 +4,52 @@
 	import TextInput from '$src/components/controls/TextInput.svelte';
 	import { UserStatus } from '$src/lib/enum';
 	import UserView from '$src/components/views/user/View.svelte';
-	import { RoleColor } from '$src/lib/enum';
+	import { ServerTagColor } from '$src/lib/enum';
 	import type { LayoutData } from './$types';
 
 	export let data: LayoutData;
 	let search = "";
 
-	type ServerRoleView = App.Database.Servers.ServerRole & {
-		users: App.Database.User[];
-	};
+	type ServerTagView = [App.DB.ServerTag, App.DB.User[]];
 
-	let roles: ServerRoleView[] = data.roles
+	let tagDict: ServerTagView[] = data.tags
 		.sort((a, b) => a.order - b.order)
 		.map(role => {
-			return { ...role, users: [] };
+			return [role, []];
 		});
-	const roleOnline : ServerRoleView = {
+	const tagOnline : ServerTagView = [{
 		id: -2,
 		server_id: -2,
 		name: "Online",
-		color: RoleColor._Online,
+		color: ServerTagColor._Online,
 		order: -2,
-		users: [],
-	};
-	const roleOffline : ServerRoleView = {
+	}, []];
+	const tagOffline : ServerTagView = [{
 		id: -1,
 		server_id: -1,
 		name: "Offline",
-		color: RoleColor._Offline,
+		color: ServerTagColor._Offline,
 		order: -1,
-		users: [],
-	};
+	}, []];
 	for (let su of data.server_users) {
-		const user = data.all_users.find(u => u.id === su.user_id);
-		if (!user) continue;
-		if (user.status === UserStatus.Offline) {
-			roleOffline.users.push(user);
+		if (!su._user) continue;
+		if (su._user.status === UserStatus.Offline) {
+			tagOffline[1].push(su._user);
 			continue;
 		}
-		const rolesUsers = data.rolesUsers.filter(ru => ru.server_user_id === su.user_id);
-		const highestRole = roles.find(r => rolesUsers.find(ru => ru.server_role_id === r.id));
-		if (highestRole) {
-			if (!highestRole.users) {
-				highestRole.users = [];
+		const highest = tagDict.find(r => data.tags.find(ru => ru.id === r[0].id));
+		if (highest) {
+			if (!highest[1]) {
+				highest[1] = [];
 			}
-			highestRole.users.push(user);
+			highest[1].push(su._user);
 		} else {
-			roleOnline.users.push(user);
+			tagOnline[1].push(su._user);
 		}
 	}
-	roles.push(roleOnline);
-	roles.forEach(role => role.users = role.users.sort((a, b) => a.status - b.status));
-	roles.push(roleOffline);
+	tagDict.push(tagOnline);
+	tagDict.forEach(kvp => kvp[1] = kvp[1].sort((a, b) => a.status - b.status));
+	tagDict.push(tagOffline);
 
 </script>
 
@@ -88,9 +82,9 @@
 		<slot />
 	</div>
 	<div class="list-users">
-		{#each roles as role}
-			<p class="text bold {role.color}">{role.name}</p>
-			{#each role.users as user}
+		{#each tagDict as [tag, users]}
+			<p class="text bold {tag.color}">{tag.name}</p>
+			{#each users as user}
 				<UserView {user} variant={ButtonVariant.Transparent} showStatus />
 			{/each}
 		{/each}

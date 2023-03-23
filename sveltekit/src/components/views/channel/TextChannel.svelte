@@ -11,7 +11,7 @@
     interface $$Events {
         settings: () => void;
     }
-	export let channel: App.Database.Servers.Channels.TextChannel;
+	export let channel: App.DB.TextChannel;
     const dispatch = createEventDispatcher<$$Events>();
 </script>
 

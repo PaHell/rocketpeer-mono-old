@@ -18,7 +18,7 @@
 		{#if data.messages}
 			{#each data.messages as message (message.id)}
 				<ChatMessage
-					sender={message._sender}
+					sender={message._user}
 					time={message.created_at}
 					type={message.type}
 					payload={message.payload}/>

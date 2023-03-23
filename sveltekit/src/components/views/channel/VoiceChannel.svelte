@@ -13,7 +13,7 @@
     interface $$Events {
         settings: () => void;
     }
-	export let channel: App.Database.Servers.Channels.VoiceChannel;
+	export let channel: App.DB.VoiceChannel;
     const dispatch = createEventDispatcher<$$Events>();
 
     onMount(() => {
@@ -21,12 +21,12 @@
         connectVoice(channel);
     });
 
-    function onClick(channel: App.Database.Servers.Channels.VoiceChannel, redirect: () => void) {
+    function onClick(channel: App.DB.VoiceChannel, redirect: () => void) {
         if ($connectedVoiceChannel?.id !== channel.id) connectVoice(channel);
         else redirect();
     }
 
-    function connectVoice(channel: App.Database.Servers.Channels.VoiceChannel) {
+    function connectVoice(channel: App.DB.VoiceChannel) {
         connectedVoiceChannel.set(channel);
         //TODO: playSound(Sounds.Telephone);
     }
@@ -51,9 +51,9 @@
             on:click={() => dispatch('settings')}/>
         <div class="spacer"></div>
     </div>
-    {#if channel._voice_users?.length}
+    {#if channel.voice_users?.length}
         <div class="channel-users">
-            {#each channel._voice_users as vcu}
+            {#each channel.voice_users as vcu}
                 <Button
                     variant={ButtonVariant.Transparent}
                     style={ButtonStyle.Card}

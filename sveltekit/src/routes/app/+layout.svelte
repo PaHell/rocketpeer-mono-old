@@ -11,7 +11,7 @@
 	import { connectedVoiceChannel } from '$src/store';
 	
 	export let data: LayoutData;
-	data.userServers = data.userServers.sort((a, b) => a.order - b.order);
+	data.user_servers = data.user_servers.sort((a, b) => a.order - b.order);
 </script>
 
 <template>
@@ -35,7 +35,7 @@
 				</NavigationItem>
 			</div>
 			<div id="servers" class="fill">
-				{#each data.userServers as item (item.id)}
+				{#each data.user_servers as item (item.id)}
 					{#if item._server}
 						<NavigationItem
 							path={`/app/servers/${item.id}/text/${item._server.text_channel_id}`}
@@ -48,7 +48,11 @@
 									align={ButtonAlignment.Center}
 									on:click={redirect}
 									{active}>
-									<Icon name={item._server.image} class="large" />
+									{#if item._server.image}
+										<img src={item._server.image} />
+									{:else}
+										<Icon name={Icons.Home} class="large" />
+									{/if}
 								</Button>
 						</NavigationItem>
 					{/if}

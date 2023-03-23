@@ -7,7 +7,7 @@
 	import UserView from "$src/components/views/user/View.svelte";
 	import { connectedVoiceChannel } from "$src/store";
 
-    export let user: App.Database.User | undefined;
+    export let user: App.DB.User | undefined;
     
     let micOff = false;
 	let speakersOff = false;

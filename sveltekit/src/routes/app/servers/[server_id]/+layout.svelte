@@ -34,11 +34,8 @@
 	}
 	
 	export let data: LayoutData;
-	let server: App.Database.Servers.Server | undefined;
-	let serverChannels: (
-		App.Database.Servers.Channels.TextChannel
-		| App.Database.Servers.Channels.TextChannel
-		| App.Database.Servers.Channels.ChannelGroup)[] = [];
+	let server: App.DB.Server | undefined;
+	let serverChannels: (App.DB.TextChannel | App.DB.TextChannel | App.DB.ChannelGroup)[] = [];
 
 	onMount(() => {
 		refreshServer();
@@ -50,28 +47,12 @@
 	
 	function refreshServer() {
 		var serverId = parseInt($page.params.server_id);
-		// find matching server
-		server = data.servers.find(s => s.id === serverId);
-		const ungrouped: (App.Database.Servers.Channels.TextChannel | App.Database.Servers.Channels.VoiceChannel)[] = [];
-		const groups: App.Database.Servers.Channels.ChannelGroup[] = [...data.channel_groups];
-		// clear users in voice channels
-		data.voice_channels.forEach((channel) => {
-			channel.voice_users = [];
-		});
-		// add users to voice channels
-		data.voice_channel_users.forEach((vcu) => {
-			const channel = data.voice_channels.find((channel) => channel.id === vcu.channel_id);
-			if (channel) {
-				const user = data.all_users.find((user) => user.id === vcu.user_id);
-				if (!channel.voice_users) channel.voice_users = [];
-				if (user) vcu._user = user;
-				channel.voice_users.push(vcu);
-			}
-		});
+		const ungrouped: (App.DB.TextChannel | App.DB.VoiceChannel)[] = [];
+		const groups: App.DB.ChannelGroup[] = [...data.channel_groups];
 		// clear channels in groups
 		groups.forEach(g => g._channels = []);
 		// collect all channels
-		const channels: ((App.Database.Servers.Channels.TextChannel | App.Database.Servers.Channels.VoiceChannel) & TypedChannel)[] = [
+		const channels: ((App.DB.TextChannel | App.DB.VoiceChannel) & TypedChannel)[] = [
 			...data.text_channels.map(c => {
 				c.type = ChannelType.Text;
 				return c;

@@ -21,8 +21,8 @@
 	
 	export let data: LayoutData;
 
-	function open(user: App.Database.User) {
-		goto(`/app/messages/${user.id}/text`);
+	function open(chat: App.DB.Chat) {
+		goto(`/app/messages/${chat.id}/text`);
 	}
 </script>
 
@@ -41,12 +41,12 @@
 		</div>
 	</header>
 	<div class="fill list-users">
-		{#each data.chats as entry}
-			<UserView user={entry[0]}
+		{#each data.chats as chat}
+			<UserView user={chat._users[0]}
 				variant={ButtonVariant.Transparent}
 				style={ButtonStyle.Card}
-				active={$page.params.user_id == entry[0].id}
-				on:click={() => open(entry[0])}
+				active={$page.params.chat_id == chat.id}
+				on:click={() => open(chat)}
 				showStatus />
 		{/each}
 	</div>
