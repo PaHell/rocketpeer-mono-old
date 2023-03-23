@@ -5,7 +5,7 @@ import { Icons } from '$src/components/general/Icon.svelte';
 import { PayloadType } from '$src/lib/enum';
 import type { LayoutServerLoad } from './$types';
 
-const messages: App.Database.Chat.Message[] = [
+const messages: App.DB.TextChannelMessage[] = [
 	{
 		id: 1,
 		user_id: 1,
@@ -72,18 +72,14 @@ export const load = (async ({ params, parent }) => {
 	const pageData = await parent();
 	const voiceId = parseInt(params.voice_id);
 	messages.forEach((m) => {
-		m._user = pageData.all_users.find((u) => u.id === m.user_id);
+		m._user = pageData.userServers.find((us) => us._user?.id === m.user_id)?._user;
 		m.channel_id = voiceId;
-	});
-	const voiceUsers = pageData.voice_channel_users.filter((vcu) => vcu.channel_id === voiceId);
-	voiceUsers.forEach((vcu) => {
-		vcu._user = pageData.all_users.find((u) => u.id === vcu.user_id);
 	});
 	return {
 		channel: {
 			...pageData.voice_channels.find((c) => c.id === voiceId),
 			voice_users: pageData.voice_channel_users.filter((vcu) => vcu.channel_id === voiceId),
 			messages: messages
-		} as App.Database.Servers.Channels.VoiceChannel
+		} as App.DB.VoiceChannel
 	};
 }) satisfies LayoutServerLoad;

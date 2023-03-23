@@ -1,7 +1,7 @@
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
 
-import type { PayloadType, RoleColor } from "./lib/enum";
+import type { PayloadType, RoleColor, ServerRole } from "./lib/enum";
 
 // and what to do when importing types
 declare global {
@@ -46,7 +46,7 @@ declare global {
 		namespace P2P {
 			interface VoiceChannelUser extends PrimaryKey {
 				user_id: User['id'];
-				_user?: User;
+				_uer_server?: UserServer;
 				channel_id: VoiceChannel['id'];
 				is_live: boolean;
 				is_talking: boolean;
@@ -91,7 +91,7 @@ declare global {
 				display_name: string;
 				first_name: string;
 				last_name: string;
-				image: string;
+				image: string | null;
 				status: UserStatus;
 				email: string;
 				_friends?: UserFriend[];
@@ -112,16 +112,18 @@ declare global {
 				_users?: User[];
 				_messages?: ChatMessage[];
 			}
-			interface ChatMessage extends PrimaryKey, Timestamp {
-				chat_id: Chat['id'];
+			interface Message {
 				user_id: User['id'];
 				_user?: User;
 				type: PayloadType;
 				payload: string;
 			}
+			interface ChatMessage extends PrimaryKey, Timestamp, Message {
+				chat_id: Chat['id'];
+			}
 			interface Server extends PrimaryKey, CreatedAt {
 				name: string;
-				image: string;
+				image: string | null;
 				text_channel_id: number;
 				description: string;
 			}
@@ -129,8 +131,10 @@ declare global {
 				server_id: Server['id'];
 				user_id: User['id'];
 				_user?: User;
-				display_name: string;
+				order?: number; // only visible for yourself
+				display_name: string | null;
 				role: ServerRole;
+				_tags?: ServerTag[];
 			}
 			interface ServerTag extends PrimaryKey {
 				server_id: Server['id'];
@@ -139,18 +143,8 @@ declare global {
 				color: ServerTagColor;
 			}
 			interface ServerTagUser extends PrimaryKey {
+				user_server_id: UserServer['id'];
 				server_tag_id: ServerTag['id'];
-				server_user_id: ServerUser['id'];
-			}
-			interface ServerRole extends PrimaryKey {
-				server_id: Server['id'];
-				name: string;
-				color: RoleColor;
-				order: number;
-			}
-			interface ServerRoleUser {
-				server_role_id: ServerRole['id'];
-				server_user_id: ServerUser['id'];
 			}
 			interface ChannelGroup extends PrimaryKey {
 				server_id: Server['id'];
@@ -165,20 +159,15 @@ declare global {
 				name: string;
 			}
 			interface TextChannel extends Channel {
-				description: string;
 				messages?: Chat.Message[];
 			}
 			interface VoiceChannel extends Channel {
-				max_users: number;
+				max_users: null | number;
 				voice_users?: VoiceChannelUser[];
 				messages?: Chat.Message[];
 			}
-			interface TextChannelMessage extends PrimaryKey, Timestamp {
+			interface TextChannelMessage extends PrimaryKey, Timestamp, Message {
 				channel_id: TextChannel['id'];
-				user_id: User['id'];
-				_user?: User;
-				type: PayloadType;
-				payload: string;
 			}
 		}
 	}

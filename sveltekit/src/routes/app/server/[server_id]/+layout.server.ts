@@ -2,187 +2,250 @@ import { browser } from '$app/environment';
 import { goto } from '$app/navigation';
 import { page } from '$app/stores';
 import { Icons } from '$src/components/general/Icon.svelte';
-import { RoleColor, UserStatus } from '$src/lib/enum';
+import { ServerTagColor, UserStatus, ServerRole } from '$src/lib/enum';
 import type { LayoutServerLoad } from './$types';
 
-let all_users: App.Database.User[] = [
+let users_on_server: App.DB.User[] = [
 	{
 		id: 1,
 		username: 'obi_wan_kenobi',
 		display_name: 'Obi-Wan Kenobi',
-		img: '',
+		first_name: 'Obi-Wan',
+		last_name: 'Kenobi',
+		image: null,
 		status: UserStatus.Online,
+		email: 'obiwan@gmx.de',
 		created_at: '2021-01-01T00:00:00.000Z',
-		updated_at: null,
-		deleted_at: null
 	},
 	{
 		id: 2,
 		username: 'general_grievous',
 		display_name: 'General Grievous',
-		img: '',
+		first_name: 'General',
+		last_name: 'Grievous',
+		image: null,
 		status: UserStatus.Busy,
+		email: 'gg@gmail.com',
 		created_at: '2021-01-01T00:00:00.000Z',
-		updated_at: null,
-		deleted_at: null
 	},
 	{
 		id: 3,
 		username: 'palpatine',
 		display_name: 'Dart Sidious',
-		img: '',
+		first_name: 'Darth',
+		last_name: 'Sidious',
+		image: null,
 		status: UserStatus.Away,
+		email: 'palpatine@outlook.com',
 		created_at: '2021-01-01T00:00:00.000Z',
-		updated_at: null,
-		deleted_at: null
 	},
 	{
 		id: 4,
 		username: 'anakin_skywalker',
-		display_name: 'Anakin Skywalker',
-		img: '',
+		display_name: 'Darth Vader',
+		first_name: 'Darth',
+		last_name: 'Vader',
+		image: '',
 		status: UserStatus.Offline,
+		email: 'anakin@sky.de',
 		created_at: '2021-01-01T00:00:00.000Z',
-		updated_at: null,
-		deleted_at: null
 	},
 	{
 		id: 5,
 		username: 'boba_fett',
 		display_name: 'Boba Fett',
-		img: '',
+		first_name: 'Boba',
+		last_name: 'Fett',
+		image: '',
 		status: UserStatus.Online,
+		email: 'boba@tatooine.global',
 		created_at: '2021-01-01T00:00:00.000Z',
-		updated_at: null,
-		deleted_at: null
 	},
 	{
 		id: 6,
 		username: 'yoda',
 		display_name: 'Master Yoda',
-		img: '',
+		first_name: 'Master',
+		last_name: 'Yoda',
+		image: '',
 		status: UserStatus.Away,
+		email: 'yoda@dagobaah.com',
 		created_at: '2021-01-01T00:00:00.000Z',
-		updated_at: null,
-		deleted_at: null
 	},
 	{
 		id: 7,
 		username: 'jar_jar_binks',
 		display_name: 'Jar Jar Binks',
-		img: '',
+		first_name: 'Jar Jar',
+		last_name: 'Binks',
+		image: '',
 		status: UserStatus.Busy,
+		email: 'jarjar@bing.com',
 		created_at: '2021-01-01T00:00:00.000Z',
-		updated_at: null,
-		deleted_at: null
 	},
 	{
 		id: 8,
 		username: 'ashoka_tano',
 		display_name: 'Ashoka Tano',
-		img: '',
+		first_name: 'Ashoka',
+		last_name: 'Tano',
+		image: '',
 		status: UserStatus.Offline,
+		email: 'ashoka@icloud.com',
 		created_at: '2021-01-01T00:00:00.000Z',
-		updated_at: null,
-		deleted_at: null
 	},
 	{
 		id: 9,
 		username: 'darth_maul',
 		display_name: 'Darth Maul',
-		img: '',
+		first_name: 'Darth',
+		last_name: 'Maul',
+		image: '',
 		status: UserStatus.Online,
+		email: 'darth@corruscant.com',
 		created_at: '2021-01-01T00:00:00.000Z',
-		updated_at: null,
-		deleted_at: null
 	},
 	{
 		id: 10,
-		username: 'darth_vader',
-		display_name: 'Darth Vader',
-		img: '',
-		status: UserStatus.Busy,
+		username: 'jabba_the_hutt',
+		display_name: 'Jabba the Hutt',
+		first_name: 'Jabba',
+		last_name: 'the Hutt',
+		image: '',
+		status: UserStatus.Online,
+		email: 'jabba@tatooine.com',
 		created_at: '2021-01-01T00:00:00.000Z',
-		updated_at: null,
-		deleted_at: null
 	},
 	{
 		id: 11,
-		username: 'darth_sidious',
-		display_name: 'Darth Sidious',
-		img: '',
-		status: UserStatus.Away,
+		username: 'grogu',
+		display_name: 'Grogu',
+		first_name: 'Grogu',
+		last_name: '',
+		image: '',
+		status: UserStatus.Online,
+		email: '',
 		created_at: '2021-01-01T00:00:00.000Z',
-		updated_at: null,
-		deleted_at: null
 	},
 	{
 		id: 12,
-		username: 'darth_maul',
-		display_name: 'Darth Maul',
-		img: '',
-		status: UserStatus.Offline,
+		username: 'the_mandalorian',
+		display_name: 'The Mandalorian',
+		first_name: 'Din',
+		last_name: 'Djarin',
+		image: '',
+		status: UserStatus.Online,
+		email: '',
 		created_at: '2021-01-01T00:00:00.000Z',
-		updated_at: null,
-		deleted_at: null
 	},
 ];
 
-let server_users: App.Database.Servers.ServerUser[] = [
+let server_users: App.DB.UserServer[] = [
 	{
-		server_id: 1,
+		id: 1,
+		server_id: -1,
 		user_id: 1,
-		display_name: 'Obi-Wan Kenobi',
+		display_name: 'Ben',
+		role: ServerRole.Owner,
+		created_at: '2021-01-01T00:00:00.000Z',
 	},
 	{
-		server_id: 1,
+		id: 2,
+		server_id: -1,
 		user_id: 2,
-		display_name: 'Luke Skywalker',
+		display_name: 'The General',
+		role: ServerRole.Admin,
+		created_at: '2021-01-01T00:00:00.000Z',
 	},
 	{
-		server_id: 1,
+		id: 3,
+		server_id: -1,
 		user_id: 3,
-		display_name: 'Darth Vader',
+		display_name: 'The Sennator',
+		role: ServerRole.Moderator,
+		created_at: '2021-01-01T00:00:00.000Z',
 	},
 	{
-		server_id: 1,
+		id: 4,
+		server_id: -1,
 		user_id: 4,
-		display_name: 'Han Solo',
+		display_name: 'Darth Vader',
+		role: ServerRole.None,
+		created_at: '2021-01-01T00:00:00.000Z',
 	},
 	{
-		server_id: 1,
+		id: 5,
+		server_id: -1,
 		user_id: 5,
-		display_name: 'Chewbacca',
+		display_name: null,
+		role: ServerRole.None,
+		created_at: '2021-01-01T00:00:00.000Z',
 	},
 	{
-		server_id: 1,
+		id: 6,
+		server_id: -1,
 		user_id: 6,
-		display_name: 'Leia Organa',
+		display_name: null,
+		role: ServerRole.None,
+		created_at: '2021-01-01T00:00:00.000Z',
 	},
 	{
-		server_id: 1,
+		id: 7,
+		server_id: -1,
 		user_id: 7,
-		display_name: 'C-3PO',
+		display_name: null,
+		role: ServerRole.Admin,
+		created_at: '2021-01-01T00:00:00.000Z',
 	},
 	{
-		server_id: 1,
+		id: 8,
+		server_id: -1,
 		user_id: 8,
-		display_name: 'R2-D2',
+		display_name: null,
+		role: ServerRole.None,
+		created_at: '2021-01-01T00:00:00.000Z',
 	},
 	{
-		server_id: 1,
+		id: 9,
+		server_id: -1,
 		user_id: 9,
-		display_name: 'Darth Sidious',
+		display_name: null,
+		role: ServerRole.None,
+		created_at: '2021-01-01T00:00:00.000Z',
+	},
+	{
+		id: 10,
+		server_id: -1,
+		user_id: 10,
+		display_name: null,
+		role: ServerRole.Admin,
+		created_at: '2021-01-01T00:00:00.000Z',
+	},
+	{
+		id: 11,
+		server_id: -1,
+		user_id: 11,
+		display_name: null,
+		role: ServerRole.None,
+		created_at: '2021-01-01T00:00:00.000Z',
+	},
+	{
+		id: 12,
+		server_id: -1,
+		user_id: 12,
+		display_name: null,
+		role: ServerRole.None,
+		created_at: '2021-01-01T00:00:00.000Z',
 	},
 ];
 
-let text_channels: App.Database.Servers.Channels.TextChannel[] = [
+let text_channels: App.DB.TextChannel[] = [
 	{
 		id: 0,
 		server_id: -1,
 		name: 'Text Channel 5',
 		order: 5,
-		channel_group_id: null
+		channel_group_id: null,
 	},
 	{
 		id: 1,
@@ -207,95 +270,144 @@ let text_channels: App.Database.Servers.Channels.TextChannel[] = [
 	},
 ];
 
-let voice_channels: App.Database.Servers.Channels.VoiceChannel[] = [
+let voice_channels: App.DB.VoiceChannel[] = [
 	{
 		id: 1,
 		server_id: -1,
 		name: 'Voice Channel 3',
 		order: 3,
 		channel_group_id: null,
+		max_users: 10,
 	},
 	{
 		id: 2,
 		server_id: -1,
 		name: 'Voice Channel 2.2',
 		order: 2,
-		channel_group_id: 1
+		channel_group_id: 1,
+		max_users: 2,
 	},
 	{
 		id: 3,
 		server_id: -1,
 		name: 'Voice Channel 4.2',
 		order: 2,
-		channel_group_id: 2
+		channel_group_id: 2,
+		max_users: null,
 	}
 ];
 
-let channel_groups: App.Database.Servers.Channels.ChannelGroup[] = [
+let channel_groups: App.DB.ChannelGroup[] = [
 	{
 		id: 1,
+		server_id: -1,
 		name: 'Group 2.X',
 		order: 2,
 	},
 	{
 		id: 2,
+		server_id: -1,
 		name: 'Group 4.X',
 		order: 4,
 	}
 ];
 
-let voice_channel_users: App.Database.Servers.Channels.VoiceChannelUser[] = [
+let tags: App.DB.ServerTag[] = [
 	{
 		id: 1,
+		server_id: -1,
+		order: 1,
+		name: 'Blues',
+		color: ServerTagColor.Blue,
+	},
+	{
+		id: 2,
+		server_id: -1,
+		order: 2,
+		name: 'Jazz',
+		color: ServerTagColor.Purple,
+	},
+	{
+		id: 3,
+		server_id: -1,
+		order: 3,
+		name: 'Rock \'n Roll',
+		color: ServerTagColor.Green,
+	},
+];
+
+let server_tag_users : App.DB.ServerTagUser[] = [
+	{
+		id: 1,
+		server_tag_id: 1,
+		server_user_id: 1,
+	},
+	{
+		id: 2,
+		server_tag_id: 2,
+		server_user_id: 2,
+	},
+	{
+		id: 3,
+		server_tag_id: 3,
+		server_user_id: 3,
+	},
+	{
+		id: 4,
+		server_tag_id: 3,
+		server_user_id: 4,
+	},
+	{
+		id: 5,
+		server_tag_id: 3,
+		server_user_id: 5,
+	},
+];
+
+let voice_channel_users: App.P2P.VoiceChannelUser[] = [
+	{
 		user_id: 1,
 		channel_id: 1,
 		is_live: false,
 		is_talking: true,
 	},
 	{
-		id: 2,
 		user_id: 2,
 		channel_id: 1,
 		is_live: false,
 		is_talking: false,
 	},
 	{
-		id: 3,
 		user_id: 3,
 		channel_id: 2,
 		is_live: false,
 		is_talking: true,
 	},
 	{
-		id: 4,
 		user_id: 4,
 		channel_id: 2,
 		is_live: false,
 		is_talking: false,
 	},
 	{
-		id: 5,
 		user_id: 5,
 		channel_id: 2,
 		is_live: false,
 		is_talking: true,
 	},
 	{
-		id: 6,
 		user_id: 6,
 		channel_id: 2,
 		is_live: false,
 		is_talking: false,
 	},	
 	{
-		id: 7,
 		user_id: 3,
 		channel_id: 2,
 		is_live: true,
 		is_talking: false,
 	},
 	{
-		id: 8,
 		user_id: 4,
 		channel_id: 2,
 		is_live: true,
@@ -303,62 +415,32 @@ let voice_channel_users: App.Database.Servers.Channels.VoiceChannelUser[] = [
 	}
 ];
 
-let roles: App.Database.Servers.ServerRole[] = [
-	{
-		id: 1,
-		server_id: -1,
-		name: 'Admin',
-		color: RoleColor.Blue,
-		order: 1,
-	},
-	{
-		id: 2,
-		server_id: -1,
-		name: 'Moderator',
-		color: RoleColor.Purple,
-		order: 2,
-	},
-	{
-		id: 3,
-		server_id: -1,
-		name: 'Member',
-		color: RoleColor.Green,
-		order: 3,
-	},
-];
+server_users.forEach((userServer) => {
+	userServer._user = users_on_server.find((user) =>
+		user.id === userServer.user_id
+	);
+	userServer._tags = server_tag_users
+		.filter((stu) => stu.user_server_id === userServer.id)
+		.map((stu) =>
+			tags.find((tag) => tag.id === stu.server_tag_id)
+		) as App.DB.ServerTag[];
+});
 
-let rolesUsers : App.Database.Servers.ServerRoleUser[] = [
-	{
-		server_role_id: 1,
-		server_user_id: 1,
-	},
-	{
-		server_role_id: 2,
-		server_user_id: 2,
-	},
-	{
-		server_role_id: 3,
-		server_user_id: 3,
-	},
-	{
-		server_role_id: 3,
-		server_user_id: 4,
-	},
-	{
-		server_role_id: 3,
-		server_user_id: 5,
-	},
-];
+const voiceUsers = voice_channel_users.filter((vcu) => vcu.channel_id === voiceId);
+voiceUsers.forEach((vcu) => {
+	vcu._user = server_users.find((us) => us._user?.id === vcu.user_id)?._user;
+});
 
-export const load = (async (data) => {
+
+export const load = (async ({ parent }) => {
 	return {
-		all_users,
+		//users_on_server,
 		server_users,
 		channel_groups,
 		text_channels,
 		voice_channels,
 		voice_channel_users,
-		roles,
-		rolesUsers,
+		//tags,
+		//server_tag_users,
 	};
 }) satisfies LayoutServerLoad;

@@ -11,15 +11,7 @@
 	import { connectedVoiceChannel } from '$src/store';
 	
 	export let data: LayoutData;
-
-	const _servers: NavItem[] = data.servers.reduce((acc, server) => {
-		acc.push({
-			title: server.name,
-			icon: Icons.Home,
-			path: `/app/server/${server.id}/text/${server.main_text_channel_id}`,
-		});
-		return acc;
-	}, [] as NavItem[]);
+	data.userServers = data.userServers.sort((a, b) => a.order - b.order);
 </script>
 
 <template>
@@ -43,21 +35,23 @@
 				</NavigationItem>
 			</div>
 			<div id="servers" class="fill">
-				{#each _servers as item (item.path)}
-					<NavigationItem
-						path={item.path}
-						match={3}
-						let:active
-						let:redirect>
-							<Button
-								variant={ButtonVariant.Transparent}
-								style={ButtonStyle.Card}
-								align={ButtonAlignment.Center}
-								on:click={redirect}
-								{active}>
-								<Icon name={item.icon} class="large" />
-							</Button>
-					</NavigationItem>
+				{#each data.userServers as item (item.id)}
+					{#if item._server}
+						<NavigationItem
+							path={`/app/servers/${item.id}/text/${item._server.text_channel_id}`}
+							match={3}
+							let:active
+							let:redirect>
+								<Button
+									variant={ButtonVariant.Transparent}
+									style={ButtonStyle.Card}
+									align={ButtonAlignment.Center}
+									on:click={redirect}
+									{active}>
+									<Icon name={item._server.image} class="large" />
+								</Button>
+						</NavigationItem>
+					{/if}
 				{/each}
 			</div>
 		</nav>

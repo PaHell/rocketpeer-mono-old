@@ -1,18 +1,3 @@
-export enum RoleColor {
-    Lime = "text-lime-500",
-    Green = "text-green-500",
-    Teal = "text-teal-500",
-    Blue = "text-blue-500",
-    Indigo = "text-indigo-500",
-    Purple = "text-purple-500",
-    Pink = "text-pink-500",
-    Red = "text-red-500",
-    Orange = "text-orange-500",
-    Yellow = "text-yellow-500",
-    _Online = "pri",
-    _Offline = "sec",
-}
-
 export enum PayloadType {
     Text,
     Image,
@@ -28,6 +13,13 @@ export enum UserStatus {
 	Offline
 }
 
+export const UserStatusColors = [
+    'bg-success-500',
+    'bg-warning-500',
+    'bg-danger-500',
+    'hidden'
+];
+
 export enum PrivacyLevel {
     Public,
     FriendsOnly,
@@ -36,14 +28,19 @@ export enum PrivacyLevel {
 
 export enum ApplicationRole {
     User,
-    Moderator,
     Admin,
-    Creator,
 }
 
 export enum UserFriendStatus {
     Pending,
     Accepted,
+}
+
+export enum ServerRole {
+    None,
+    Moderator,
+    Admin,
+    Owner,
 }
 
 export enum ServerTagColor {
@@ -58,5 +55,3 @@ export enum ServerTagColor {
     Orange,
     Yellow,
 }
-
-export const UserStatusColors = ['bg-success-500', 'bg-warning-500', 'bg-danger-500', 'hidden'];

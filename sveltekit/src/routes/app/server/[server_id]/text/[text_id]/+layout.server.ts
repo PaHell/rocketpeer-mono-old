@@ -5,7 +5,7 @@ import { Icons } from '$src/components/general/Icon.svelte';
 import { PayloadType } from '$src/lib/enum';
 import type { LayoutServerLoad } from './$types';
 
-const messages: App.Database.Chat.Message[] = [
+const messages: App.DB.TextChannelMessage[] = [
 	{
 		id: 1,
 		user_id: 1,
