@@ -232,56 +232,56 @@ let server_tag_users : App.DB.ServerTagUser[] = [
 let voice_channel_users: App.P2P.VoiceChannelUser[] = [
 	{
 		id: 1,
-		user_id: 1,
+		server_user_id: 1,
 		channel_id: 1,
 		is_live: false,
 		is_talking: true,
 	},
 	{
 		id: 2,
-		user_id: 2,
+		server_user_id: 2,
 		channel_id: 1,
 		is_live: false,
 		is_talking: false,
 	},
 	{
 		id: 3,
-		user_id: 3,
+		server_user_id: 3,
 		channel_id: 2,
 		is_live: false,
 		is_talking: true,
 	},
 	{
 		id: 4,
-		user_id: 4,
+		server_user_id: 4,
 		channel_id: 2,
 		is_live: false,
 		is_talking: false,
 	},
 	{
 		id: 5,
-		user_id: 5,
+		server_user_id: 5,
 		channel_id: 2,
 		is_live: false,
 		is_talking: true,
 	},
 	{
 		id: 6,
-		user_id: 6,
+		server_user_id: 6,
 		channel_id: 2,
 		is_live: false,
 		is_talking: false,
 	},	
 	{
 		id: 7,
-		user_id: 3,
+		server_user_id: 7,
 		channel_id: 2,
 		is_live: true,
 		is_talking: false,
 	},
 	{
 		id: 8,
-		user_id: 4,
+		server_user_id: 8,
 		channel_id: 2,
 		is_live: true,
 		is_talking: true,
@@ -291,23 +291,24 @@ let voice_channel_users: App.P2P.VoiceChannelUser[] = [
 export const load = (async ({ parent, params }) => {
 	const pageData = await parent();
 	const serverId = parseInt(params.server_id);
-	server_users.forEach((userServer) => {
-		userServer.user = pageData._all_users.find((user) =>
-			user.id === userServer.user_id
-		);
-		userServer._tags = server_tag_users
-			.filter((stu) => stu.server_user_id === userServer.id)
+	// fill server_users with users
+	server_users.forEach((us) => {
+		us.user = pageData._all_users.find((user) => user.id === us.user_id);
+		us._tags = server_tag_users
+			.filter((stu) => stu.server_user_id === us.id)
 			.map((stu) =>
 				tags.find((tag) => tag.id === stu.server_tag_id)
 			) as App.DB.ServerTag[];
 	});
-
+	// sort server_users
 	server_users = server_users.sort((a, b) => a.user?.status - b.user?.status);
-	
+	// fill voice_channel_users with server_user
+	voice_channel_users.forEach(vcu => {
+		vcu._server_user = server_users.find(su => su.id === vcu.server_user_id);
+	});
+	// add server_users to voice channels
 	voice_channels.forEach((vc) => {
-		vc._voice_users = voice_channel_users
-			.filter(vcu => vcu.channel_id === vc.id)
-			.map(vcu => server_users.find(su => su.user_id === vcu.user_id));
+		vc._voice_users = voice_channel_users.filter(vcu => vcu.channel_id === vc.id);
 	});
 	return {
 		server_user: pageData.server_users.find((us) => us.server_id === serverId),
@@ -315,7 +316,7 @@ export const load = (async ({ parent, params }) => {
 		channel_groups,
 		text_channels,
 		voice_channels,
-		voice_channel_users,
+		//voice_channel_users,
 		tags,
 	};
 }) satisfies LayoutServerLoad;

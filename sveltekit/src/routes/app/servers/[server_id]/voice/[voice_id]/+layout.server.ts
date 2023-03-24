@@ -8,7 +8,7 @@ import type { LayoutServerLoad } from './$types';
 const messages: App.DB.TextChannelMessage[] = [
 	{
 		id: 1,
-		user_id: 1,
+		server_user_id: 1,
 		channel_id: -1,
 		type: PayloadType.Text,
 		payload: 'Hello there.',
@@ -18,7 +18,7 @@ const messages: App.DB.TextChannelMessage[] = [
 	},
 	{
 		id: 2,
-		user_id: 2,
+		server_user_id: 2,
 		channel_id: -1,
 		type: PayloadType.Text,
 		payload: 'General Kenobi!\nYou are a bold one.\nKill him!',
@@ -28,7 +28,7 @@ const messages: App.DB.TextChannelMessage[] = [
 	},
 	{
 		id: 3,
-		user_id: 2,
+		server_user_id: 2,
 		channel_id: -1,
 		type: PayloadType.Text,
 		payload: 'Back away! I will deal with this Jedi slime myself.',
@@ -38,7 +38,7 @@ const messages: App.DB.TextChannelMessage[] = [
 	},
 	{
 		id: 4,
-		user_id: 1,
+		server_user_id: 1,
 		channel_id: -1,
 		type: PayloadType.Text,
 		payload: 'Your move.',
@@ -48,7 +48,7 @@ const messages: App.DB.TextChannelMessage[] = [
 	},
 	{
 		id: 5,
-		user_id: 2,
+		server_user_id: 2,
 		channel_id: -1,
 		type: PayloadType.Text,
 		payload: "You fool. I've been trained in your Jedi arts by Count Dooku.",
@@ -58,7 +58,7 @@ const messages: App.DB.TextChannelMessage[] = [
 	},
 	{
 		id: 6,
-		user_id: 2,
+		server_user_id: 2,
 		channel_id: -1,
 		type: PayloadType.Text,
 		payload: 'Attack, Kenobi!',
@@ -72,14 +72,11 @@ export const load = (async ({ params, parent }) => {
 	const pageData = await parent();
 	const voiceId = parseInt(params.voice_id);
 	messages.forEach((m) => {
-		m._user = pageData.userServers.find((us) => us._user?.id === m.user_id)?._user;
+		m._server_user = pageData.server_users.find((su) => su.id === m.server_user_id);
 		m.channel_id = voiceId;
 	});
 	return {
-		channel: {
-			...pageData.voice_channels.find((c) => c.id === voiceId),
-			voice_users: pageData.voice_channel_users.filter((vcu) => vcu.channel_id === voiceId),
-			messages: messages
-		} as App.DB.VoiceChannel
+		channel: pageData.voice_channels.find((c) => c.id === voiceId),
+		messages,
 	};
 }) satisfies LayoutServerLoad;

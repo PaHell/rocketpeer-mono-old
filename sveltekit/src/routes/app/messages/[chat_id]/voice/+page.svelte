@@ -8,7 +8,6 @@
 	import type { LayoutData } from './$types';
 	import ChatMessage from '$src/components/views/chat/Message.svelte';
 	import ChatView from '$src/components/views/chat/View.svelte';
-	import UserVoiceView from '$src/components/views/user/Voice.svelte';
 	import Alert, { AlertVariant } from '$src/components/general/Alert.svelte';
 	import { onDestroy } from 'svelte';
 	import VideoPlayer from '$src/components/controls/VideoPlayer.svelte';

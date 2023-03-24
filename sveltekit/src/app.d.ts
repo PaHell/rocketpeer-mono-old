@@ -47,13 +47,6 @@ declare global {
 			}
 		}
 		namespace P2P {
-			interface VoiceChannelUser extends DB.PrimaryKey {
-				user_id: DB.User['id'];
-				_server_user?: DB.ServerUser;
-				channel_id: DB.VoiceChannel['id'];
-				is_live: boolean;
-				is_talking: boolean;
-			}
 			interface VoiceChatUser extends DB.PrimaryKey {
 				user_id: DB.User['id'];
 				_user?: DB.User;
@@ -62,15 +55,22 @@ declare global {
 				is_live: boolean;
 				is_talking: boolean;
 			}
-			interface VoiceChannelMessage extends DB.PrimaryKey, DB.Timestamp, Message {
-				channel_id: DB.VoiceChannel['id'];
-				server_user_id: ServerUser['id'];
-				_server_user?: User;
-			}
 			interface VoiceChatMessage extends DB.PrimaryKey, DB.Timestamp, Message {
 				chat_id: DB.VoiceChannel['id'];
 				user_id: User['id'];
 				_user?: User;
+			}
+			interface VoiceChannelUser extends DB.PrimaryKey {
+				server_user_id: DB.ServerUser['id'];
+				_server_user?: DB.ServerUser;
+				channel_id: DB.VoiceChannel['id'];
+				is_live: boolean;
+				is_talking: boolean;
+			}
+			interface VoiceChannelMessage extends DB.PrimaryKey, DB.Timestamp, Message {
+				channel_id: DB.VoiceChannel['id'];
+				server_user_id: ServerUser['id'];
+				_server_user?: User;
 			}
 		}
 		namespace API {
@@ -180,12 +180,10 @@ declare global {
 				name: string;
 			}
 			interface TextChannel extends Channel {
-				_messages?: TextChannelMessage[];
 			}
 			interface VoiceChannel extends Channel {
 				max_users: null | number;
 				_voice_users?: VoiceChannelUser[];
-				_messages?: P2P.VoiceChannelMessage[];
 			}
 			interface TextChannelMessage extends PrimaryKey, Timestamp, Message {
 				channel_id: TextChannel['id'];

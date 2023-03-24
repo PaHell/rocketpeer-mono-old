@@ -4,7 +4,6 @@
 </script>
 
 <script lang="typescript">
-    export let data: App.Database.Servers.Channels.VoiceChannelUser;
 </script>
 
 <template>

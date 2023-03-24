@@ -6,7 +6,6 @@
 	import { afterNavigate } from '$app/navigation';
 	import { debounce } from '$src/lib/helpers';
 	import ChatView from '$src/components/views/chat/View.svelte';
-	import UserVoiceView from '$src/components/views/user/Voice.svelte';
 	import Alert, { AlertVariant } from '$src/components/general/Alert.svelte';
 	import { onDestroy } from 'svelte';
 	import Overlay from './Overlay.svelte';

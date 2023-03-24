@@ -107,9 +107,7 @@ export const load = (async ({ params, parent }) => {
 		m.channel_id = textId;
 	});
 	return {
-		channel: {
-			...pageData.text_channels.find((c) => c.id === textId),
-			messages: messages
-		} as App.DB.TextChannel
+		channel: pageData.text_channels.find((c) => c.id === textId),
+		messages,
 	};
 }) satisfies LayoutServerLoad;

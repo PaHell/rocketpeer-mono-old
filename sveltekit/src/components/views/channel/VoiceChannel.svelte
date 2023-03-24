@@ -51,7 +51,7 @@
             on:click={() => dispatch('settings')}/>
         <div class="spacer"></div>
     </div>
-    {#if channel._voice_users?.length}
+    {#if channel._voice_users}
         <div class="channel-users">
             {#each channel._voice_users as vcu}
                 <Button
@@ -59,7 +59,7 @@
                     style={ButtonStyle.Card}
                     class={vcu.is_talking ? 'talking' : ''}>
                     <UserImage user={vcu._user} small/>
-                    <p class="text ellipsis flex-1">{vcu._user?.display_name}</p>
+                    <p class="text ellipsis flex-1">{vcu._server_user?.display_name ?? vcu._server_user?.user.display_name}</p>
                     {#if vcu.is_live}
                         <Badge
                             text="live"

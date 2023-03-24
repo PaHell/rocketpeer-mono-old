@@ -64,9 +64,11 @@
 		{:else}
 			<div id="server-voice-users">
 				<div>
-					{#each data.channel.voice_users as vcu}
-						<UserVoiceView data={vcu} on:click={openStream}/>
-					{/each}
+					{#if data.channel?._voice_users}
+						{#each data.channel._voice_users as vcu}
+							<UserVoiceView data={vcu} on:click={openStream}/>
+						{/each}
+					{/if}
 				</div>
 				<footer>
 					<Button variant={ButtonVariant.Secondary}
@@ -79,16 +81,14 @@
 		{/if}
 		<div>
 			<ChatView>
-				{#if data.channel._messages}
-					{#each data.channel._messages as message}
-						<ChatMessage
-							sender={message._server_user.user}
-							display_name={message._server_user?.display_name}
-							time={message.created_at}
-							type={message.type}
-							payload={message.payload}/>
-					{/each}
-				{/if}
+				{#each data.messages as message}
+					<ChatMessage
+						sender={message._server_user?.user}
+						display_name={message._server_user?.display_name}
+						time={message.created_at}
+						type={message.type}
+						payload={message.payload}/>
+				{/each}
 			</ChatView>
 		</div>
 	</main>

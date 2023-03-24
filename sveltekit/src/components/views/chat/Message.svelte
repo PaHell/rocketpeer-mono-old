@@ -10,7 +10,7 @@ import type { PayloadType } from "$src/lib/enum";
 
 <script lang="typescript">
     export let sender: App.DB.User | undefined;
-    export let display_name: string;
+    export let display_name: string | null = null;
     export let time: string;
     export let type: PayloadType;
     export let payload: string;
@@ -26,7 +26,7 @@ import type { PayloadType } from "$src/lib/enum";
         <UserImage user={sender} />
     {/if}
     <main>
-        <p class="text bold ellipsis">{sender?.display_name}</p>
+        <p class="text bold ellipsis">{display_name ?? sender?.display_name}</p>
         <p class="text tri text-label ellipsis">{$_time(time).format()}</p>
         <p class="text col-span-2">{payload}</p>
     </main>

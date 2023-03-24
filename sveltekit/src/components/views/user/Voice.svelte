@@ -4,19 +4,19 @@
 </script>
 
 <script lang="typescript">
-    export let data: App.Database.Servers.Channels.VoiceChannelUser;
+    export let data: App.P2P.VoiceChannelUser;
 </script>
 
 <template>
-    {#if data._user}
+    {#if data._server_user?.user}
         <Button
             class="user-voice"
             variant={ButtonVariant.None}
             on:click>
             <main>
-                <Image user={data._user} />
-                <p class="text bold ellipsis">{data._user.display_name}</p>
-                <p class="text text-label sec ellipsis">#{data._user.username}</p>
+                <Image user={data._server_user.user} />
+                <p class="text bold ellipsis">{data._server_user.display_name ?? data._server_user.user.display_name}</p>
+                <p class="text text-label sec ellipsis">#{data._server_user.user.username}</p>
             </main>
         </Button>
     {/if}
