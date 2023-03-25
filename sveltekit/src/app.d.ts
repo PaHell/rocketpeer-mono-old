@@ -1,6 +1,9 @@
 import type { PayloadType, RoleColor, ServerRole } from "./lib/enum";
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
+
+import type { PayloadType, RoleColor, ServerRole } from "./lib/enum";
+
 // and what to do when importing types
 
 declare global {

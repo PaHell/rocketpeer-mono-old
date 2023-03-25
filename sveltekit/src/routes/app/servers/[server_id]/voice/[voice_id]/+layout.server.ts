@@ -72,11 +72,14 @@ export const load = (async ({ params, parent }) => {
 	const pageData = await parent();
 	const voiceId = parseInt(params.voice_id);
 	messages.forEach((m) => {
-		m._server_user = pageData.server_users.find((su) => su.id === m.server_user_id);
+		m._user = pageData.userServers.find((us) => us._user?.id === m.user_id)?._user;
 		m.channel_id = voiceId;
 	});
 	return {
-		channel: pageData.voice_channels.find((c) => c.id === voiceId),
-		messages,
+		channel: {
+			...pageData.voice_channels.find((c) => c.id === voiceId),
+			voice_users: pageData.voice_channel_users.filter((vcu) => vcu.channel_id === voiceId),
+			messages: messages
+		} as App.DB.VoiceChannel
 	};
 }) satisfies LayoutServerLoad;

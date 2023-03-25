@@ -1,8 +1,9 @@
 use std::{env, fs};
 
 use nom::{
-    bytes::complete::{tag, take_while},
-    multi::many0,
+    bytes::complete::{tag, take_until, take_while},
+    combinator::complete,
+    multi::{many0, many1},
     sequence::tuple,
     IResult,
 };
@@ -20,13 +21,13 @@ struct Property {
 }
 
 fn parse_model(input: &str) -> IResult<&str, Model> {
-    println!("parsing model");
+    println!("{}", input);
     let (input, (_, name, _, properties, _)) = tuple((
-        tag("model "),
-        take_while(|c: char| c.is_alphanumeric()),
-        tag(" { "),
-        many0(parse_property),
-        tag(" } "),
+        complete(tag("model ")),
+        complete(take_until("{")),
+        complete(tag(" { ")),
+        many1(complete(parse_property)),
+        complete(tag(" } ")),
     ))(input)?;
 
     println!("parse_model {}", input);
@@ -40,11 +41,12 @@ fn parse_model(input: &str) -> IResult<&str, Model> {
 }
 
 fn parse_property(input: &str) -> IResult<&str, Property> {
+    println!("parse property {}", input);
     let (input, (name, _, data_type, _)) = tuple((
-        take_while(|c: char| c.is_alphanumeric()),
-        tag(": "),
-        take_while(|c: char| c.is_alphanumeric()),
-        tag("@"),
+        complete(take_while(|c: char| c.is_alphanumeric())),
+        complete(tag(": ")),
+        complete(take_while(|c: char| c.is_alphanumeric())),
+        complete(tuple((tag("@"), take_while(|c: char| c.is_alphanumeric())))),
     ))(input)?;
 
     Ok((
@@ -72,7 +74,7 @@ fn filter_properties(properties: &Vec<Property>) -> Vec<Property> {
 }
 
 fn parse_schema(input: &str) -> IResult<&str, Vec<Model>> {
-    many0(parse_model)(input)
+    many0(complete(parse_model))(input)
 }
 
 fn generate_ts_interfaces(models: &Vec<Model>) -> String {

@@ -12,48 +12,49 @@
 	import ImageIcon from '$src/components/views/ImageIcon.svelte';
 	
 	export let data: LayoutData;
-	data.server_users = data.server_users.sort((a, b) => a.order - b.order);
+	data.userServers = data.userServers.sort((a, b) => a.order - b.order);
 </script>
 
 <template>
 	<div id="layout-app" class="layout-pane row items-stretch">
-		<nav class={$connectedVoiceChannel ? 'padded' : ''}>
-			<NavigationItem
-				path={'/app/messages'}
-				match={2}
-				let:active
-				let:redirect>
-				<Button
-					variant={ButtonVariant.Transparent}
-					style={ButtonStyle.Card}
-					align={ButtonAlignment.Center}
-					class="branding"
-					{active}
-					on:click={redirect}>
-					<Logo/>
-				</Button>
-			</NavigationItem>
-			{#each data.server_users as item (item.id)}
-				{#if item._server}
-					<NavigationItem
-						path={`/app/servers/${item.id}/text/${item._server.text_channel_id}`}
-						match={3}
-						let:active
-						let:redirect>
-							<Button
-								variant={ButtonVariant.Transparent}
-								style={ButtonStyle.Card}
-								align={ButtonAlignment.Center}
-								on:click={redirect}
-								{active}>
-								<ImageIcon
-									src={item._server.image}
-									alt={item._server.name}
-									placeholder={Icons.Home}/>
-							</Button>
-					</NavigationItem>
-				{/if}
-			{/each}
+		<nav class="layout-pane {$connectedVoiceChannel ? 'padded' : ''}">
+			<div>
+				<NavigationItem
+					path={'/app/messages/2/text'}
+					match={2}
+					let:active
+					let:redirect>
+					<Button
+						variant={ButtonVariant.Transparent}
+						style={ButtonStyle.Card}
+						align={ButtonAlignment.Center}
+						class="branding"
+						{active}
+						on:click={redirect}>
+						<Logo/>
+					</Button>
+				</NavigationItem>
+			</div>
+			<div id="servers" class="fill">
+				{#each data.userServers as item (item.id)}
+					{#if item._server}
+						<NavigationItem
+							path={`/app/servers/${item.id}/text/${item._server.text_channel_id}`}
+							match={3}
+							let:active
+							let:redirect>
+								<Button
+									variant={ButtonVariant.Transparent}
+									style={ButtonStyle.Card}
+									align={ButtonAlignment.Center}
+									on:click={redirect}
+									{active}>
+									<Icon name={item._server.image} class="large" />
+								</Button>
+						</NavigationItem>
+					{/if}
+				{/each}
+			</div>
 		</nav>
 		<slot/>
 	</div>
