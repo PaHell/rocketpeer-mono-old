@@ -1,84 +1,101 @@
-use std::{fs, io::Write};
+use std::{env, fs};
 
-use pest::{iterators::Pair, Parser};
-use pest_derive::Parser;
+use nom::{
+    bytes::complete::{tag, take_while},
+    multi::many0,
+    sequence::tuple,
+    IResult,
+};
 
-#[derive(Parser)]
-#[grammar = "prisma.pest"]
-struct PrismaParser;
-
-#[derive(Debug, Default)]
-struct PrismaSchema {
-    models: Vec<Model>
-}
-
-#[derive(Debug, Default)]
+#[derive(Debug)]
 struct Model {
     name: String,
-    fields: Vec<Field>,
-    id_fields: Option<IdField>
-}
-
-impl Model {
-    fn field_names(&self) -> Vec<&str> {
-        self.fields.iter().map(|f| f.name.as_str()).collect()
-    }
-}
-
-#[derive(Debug, Default)]
-struct Field {
-    name: String,
-    field_type: FieldType
-}
-
-impl Field {
-    fn new_relation(name:String, related_model: String) -> Field {
-        let field_type = FieldType::Relation(Box::new(Field {
-            name:related_model.clone(),
-            field_type: FieldType::Enum(related_model)
-        }));
-        Field {name, field_type}
-    }
+    properties: Vec<Property>,
 }
 
 #[derive(Debug)]
-enum FieldType {
-    Boolean,
-    Int,
-    Float,
-    String,
-    Enum(String),
-    Relation(Box<Field>)
-}
-
-impl Default for FieldType {
-    fn default() -> Self {
-        FieldType::String
-    }
-}
-
-#[derive(Debug, Default)]
-struct IdField {
+struct Property {
     name: String,
-    fields: Vec<String>
+    data_type: String,
+}
+
+fn parse_model(input: &str) -> IResult<&str, Model> {
+    println!("parsing model");
+    let (input, (_, name, _, properties, _)) = tuple((
+        tag("model "),
+        take_while(|c: char| c.is_alphanumeric()),
+        tag(" { "),
+        many0(parse_property),
+        tag(" } "),
+    ))(input)?;
+
+    println!("parse_model {}", input);
+    Ok((
+        input,
+        Model {
+            name: name.to_owned(),
+            properties,
+        },
+    ))
+}
+
+fn parse_property(input: &str) -> IResult<&str, Property> {
+    let (input, (name, _, data_type, _)) = tuple((
+        take_while(|c: char| c.is_alphanumeric()),
+        tag(": "),
+        take_while(|c: char| c.is_alphanumeric()),
+        tag("@"),
+    ))(input)?;
+
+    Ok((
+        input,
+        Property {
+            name: name.to_owned(),
+            data_type: data_type.to_owned(),
+        },
+    ))
+}
+
+fn filter_properties(properties: &Vec<Property>) -> Vec<Property> {
+    properties
+        .iter()
+        .map(|property| Property {
+            name: property.name.to_owned(),
+            data_type: property
+                .data_type
+                .split("@")
+                .next()
+                .expect("property data type is missing")
+                .to_owned(),
+        })
+        .collect()
+}
+
+fn parse_schema(input: &str) -> IResult<&str, Vec<Model>> {
+    many0(parse_model)(input)
+}
+
+fn generate_ts_interfaces(models: &Vec<Model>) -> String {
+    let mut output = String::new();
+
+    for model in models {
+        output.push_str(&format!("interface {} {{\n", model.name));
+        for property in filter_properties(&model.properties) {
+            output.push_str(&format!("    {}: {};\n", property.name, property.data_type))
+        }
+        output.push_str("}\n\n");
+    }
+    output
 }
 
 fn main() {
-    let schema_file = fs::read_to_string("../../rust/prisma/schema.prisma").expect("failed to load schema file");
-    let schema_ast = parse_prisma_schema(&schema_file);
-    let ts_code = generate_typescript_interfaces(&schema_ast);
+    let input = fs::read_to_string("schema.prisma").expect("Failed to read schema");
 
-    fn parse_prisma_schema(schema: &str) -> PrismaSchema {
-        let mut schema_ast = PrismaSchema::default();
+    let (_, models) = parse_schema(&input).expect("failed to parse schema");
 
-        let pairs = PrismaParser::parse(Rule::schema, schema)
-            .unwrap_or_else(|e| panic!("{}", e))
-            .next()
-            .unwrap()
-            .into_inner();
+    println!("models {:?}", models);
+    let output = generate_ts_interfaces(&models);
 
-        for pair in pairs {
-            match pair.as_rule() {}
-        }
-    }
+    println!("{:?}", output);
+    fs::write("schema.d.ts", output).expect("failed to write ts file");
 }
