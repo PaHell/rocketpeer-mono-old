@@ -1,48 +1,84 @@
-use std::fs;
+use std::{fs, io::Write};
+
+use pest::{iterators::Pair, Parser};
+use pest_derive::Parser;
+
+#[derive(Parser)]
+#[grammar = "prisma.pest"]
+struct PrismaParser;
+
+#[derive(Debug, Default)]
+struct PrismaSchema {
+    models: Vec<Model>
+}
+
+#[derive(Debug, Default)]
+struct Model {
+    name: String,
+    fields: Vec<Field>,
+    id_fields: Option<IdField>
+}
+
+impl Model {
+    fn field_names(&self) -> Vec<&str> {
+        self.fields.iter().map(|f| f.name.as_str()).collect()
+    }
+}
+
+#[derive(Debug, Default)]
+struct Field {
+    name: String,
+    field_type: FieldType
+}
+
+impl Field {
+    fn new_relation(name:String, related_model: String) -> Field {
+        let field_type = FieldType::Relation(Box::new(Field {
+            name:related_model.clone(),
+            field_type: FieldType::Enum(related_model)
+        }));
+        Field {name, field_type}
+    }
+}
+
+#[derive(Debug)]
+enum FieldType {
+    Boolean,
+    Int,
+    Float,
+    String,
+    Enum(String),
+    Relation(Box<Field>)
+}
+
+impl Default for FieldType {
+    fn default() -> Self {
+        FieldType::String
+    }
+}
+
+#[derive(Debug, Default)]
+struct IdField {
+    name: String,
+    fields: Vec<String>
+}
 
 fn main() {
-    let schema_contents =
-        fs::read_to_string("../../rust/prisma/schema.prisma").expect("Failed to read file");
+    let schema_file = fs::read_to_string("../../rust/prisma/schema.prisma").expect("failed to load schema file");
+    let schema_ast = parse_prisma_schema(&schema_file);
+    let ts_code = generate_typescript_interfaces(&schema_ast);
 
-    let lines: Vec<&str> = schema_contents.split("\n").collect();
-    let mut models = Vec::new();
-    let mut in_model = false;
+    fn parse_prisma_schema(schema: &str) -> PrismaSchema {
+        let mut schema_ast = PrismaSchema::default();
 
-    for line in lines {
-        if line.contains("{") {
-            in_model = true;
-            models.push(line);
-            continue;
-        }
+        let pairs = PrismaParser::parse(Rule::schema, schema)
+            .unwrap_or_else(|e| panic!("{}", e))
+            .next()
+            .unwrap()
+            .into_inner();
 
-        if line.contains("}") {
-            in_model = false;
-            models.push(line);
-            continue;
-        }
-
-        if in_model {
-            models.push(line);
+        for pair in pairs {
+            match pair.as_rule() {}
         }
     }
-    let mut models_without_relations: Vec<String> = Vec::new();
-    models.drain(0..8);
-    for line in models {
-        if line.contains("@relation") || line.contains("@@index") {
-        } else if line.contains("model") {
-            let new_line = line.replace("model", "interface");
-            models_without_relations.push(new_line);
-        } else if line.contains("String") {
-            let new_line = line.replace("String", ": string;");
-            models_without_relations.push(new_line);
-        } else if line.contains("@default") {
-            let new_line = line.replace("@default(now())", "");
-            models_without_relations.push(new_line);
-        } else {
-            models_without_relations.push(line.to_string());
-        }
-    }
-
-    fs::write("testfile.txt", models_without_relations.join("\n"))
-        .expect("failed to write to file");
 }

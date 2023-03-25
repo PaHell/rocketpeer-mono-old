@@ -4,16 +4,9 @@ FROM rust:latest as build
 WORKDIR /usr/src/rust
 
 COPY . .
-RUN cargo build
-WORKDIR /usr/src/rust/target/debug
-RUN cargo prisma generate
-RUN cargo prisma db push
-#RUN ["cmd", "target/debug/prisma generate"]
-#RUN ["cmd","target/debug/prisma db push"]
-#RUN ["cmd", "target/debug/rust"]
 
-#WORKDIR /usr/src/rust
-#ENTRYPOINT ["target/debug/prisma generate && target/prisma db push && target/debug/rust"]
+
+RUN cargo build
 
 
 WORKDIR /usr/src/rust/target/debug

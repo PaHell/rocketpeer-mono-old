@@ -40,7 +40,7 @@ services:
       - database
   backend:
     container_name: rust
-    platform: linux/arm64/v8
+    platform: linux/x86_64
     image: rust-backend
     depends_on:
       - database
