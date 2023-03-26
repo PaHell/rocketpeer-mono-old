@@ -13,39 +13,6 @@ declare global {
 			type: PayloadType;
 			payload: string;
 		}
-		namespace Components {
-			namespace Table {
-				interface TableContext<T> {
-					registerColumn: (
-						name: string,
-						width: string,
-						css: string,
-						sortKey: keyof T | null
-					) => void;
-					getRowContext: (item: T, changed: () => void) => RowContext<T>;
-				}
-				interface RowContext<T> {
-					item: T;
-					index: number;
-					state: RowState;
-					initialState: RowState;
-					changed: (state: RowState) => void;
-				}
-				interface Column<T> {
-					title: string;
-					width: string;
-					css: string;
-					sortKey: keyof T | null;
-				}
-			}
-		}
-		namespace Lib {
-			interface Country {
-				iso3: string;
-				name: string;
-				flag: string;
-			}
-		}
 		namespace P2P {
 			interface VoiceChatUser extends DB.PrimaryKey {
 				user_id: DB.User['id'];

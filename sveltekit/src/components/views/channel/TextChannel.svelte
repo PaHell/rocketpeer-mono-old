@@ -1,6 +1,5 @@
 <script lang="typescript" context="module">
     import Badge, { BadgeVariant } from "$src/components/general/Badge.svelte";
-    import UserImage from "$src/components/views/user/Image.svelte";
 	import Button, { ButtonStyle, ButtonVariant } from '$src/components/controls/Button.svelte';
 	import NavigationItem from '$src/components/controls/NavigationItem.svelte';
 	import { Icons } from '$src/components/general/Icon.svelte';
@@ -86,10 +85,13 @@
             &:last-child {
                 @apply mb-2;
             }
-            & > .user-image {
-                @apply mr-2;
+            & > .image-icon {
+                @apply w-8 h-8 mr-2 bg-gray-300 dark:bg-gray-800;
+                & .icon {
+                    @apply text-icon-small;
+                }
             }
-            &.talking > .user-image {
+            &.talking > .image-icon {
                 @apply border-accent-500 ring-1 ring-accent-500;
             }
         }

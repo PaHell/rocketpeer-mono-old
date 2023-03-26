@@ -1,6 +1,3 @@
-<script lang="typescript" context="module">
-</script>
-
 <script lang="typescript">
 	import Icon, { Icons } from "$src/components/general/Icon.svelte";
 	import Button, { ButtonVariant } from "$src/components/controls/Button.svelte";

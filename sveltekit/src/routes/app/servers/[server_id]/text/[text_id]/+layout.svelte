@@ -50,14 +50,14 @@
 	tagDict.push(tagOnline);
 	tagDict.forEach(kvp => kvp[1] = kvp[1].sort((a, b) => a.status - b.status));
 	tagDict.push(tagOffline);
-
+	tagDict = tagDict.filter(kvp => kvp[1].length > 0);
 </script>
 
 
 <header>
 	<div>
 		<Icon name={Icons.TextChannel} class="text-icon-sec dark:text-icon-dark-sec"/>
-		<p class="text text-headline ellipsis">{data.channel.name}</p>
+		<p class="text text-headline ellipsis">{data.channel?.name}</p>
 		<div class="divider"></div>
 		<p class="text sec ellipsis">Ganz schön hässlich hier, aber waren Sie schonmal in Karlsruhe?</p>
 	</div>
@@ -85,7 +85,11 @@
 		{#each tagDict as [tag, server_users]}
 			<p class="text bold {tag.color}">{tag.name}</p>
 			{#each server_users as su}
-				<UserView user={su.user} display_name={su.display_name} variant={ButtonVariant.Transparent} showStatus />
+				<UserView
+					user={su.user}
+					display_name={su.display_name}
+					variant={ButtonVariant.Transparent}
+					showStatus />
 			{/each}
 		{/each}
 	</div>
@@ -101,7 +105,8 @@
 				flex: 3 2 auto;
 			}
 			&:nth-child(2) {
-				@apply border-l
+				@apply overflow-y-auto
+				border-l
 				bg-gray-100 dark:bg-gray-800
 				border-gray-300 dark:border-gray-700;
 				flex: 1 1 20rem;

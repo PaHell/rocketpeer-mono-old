@@ -11,9 +11,8 @@
 	import type { LayoutData } from './$types';
 	import { page } from '$app/stores';
 	import NavigationItem from '$src/components/controls/NavigationItem.svelte';
-	import UserImage from '$src/components/views/user/Image.svelte';
 	import UserView from '$src/components/views/user/View.svelte';
-	import VoiceConnection from '$src/components/controls/VoiceConnection.svelte';
+	import VoiceConnection from '$src/components/views/VoiceConnection.svelte';
 	import { connectedVoiceChannel } from '$src/store';
 	import VoiceChannel from '$src/components/views/channel/VoiceChannel.svelte';
 	import TextChannel from '$src/components/views/channel/TextChannel.svelte';
@@ -155,10 +154,10 @@
             &:last-child {
                 @apply mb-2;
             }
-            & > .user-image {
+            & > .image-icon {
                 @apply mr-2;
             }
-            &.talking > .user-image {
+            &.talking > .image-icon {
                 @apply border-accent-500 ring-1 ring-accent-500;
             }
         }

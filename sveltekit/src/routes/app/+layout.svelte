@@ -9,6 +9,7 @@
 	import NavigationItem from '$src/components/controls/NavigationItem.svelte';
 	import type { NavItem } from '$src/components/controls/Navigation.svelte';
 	import { connectedVoiceChannel } from '$src/store';
+	import ImageIcon from '$src/components/views/ImageIcon.svelte';
 	
 	export let data: LayoutData;
 	data.server_users = data.server_users.sort((a, b) => a.order - b.order);
@@ -16,48 +17,43 @@
 
 <template>
 	<div id="layout-app" class="layout-pane row items-stretch">
-		<nav class="layout-pane {$connectedVoiceChannel ? 'padded' : ''}">
-			<div>
-				<NavigationItem
-					path={'/app/messages/2/text'}
-					match={2}
-					let:active
-					let:redirect>
-					<Button
-						variant={ButtonVariant.Transparent}
-						style={ButtonStyle.Card}
-						align={ButtonAlignment.Center}
-						class="branding"
-						{active}
-						on:click={redirect}>
-						<Logo/>
-					</Button>
-				</NavigationItem>
-			</div>
-			<div id="servers" class="fill">
-				{#each data.server_users as item (item.id)}
-					{#if item._server}
-						<NavigationItem
-							path={`/app/servers/${item.id}/text/${item._server.text_channel_id}`}
-							match={3}
-							let:active
-							let:redirect>
-								<Button
-									variant={ButtonVariant.Transparent}
-									style={ButtonStyle.Card}
-									align={ButtonAlignment.Center}
-									on:click={redirect}
-									{active}>
-									{#if item._server.image}
-										<img src={item._server.image} />
-									{:else}
-										<Icon name={Icons.Home} class="large" />
-									{/if}
-								</Button>
-						</NavigationItem>
-					{/if}
-				{/each}
-			</div>
+		<nav class={$connectedVoiceChannel ? 'padded' : ''}>
+			<NavigationItem
+				path={'/app/messages/2/text'}
+				match={2}
+				let:active
+				let:redirect>
+				<Button
+					variant={ButtonVariant.Transparent}
+					style={ButtonStyle.Card}
+					align={ButtonAlignment.Center}
+					class="branding"
+					{active}
+					on:click={redirect}>
+					<Logo/>
+				</Button>
+			</NavigationItem>
+			{#each data.server_users as item (item.id)}
+				{#if item._server}
+					<NavigationItem
+						path={`/app/servers/${item.id}/text/${item._server.text_channel_id}`}
+						match={3}
+						let:active
+						let:redirect>
+							<Button
+								variant={ButtonVariant.Transparent}
+								style={ButtonStyle.Card}
+								align={ButtonAlignment.Center}
+								on:click={redirect}
+								{active}>
+								<ImageIcon
+									src={item._server.image}
+									alt={item._server.name}
+									placeholder={Icons.Home}/>
+							</Button>
+					</NavigationItem>
+				{/if}
+			{/each}
 		</nav>
 		<slot/>
 	</div>
@@ -65,52 +61,49 @@
 
 <style global lang="postcss">
 	#layout-app.layout-pane {
-		& > nav.layout-pane {
-			@apply w-20 items-stretch
+		& > nav {
+			@apply w-20 p-2 items-stretch
 			border-r
 			border-gray-300 dark:border-gray-800;
 			&.padded {
 				padding-bottom: calc(7rem + 2px);
 			}
-			& .branding.button {
-				@apply w-full h-14 mr-[-1px]
-				relative
-				border-l-0 border-t-0
-				rounded-none;
-				width: calc(100% + 1px);
-				& > svg > path {
-					@apply fill-accent-500;
+			& > .button {
+				@apply flex-none
+				w-16 h-16 p-0
+				rounded-lg;
+				&:not(:last-child) {
+					@apply mb-1;
 				}
-			}
-
-			& > #servers {
-				@apply p-2;
-				& > .button {
-					@apply flex-none
-					w-16 h-16 rounded-lg;
-					&:not(:last-child) {
-						@apply mb-1;
+				& .icon {
+					@apply text-icon-large;
+				}
+				& > .icon,
+				& > .image-icon {
+					@apply w-full h-full;
+				}
+				& > .image-icon {
+					@apply rounded-[inherit];
+				}
+				&:hover,
+				&.active {
+					& > svg > path {
+						@apply fill-white;
 					}
-					&:hover,
-					&.active {
-						& > svg > path {
-							@apply fill-white;
-						}
+				}
+				&.active {
+					@apply rounded-3xl;
+					&:hover {
+						@apply rounded-lg delay-200;
 					}
-					&.active {
+					& > .icon {
+						@apply text-accent-500;
+					}
+				}
+				&:not(.active) {
+					@apply rounded-lg;
+					&:hover {
 						@apply rounded-3xl;
-						&:hover {
-							@apply rounded-lg delay-200;
-						}
-						& > .icon {
-							@apply text-accent-500;
-						}
-					}
-					&:not(.active) {
-						@apply rounded-lg;
-						&:hover {
-							@apply rounded-3xl;
-						}
 					}
 				}
 			}

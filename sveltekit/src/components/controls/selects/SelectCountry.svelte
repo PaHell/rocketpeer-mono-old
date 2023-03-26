@@ -1,16 +1,17 @@
 <script lang="typescript">
 	import Select from '$src/components/controls/selects/Select.svelte';
+	import type { Country } from '$src/lib/countries';
 	import { countries } from '$src/lib/countries';
 	import { createEventDispatcher, onMount, type ComponentEvents } from 'svelte';
 
 	interface $$Events {
 		change: {
-			item: App.Lib.Country;
+			item: Country;
 			index: number;
 		};
 	}
 
-	export let value: App.Lib.Country | undefined = undefined;
+	export let value: Country | undefined = undefined;
 	export let iso3: string | undefined = undefined;
 	export let required = false;
 

@@ -1,4 +1,4 @@
-<script lang="typescript">
+<script lang="typescript" context="module">
 	import { onDestroy, onMount, setContext, SvelteComponent } from 'svelte';
 	import Column from '$src/components/table/Column.svelte';
 	import Row, { classes, RowState, translations } from '$src/components/table/Row.svelte';
@@ -6,21 +6,44 @@
 	import Button, { ButtonVariant } from '$src/components/controls/Button.svelte';
 	import Icon, { Icons } from '$src/components/general/Icon.svelte';
 	import { _ } from 'svelte-i18n';
-
-	type T = $$Generic<App.Models.DatabaseElement>;
+	export interface TableContext<T> {
+		registerColumn: (
+			name: string,
+			width: string,
+			css: string,
+			sortKey: keyof T | null
+		) => void;
+		getRowContext: (item: T, changed: () => void) => RowContext<T>;
+	}
+	export interface RowContext<T> {
+		item: T;
+		index: number;
+		state: RowState;
+		initialState: RowState;
+		changed: (state: RowState) => void;
+	}
+	export interface Column<T> {
+		title: string;
+		width: string;
+		css: string;
+		sortKey: keyof T | null;
+	}
+</script>
+<script lang="typescript">
+	type T = $$Generic<App.DB.PrimaryKey>;
 	interface $$Slots {
 		default: {
-			ctx: App.Components.Table.RowContext<T>;
+			ctx: RowContext<T>;
 		};
 	}
 	export let items: T[] = [];
 	export let css: string = '';
-	let columns: App.Components.Table.Column<T>[] = [];
-	let activeColumn: App.Components.Table.Column<T> | null = null;
+	let columns: Column<T>[] = [];
+	let activeColumn: Column<T> | null = null;
 	let columnSortedAsc: boolean = false;
-	let contexts: App.Components.Table.RowContext<T>[] = [];
+	let contexts: RowContext<T>[] = [];
 	let counters: [RowState, number][] = [];
-	setContext<App.Components.Table.TableContext<T>>('table', {
+	setContext<TableContext<T>>('table', {
 		registerColumn,
 		getRowContext
 	});
@@ -55,7 +78,7 @@
 		onRowChanged(contexts[items.length - 1], RowState.Added);
 	}
 
-	function sortByColumn(column: App.Components.Table.Column<T>) {
+	function sortByColumn(column: Column<T>) {
 		// toggle order or set column
 		if (!column.sortKey) return;
 		const key = column.sortKey;
@@ -84,7 +107,7 @@
 		console.warn('Save Changes', JSON.stringify(items));
 	}
 
-	function onRowChanged(context: App.Components.Table.RowContext<T>, state: RowState) {
+	function onRowChanged(context: RowContext<T>, state: RowState) {
 		console.log('Table Changed', { item: context.item });
 		context.state = state;
 		if (state != RowState.Deleted) {
@@ -105,7 +128,7 @@
 			width,
 			css,
 			sortKey
-		} as App.Components.Table.Column<T>);
+		} as Column<T>);
 		columns = columns;
 	}
 
@@ -125,7 +148,7 @@
 		};
 		return contexts[index];
 	}
-</script>
+</>
 
 
 	<div class="table-container {css}">

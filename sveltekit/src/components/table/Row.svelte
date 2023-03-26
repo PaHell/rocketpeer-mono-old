@@ -5,6 +5,7 @@
 	import Column from '$src/components/table/Column.svelte';
 	import Button, { ButtonVariant } from '$src/components/controls/Button.svelte';
 	import { Icons } from '$src/components/general/Icon.svelte';
+	import type { TableContext, RowContext } from '$src/components/table/Table.svelte';
 
 	export enum RowState {
 		Unmodified,
@@ -32,12 +33,12 @@
 	type T = $$Generic;
 	interface $$Slots {
 		default: {
-			context: App.General.RowContext<T>;
+			context: RowContext<T>;
 		};
 	}
 	export let item: T;
 
-	const table = getContext<App.General.TableContext<T>>('table');
+	const table = getContext<TableContext<T>>('table');
 	let context = table.getRowContext(item, changed);
 	setContext<number>('index', context.index);
 

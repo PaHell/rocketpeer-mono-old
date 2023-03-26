@@ -1,6 +1,7 @@
 <script lang="typescript" context="module">
-    import Image from "$src/components/views/user/Image.svelte";
     import Button, { ButtonStyle, ButtonVariant } from "$src/components/controls/Button.svelte";
+	import { Icons } from "$src/components/general/Icon.svelte";
+	import ImageIcon from "$src/components/views/ImageIcon.svelte";
 </script>
 
 <script lang="typescript">
@@ -14,7 +15,11 @@
             variant={ButtonVariant.None}
             on:click>
             <main>
-                <Image user={data._server_user.user} />
+                <ImageIcon
+                    src={data._server_user.user.image}
+                    alt="Image of {data._server_user.display_name ?? data._server_user.user.display_name}"
+                    placeholder={Icons.User}
+                    status={data._server_user.user.status} />
                 <p class="text bold ellipsis">{data._server_user.display_name ?? data._server_user.user.display_name}</p>
                 <p class="text text-label sec ellipsis">#{data._server_user.user.username}</p>
             </main>
@@ -30,7 +35,7 @@
         border-gray-300 dark:border-gray-700;
         & > main {
             @apply w-full flex flex-col items-center justify-center;
-            & > .user-image {
+            & > .image-icon {
                 @apply mb-1;
             }
         }

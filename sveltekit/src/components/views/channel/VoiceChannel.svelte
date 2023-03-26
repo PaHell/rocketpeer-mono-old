@@ -1,12 +1,12 @@
 <script lang="typescript" context="module">
     import Badge, { BadgeVariant } from "$src/components/general/Badge.svelte";
-    import UserImage from "$src/components/views/user/Image.svelte";
 	import Button, { ButtonStyle, ButtonVariant } from '$src/components/controls/Button.svelte';
 	import NavigationItem from '$src/components/controls/NavigationItem.svelte';
 	import { Icons } from '$src/components/general/Icon.svelte';
 	import { createEventDispatcher, onMount } from "svelte";
 	import { connectedVoiceChannel } from "$src/store";
 	import { playSound, Sounds } from "$src/components/controls/MusicPlayer.svelte";
+	import ImageIcon from "$src/components/views/ImageIcon.svelte";
 </script>
 
 <script lang="typescript">
@@ -58,7 +58,10 @@
                     variant={ButtonVariant.Transparent}
                     style={ButtonStyle.Card}
                     class={vcu.is_talking ? 'talking' : ''}>
-                    <UserImage user={vcu._user} small/>
+                    <ImageIcon
+                        src={vcu._server_user.user.image}
+                        alt="Image of {vcu._server_user.display_name ?? vcu._server_user.user.display_name}"
+                        placeholder={Icons.User}/>
                     <p class="text ellipsis flex-1">{vcu._server_user?.display_name ?? vcu._server_user?.user.display_name}</p>
                     {#if vcu.is_live}
                         <Badge

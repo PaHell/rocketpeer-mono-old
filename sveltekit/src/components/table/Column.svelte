@@ -2,6 +2,7 @@
 
 <script lang="typescript">
 	import { getContext, onDestroy, onMount, setContext, SvelteComponent } from 'svelte';
+	import { type TableContext } from '$src/components/table/Table.svelte';
 
 	type T = $$Generic;
 	interface $$Slots {
@@ -16,7 +17,7 @@
 
 	const index = getContext<number>('index');
 	if (index === 0) {
-		const table = getContext<App.Components.Table.TableContext<T>>('table');
+		const table = getContext<TableContext<T>>('table');
 		table.registerColumn(title, width, classes, sortByKey);
 	}
 </script>

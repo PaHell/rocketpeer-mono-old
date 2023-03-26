@@ -1,6 +1,7 @@
 <script lang="typescript" context="module">
-    import Image from "$src/components/views/user/Image.svelte";
     import Button, { ButtonStyle, ButtonVariant } from "$src/components/controls/Button.svelte";
+	import { Icons } from "$src/components/general/Icon.svelte";
+	import ImageIcon from "$src/components/views/ImageIcon.svelte";
 </script>
 
 <script lang="typescript">
@@ -19,7 +20,11 @@
         style={ButtonStyle.Card}
         class="user-view"
         on:click>
-        <Image {user} {showStatus} />
+        <ImageIcon
+            src={user.image}
+            alt="Image of {display_name}"
+            placeholder={Icons.User}
+            status={user.status} />
         <main>
             <p class="text bold ellipsis">{display_name ?? user.display_name}</p>
             <p class="text text-label sec ellipsis">#{user.username}</p>
@@ -30,8 +35,9 @@
 <style global lang="postcss">
     .button.user-view {
         @apply items-center justify-start text-left;
-        & > .user-image {
-            @apply flex-none;
+        & > .image-icon {
+            @apply flex-none
+            bg-gray-300 dark:bg-gray-700;
         }
         & > main {
             @apply ml-1 flex-1 overflow-hidden;

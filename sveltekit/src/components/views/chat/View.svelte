@@ -1,5 +1,4 @@
 <script lang="typescript" context="module">
-    import UserImage from "$src/components/views/user/Image.svelte";
     import Button, { ButtonAlignment, ButtonVariant } from "$src/components/controls/Button.svelte";
     import moment from "moment";
 	import { locale } from "$src/lib/i18n";

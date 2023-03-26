@@ -28,7 +28,7 @@
 		VoiceDisconnect = 'plug-line',
 		Microphone = 'mic-line',
 		Speakers = 'headphone-line',
-		UserImagePlaceholder = 'user-6-line',
+		User = 'user-line',
 		Users = 'contacts-line',
 		Notification = 'notification-line',
 		Pinned = 'pushpin-line',

@@ -1,11 +1,12 @@
 <script lang="typescript" context="module">
-    import UserImage from "$src/components/views/user/Image.svelte";
     import Button, { ButtonAlignment, ButtonVariant } from "$src/components/controls/Button.svelte";
     import moment from "moment";
 	import { locale } from "$src/lib/i18n";
 	import { onMount } from "svelte";
 	import { time as _time } from "$src/lib/time";
 import type { PayloadType } from "$src/lib/enum";
+	import ImageIcon from "../ImageIcon.svelte";
+	import { Icons } from "$src/components/general/Icon.svelte";
 </script>
 
 <script lang="typescript">
@@ -23,7 +24,10 @@ import type { PayloadType } from "$src/lib/enum";
 
 <div class="chat-message">
     {#if sender}
-        <UserImage user={sender} />
+        <ImageIcon
+            src={sender.image}
+            alt="Image of {display_name}"
+            placeholder={Icons.User} />
     {/if}
     <main>
         <p class="text bold ellipsis">{display_name ?? sender?.display_name}</p>
@@ -48,9 +52,9 @@ import type { PayloadType } from "$src/lib/enum";
         &:first-child {
             @apply mt-2;
         }
-        & > .user-image {
+        & > .image-icon {
             @apply flex-none mr-2
-            border-gray-300 dark:border-gray-600;
+            bg-gray-300 dark:bg-gray-800;
         }
         & > main {
             @apply flex-1 grid grid-cols-2 items-center;
