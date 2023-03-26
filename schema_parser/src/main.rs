@@ -1,5 +1,3 @@
-use std::{env, fs};
-
 use nom::{
     bytes::complete::{tag, take_until, take_while, take_while1},
     combinator::complete,
@@ -7,6 +5,7 @@ use nom::{
     sequence::tuple,
     IResult,
 };
+use std::{env, fs};
 
 #[derive(Debug)]
 struct Model {
@@ -38,23 +37,49 @@ fn parse_model(input: &str) -> IResult<&str, Model> {
 }
 
 fn parse_property(input: &str) -> IResult<&str, Property> {
-    let (input, (_, name, _, data_type)) = tuple((
-        take_while(char::is_whitespace),
-        take_while1(|c: char| !c.is_whitespace()),
-        take_while(char::is_whitespace),
-        complete(take_until("\n")),
-    ))(input)?;
+    if input.contains("@") {
+        let (input, (_, name, _, data_type, _, _)) = tuple((
+            take_while(char::is_whitespace),           // _
+            take_while1(|c: char| !c.is_whitespace()), // name
+            take_while(char::is_whitespace),           //_
+            take_while1(|c: char| !c.is_whitespace()), // data type
+            take_while(char::is_whitespace),           //_
+            complete(take_until("\n")),                // @ stuff
+        ))(input)?;
 
-    let data = match data_type {
-        "String" => "string",
-        "Int" => "number",
-        _ => "not implemented",
-    };
-    let output = Property {
-        name: name.to_owned(),
-        data_type: data.to_owned(),
-    };
-    Ok((input, output))
+        let data = match data_type {
+            "Int" => "number",
+            "String" => "string",
+            "Bytes" => "Blob",
+            _ => data_type,
+        };
+
+        println!("{}: {:?}", name, data);
+        let output = Property {
+            name: name.to_owned(),
+            data_type: data.to_owned(),
+        };
+        return Ok((input, output));
+    } else {
+        let (input, (_, name, _, data_type)) = tuple((
+            take_while(char::is_whitespace),           // _
+            take_while1(|c: char| !c.is_whitespace()), // name
+            take_while(char::is_whitespace),           //_
+            complete(take_until("\n")),                //data type
+        ))(input)?;
+        let data = match data_type {
+            "Int" => "number",
+            "String" => "string",
+            "Bytes" => "Blob",
+            _ => data_type,
+        };
+        println!("{}: {:?}", name, data);
+        let output = Property {
+            name: name.to_owned(),
+            data_type: data.to_owned(),
+        };
+        return Ok((input, output));
+    }
 }
 
 fn filter_properties(properties: &Vec<Property>) -> Vec<Property> {
