@@ -1,3 +1,13 @@
+generator client {
+  provider = "cargo prisma"
+  output   = "../src/prisma.rs"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("RUST_DB_URL")
+}
+
 model users {
   id                    Int                     @id @default(autoincrement())
   user_name             String                  @unique
@@ -27,7 +37,6 @@ model user_friends {
   created_at     DateTime @db.DateTime(0)
   friends_user_1 users    @relation("friends_user_1", fields: [user_1_id], references: [id], onUpdate: Restrict, map: "user_1")
   friends_user_2 users    @relation("friends_user_2", fields: [user_2_id], references: [id], onUpdate: Restrict, map: "user_2")
-
   @@index([user_1_id], map: "user_1")
   @@index([user_2_id], map: "user_2")
 }
@@ -42,7 +51,6 @@ model message {
   deleted_at       DateTime
   message_receiver users        @relation("message_receiver", fields: [receiver_id], references: [id], map: "receiver_id")
   message_sender   users        @relation("message_sender", fields: [sender_id], references: [id], map: "sender_id")
-
   @@index([receiver_id], map: "receiver_id")
   @@index([sender_id], map: "sender_id")
 }
@@ -64,7 +72,6 @@ model users_servers {
   user_server_tags user_server_tags[]
   servers          servers            @relation(fields: [server_id], references: [id], onUpdate: Restrict, map: "server_id")
   users            users              @relation(fields: [user_id], references: [id], onUpdate: Restrict, map: "user_id")
-
   @@index([server_id], map: "server_id")
   @@index([user_id], map: "user_id")
 }
@@ -89,7 +96,6 @@ model server_tags {
   Color            colors
   servers          servers            @relation(fields: [server_id], references: [id], onUpdate: Restrict, map: "server_id_from_tags")
   user_server_tags user_server_tags[]
-
   @@index([server_id], map: "server_id_from_tags")
 }
 
@@ -99,7 +105,6 @@ model user_server_tags {
   user_server_id Int
   server_tags    server_tags   @relation(fields: [server_tag_id], references: [id], onUpdate: Restrict, map: "server_tag")
   users_servers  users_servers @relation(fields: [user_server_id], references: [id], onUpdate: Restrict, map: "user_servers_id")
-
   @@index([server_tag_id], map: "server_tag")
   @@index([user_server_id], map: "user_servers_id")
 }
@@ -111,8 +116,6 @@ model channel_groups {
   name          String
   servers       servers         @relation(fields: [server_id], references: [id], onUpdate: Restrict, map: "channel_server_id")
   text_channels text_channels[]
-  voice_channel voice_channel[]
-
   @@index([server_id], map: "channel_server_id")
 }
 
@@ -125,7 +128,6 @@ model voice_channel {
   max_users        Int
   channel_groups   channel_groups? @relation(fields: [channel_group_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "voice_channel_id")
   servers          servers         @relation(fields: [server_id], references: [id], onUpdate: Restrict, map: "voice_server_id")
-
   @@index([channel_group_id], map: "voice_channel_id")
   @@index([server_id], map: "voice_server_id")
 }
@@ -140,7 +142,6 @@ model text_channels {
   text_channel_messages text_channel_messages[]
   channel_groups        channel_groups?         @relation(fields: [channel_group_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "text_channel_group")
   servers               servers                 @relation(fields: [server_id], references: [id], onUpdate: Restrict, map: "text_server_id")
-
   @@index([channel_group_id], map: "text_channel_group")
   @@index([server_id], map: "text_server_id")
 }
@@ -155,41 +156,6 @@ model text_channel_messages {
   deleted_at      DateTime
   text_channels   text_channels @relation(fields: [text_channel_id], references: [id], onUpdate: Restrict, map: "text_channel_id")
   users           users         @relation(fields: [sender_id], references: [id], onUpdate: Restrict, map: "text_sender_id")
-
   @@index([text_channel_id], map: "text_channel_id")
   @@index([sender_id], map: "text_sender_id")
-}
-
-enum users_status {
-  Online
-  Away
-  DoNotDisturb
-  Offline
-}
-
-enum colors {
-  Black
-  White
-  Purple
-}
-
-enum users_privacy_level {
-  Default
-}
-
-enum users_role {
-  Administrator
-  Default
-}
-
-enum server_role {
-  Administrator
-  Default
-}
-
-enum message_type {
-  Text
-  Picture
-  Video
-  Gif
 }

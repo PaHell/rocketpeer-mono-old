@@ -1,11 +1,11 @@
 use nom::{
     bytes::complete::{tag, take_until, take_while, take_while1},
     combinator::complete,
-    multi::{many0, many1},
+    multi::many0,
     sequence::tuple,
     IResult,
 };
-use std::{env, fs};
+use std::fs;
 
 #[derive(Debug)]
 struct Model {
@@ -20,12 +20,11 @@ struct Property {
 }
 
 fn parse_model(input: &str) -> IResult<&str, Model> {
-    let (input, (_, name, _, properties, _)) = tuple((
+    let (input, (_, name, _, properties)) = tuple((
         tag("model"),
         take_until("{"),
         tag("{"),
-        many1(parse_property),
-        tag("\n}\n"),
+        many0(parse_property),
     ))(input)?;
 
     let output = Model {
@@ -51,10 +50,10 @@ fn parse_property(input: &str) -> IResult<&str, Property> {
             "Int" => "number",
             "String" => "string",
             "Bytes" => "Blob",
+            "DateTime" => "string",
             _ => data_type,
         };
 
-        println!("{}: {:?}", name, data);
         let output = Property {
             name: name.to_owned(),
             data_type: data.to_owned(),
@@ -73,7 +72,6 @@ fn parse_property(input: &str) -> IResult<&str, Property> {
             "Bytes" => "Blob",
             _ => data_type,
         };
-        println!("{}: {:?}", name, data);
         let output = Property {
             name: name.to_owned(),
             data_type: data.to_owned(),
@@ -97,27 +95,33 @@ fn filter_properties(properties: &Vec<Property>) -> Vec<Property> {
         .collect()
 }
 
-fn parse_schema(input: &str) -> IResult<&str, Vec<Model>> {
-    many1(parse_model)(input)
-}
-
 fn generate_ts_interfaces(models: &Vec<Model>) -> String {
     let mut output = String::new();
 
     for model in models {
-        output.push_str(&format!("interface {} {{\n", model.name));
-        for property in filter_properties(&model.properties) {
-            output.push_str(&format!("    {}: {};\n", property.name, property.data_type))
+        output.push_str(&format!("interface{}{{\n", model.name));
+        for (i, property) in filter_properties(&model.properties).iter().enumerate() {
+            output.push_str(&format!("    {}: {};", property.name, property.data_type));
+            if i < model.properties.len() - 1 {
+                output.push_str("\n");
+            } else {
+                output.push_str("\n}\n\n");
+            }
         }
-        output.push_str("}\n\n");
     }
     output
 }
-
 fn main() {
     let input = fs::read_to_string("schema.prisma").expect("Failed to read schema");
-
-    let (_, models) = parse_schema(&input).expect("failed to parse schema");
+    let mut data: Vec<String> = input.split("}\n\n").map(|s| s.to_string()).collect();
+    data.drain(0..2);
+    let mut models: Vec<Model> = Vec::new();
+    for mut model in data {
+        //let mut tester: String = model.lines().filter(|line| !line.contains("@@")).collect();
+        //tester.push_str("}");
+        let (_, output) = parse_model(&model).expect("failed to parse schema");
+        models.push(output);
+    }
 
     let output = generate_ts_interfaces(&models);
 
