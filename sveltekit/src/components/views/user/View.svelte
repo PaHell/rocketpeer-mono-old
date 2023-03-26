@@ -14,22 +14,24 @@
 </script>
 
 <template>
-    <Button
-        {variant}
-        {active}
-        style={ButtonStyle.Card}
-        class="user-view"
-        on:click>
-        <ImageIcon
-            src={user.image}
-            alt="Image of {display_name}"
-            placeholder={Icons.User}
-            status={user.status} />
-        <main>
-            <p class="text bold ellipsis">{display_name ?? user.display_name}</p>
-            <p class="text text-label sec ellipsis">#{user.username}</p>
-        </main>
-    </Button>
+    {#if user}
+        <Button
+            {variant}
+            {active}
+            style={ButtonStyle.Card}
+            class="user-view"
+            on:click>
+            <ImageIcon
+                src={user.image}
+                alt="Image of {display_name}"
+                placeholder={Icons.User}
+                status={user.status} />
+            <main>
+                <p class="text bold ellipsis">{display_name ?? user.display_name}</p>
+                <p class="text text-label sec ellipsis">#{user.username}</p>
+            </main>
+        </Button>
+    {/if}
 </template>
 
 <style global lang="postcss">

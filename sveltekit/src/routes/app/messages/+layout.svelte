@@ -40,8 +40,21 @@
 		</div>
 	</header>
 	<div class="fill list-users">
+		<NavigationItem
+			path={'/app/messages'}
+			let:active
+			let:redirect>
+			<Button
+				class="user-view"
+				variant={ButtonVariant.Transparent}
+				style={ButtonStyle.Card}
+				icon={Icons.User}
+				text="Friends"
+				{active}
+				on:click={redirect}/>
+		</NavigationItem>
 		{#each data.chats as chat}
-			<UserView user={chat.users[0]}
+			<UserView user={chat.users?.[0]}
 				variant={ButtonVariant.Transparent}
 				style={ButtonStyle.Card}
 				active={$page.params.chat_id == chat.id}

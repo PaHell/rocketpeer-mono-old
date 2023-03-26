@@ -101,7 +101,7 @@ const user_friends: App.DB.UserFriend[] = [
 export const load = (async ({params, parent}) => {
 	const pageData = await parent();
 	chats.forEach((chat) => {
-		chat._users = chat_users
+		chat.users = chat_users
 			.filter(cu => cu.chat_id === chat.id)
 			.map(cu => pageData._all_users.find(u => u.id === cu.user_id));
 	});

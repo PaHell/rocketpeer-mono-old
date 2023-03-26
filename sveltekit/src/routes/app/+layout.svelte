@@ -19,7 +19,7 @@
 	<div id="layout-app" class="layout-pane row items-stretch">
 		<nav class={$connectedVoiceChannel ? 'padded' : ''}>
 			<NavigationItem
-				path={'/app/messages/2/text'}
+				path={'/app/messages'}
 				match={2}
 				let:active
 				let:redirect>
@@ -63,10 +63,10 @@
 	#layout-app.layout-pane {
 		& > nav {
 			@apply w-20 p-2 items-stretch
-			border-r
+			border-r overflow-y-auto overflow-x-hidden
 			border-gray-300 dark:border-gray-800;
 			&.padded {
-				padding-bottom: calc(7rem + 2px);
+				padding-bottom: calc(7.5rem + 2px);
 			}
 			& > .button {
 				@apply flex-none

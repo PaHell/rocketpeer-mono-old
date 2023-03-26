@@ -17,10 +17,10 @@
 	<div>
 		<Icon name={Icons.TextChannel} class="text-icon-sec dark:text-icon-dark-sec"/>
 		{#if data.chat}
-			<p class="text text-headline ellipsis">{data.chat?.name ?? data.chat?._users?.join(", ")}</p>
+			<p class="text text-headline ellipsis">{data.chat?.name ?? data.chat?.users?.map(u => u.display_name).join(", ")}</p>
 			{#if data.chat?.name}
 				<div class="divider"></div>
-				<p class="text sec ellipsis">{data.chat?._users?.join(", ")}</p>
+				<p class="text sec ellipsis">{data.chat?.users?.map(u => u.display_name).join(", ")}</p>
 			{/if}
 		{/if}
 	</div>

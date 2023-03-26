@@ -75,7 +75,8 @@
 		}
 	}
 	.voice-connection {
-		@apply bg-gray-100 dark:bg-gray-900
+		@apply relative
+		bg-gray-100 dark:bg-gray-900
 		border-t border-gray-300 dark:border-gray-800;
 		margin-left: calc(-5rem - 1px);
 		& > section {

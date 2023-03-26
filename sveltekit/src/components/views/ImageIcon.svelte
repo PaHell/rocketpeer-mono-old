@@ -11,16 +11,14 @@
     export let placeholder: Icons = Icons.NoImage;
     export let counter: number = 0;
     export let status: UserStatus | undefined = undefined;
-    export let small = false;
-    export let large = false;
 </script>
 
-<div class="image-icon {classes}" class:small>
+<div class="image-icon {classes}">
     <div>
         {#if src}
             <img {src} {alt} />
         {:else}
-            <Icon name={placeholder} class="sec {small ? 'small': large ? 'large' : ''}" />
+            <Icon name={placeholder} class="sec" />
         {/if}
     </div>
     {#if status != undefined}
