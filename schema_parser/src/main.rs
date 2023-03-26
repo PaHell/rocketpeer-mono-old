@@ -1,7 +1,7 @@
 use std::{env, fs};
 
 use nom::{
-    bytes::complete::{tag, take_until, take_while},
+    bytes::complete::{tag, take_until, take_while, take_while1},
     combinator::complete,
     multi::{many0, many1},
     sequence::tuple,
@@ -21,41 +21,40 @@ struct Property {
 }
 
 fn parse_model(input: &str) -> IResult<&str, Model> {
-    println!("{}", input);
     let (input, (_, name, _, properties, _)) = tuple((
-        complete(tag("model ")),
-        complete(take_until("{")),
-        complete(tag(" { ")),
-        many1(complete(parse_property)),
-        complete(tag(" } ")),
+        tag("model"),
+        take_until("{"),
+        tag("{"),
+        many1(parse_property),
+        tag("\n}\n"),
     ))(input)?;
 
-    println!("parse_model {}", input);
-    Ok((
-        input,
-        Model {
-            name: name.to_owned(),
-            properties,
-        },
-    ))
+    let output = Model {
+        name: name.to_owned(),
+        properties,
+    };
+
+    Ok((input, output))
 }
 
 fn parse_property(input: &str) -> IResult<&str, Property> {
-    println!("parse property {}", input);
-    let (input, (name, _, data_type, _)) = tuple((
-        complete(take_while(|c: char| c.is_alphanumeric())),
-        complete(tag(": ")),
-        complete(take_while(|c: char| c.is_alphanumeric())),
-        complete(tuple((tag("@"), take_while(|c: char| c.is_alphanumeric())))),
+    let (input, (_, name, _, data_type)) = tuple((
+        take_while(char::is_whitespace),
+        take_while1(|c: char| !c.is_whitespace()),
+        take_while(char::is_whitespace),
+        complete(take_until("\n")),
     ))(input)?;
 
-    Ok((
-        input,
-        Property {
-            name: name.to_owned(),
-            data_type: data_type.to_owned(),
-        },
-    ))
+    let data = match data_type {
+        "String" => "string",
+        "Int" => "number",
+        _ => "not implemented",
+    };
+    let output = Property {
+        name: name.to_owned(),
+        data_type: data.to_owned(),
+    };
+    Ok((input, output))
 }
 
 fn filter_properties(properties: &Vec<Property>) -> Vec<Property> {
@@ -74,7 +73,7 @@ fn filter_properties(properties: &Vec<Property>) -> Vec<Property> {
 }
 
 fn parse_schema(input: &str) -> IResult<&str, Vec<Model>> {
-    many0(complete(parse_model))(input)
+    many1(parse_model)(input)
 }
 
 fn generate_ts_interfaces(models: &Vec<Model>) -> String {
@@ -95,9 +94,7 @@ fn main() {
 
     let (_, models) = parse_schema(&input).expect("failed to parse schema");
 
-    println!("models {:?}", models);
     let output = generate_ts_interfaces(&models);
 
-    println!("{:?}", output);
     fs::write("schema.d.ts", output).expect("failed to write ts file");
 }
