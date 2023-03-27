@@ -4,14 +4,11 @@ FROM rust:latest as build
 WORKDIR /usr/src/rust
 
 COPY . .
-RUN cargo run --bin prisma -- db push
-RUN cargo build --release
-
-FROM alpine:latest
-
-COPY --from=build /usr/src/rust/target/release/rust /usr/local/bin
 
 
-WORKDIR /usr/local/bin
-CMD ["rust"]
+RUN cargo build
 
+
+WORKDIR /usr/src/rust/target/debug
+ENTRYPOINT ["./rust"]
+EXPOSE 8000

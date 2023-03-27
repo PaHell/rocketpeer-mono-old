@@ -8,8 +8,9 @@ async fn bye() -> HttpResponse {
     HttpResponse::Ok().body("bye")
 }
 
-#[tokio::main]
+#[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    println!("starting server");
     HttpServer::new(move || {
         App::new().service(
             web::scope("/api").service(
@@ -19,7 +20,7 @@ async fn main() -> std::io::Result<()> {
             ),
         )
     })
-    .bind(("127.0.0.1", 8000))?
+    .bind(("0.0.0.0", 8000))?
     .run()
     .await
 }
