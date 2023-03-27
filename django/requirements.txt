@@ -1,5 +1,0 @@
-django==4.1
-django-environ==0.10.0
-mysqlclient==2.1.1
-djangorestframework==3.14.0
-gunicorn==20.1.0
