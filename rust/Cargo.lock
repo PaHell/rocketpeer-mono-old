@@ -3552,7 +3552,6 @@ dependencies = [
  "actix-web",
  "prisma-client-rust-cli",
  "serde",
- "tokio",
 ]
 
 [[package]]

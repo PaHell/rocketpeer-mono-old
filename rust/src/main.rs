@@ -8,8 +8,9 @@ async fn bye() -> HttpResponse {
     HttpResponse::Ok().body("bye")
 }
 
-#[tokio::main]
+#[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    println!("starting server");
     HttpServer::new(move || {
         App::new().service(
             web::scope("/api").service(
