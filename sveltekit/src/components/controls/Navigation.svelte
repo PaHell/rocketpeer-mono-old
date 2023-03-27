@@ -2,6 +2,7 @@
 	import { afterNavigate, goto } from '$app/navigation';
 	import { createEventDispatcher, onMount } from 'svelte';
 	import type { Icons } from '$src/components/general/Icon.svelte';
+    import { match as _match } from '$src/lib/navigation';
     export interface NavItem {
         title: string;
         icon: Icons;
@@ -19,12 +20,15 @@
         };
     }
     interface $$Events {
-        change: T;
+        change: {
+            item: T,
+            index: number,
+        };
     }
 	export let items: T[] = [];
     export let pathSelector : (item: T) => string;
     export let match: number = 0; // 0 = exact, >0 = from start
-    let activeIndex: number = -1;
+    export let active: number = -1;
 
     let paths: string[] = [];
 
@@ -35,28 +39,20 @@
     $: updatePaths();
 
     onMount(() => {
-        currentPath = window.location.pathname;
         onNavigate();
 	});
     
-	afterNavigate(({ to }) => {
-        currentPath = window.location.pathname;
+	afterNavigate(() => {
         onNavigate();
 	});
-
-    function isActive(path: string) : boolean {
-        if (match == 0) return path === currentPath;
-        const currSplit = currentPath.split('/');
-        const pathSplit = path.split('/');
-        for (let i = 0; i <= match; i++) {
-            if (currSplit[i] !== pathSplit[i]) return false;
-        }
-        return true;
-    }
-
+    
 	function onNavigate() {
-        activeIndex = paths.findIndex(path => isActive(path));
-        dispatch('change', items[activeIndex]);
+        currentPath = window.location.pathname;
+        active = paths.findIndex(path => _match(path, currentPath, match));
+        dispatch('change', {
+            item: items[active],
+            index: active,
+        });
 	}
 
     function updatePaths() {
@@ -66,7 +62,7 @@
 </script>
 <div class="navigation">
     {#each items as item, i}
-        <slot {item} active={i == activeIndex} redirect={() => goto(paths[i])}/>
+        <slot {item} active={i == active} redirect={() => goto(paths[i])}/>
     {/each}
 </div>
 

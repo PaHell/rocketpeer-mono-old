@@ -1,5 +1,5 @@
 <script lang="typescript" context="module">
-    import Button, { ButtonStyle, ButtonVariant } from "$src/components/controls/Button.svelte";
+    import Button, { ButtonVariant } from "$src/components/controls/Button.svelte";
 	import { Icons } from "$src/components/general/Icon.svelte";
 	import ImageIcon from "$src/components/views/ImageIcon.svelte";
 </script>

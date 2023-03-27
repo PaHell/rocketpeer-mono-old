@@ -1,6 +1,6 @@
 <script lang="typescript" context="module">
     import Badge, { BadgeVariant } from "$src/components/general/Badge.svelte";
-	import Button, { ButtonStyle, ButtonVariant } from '$src/components/controls/Button.svelte';
+	import Button, { ButtonVariant } from '$src/components/controls/Button.svelte';
 	import NavigationItem from '$src/components/controls/NavigationItem.svelte';
 	import { Icons } from '$src/components/general/Icon.svelte';
 	import { createEventDispatcher } from "svelte";
@@ -20,8 +20,7 @@
     let:redirect>
     <div class="channel" class:opened={active}>
         <Button
-            variant={ButtonVariant.Transparent}
-            style={ButtonStyle.Card}
+            variant={ButtonVariant.Card}
             icon={Icons.TextChannel}
             text={channel.name}
             on:click={redirect}

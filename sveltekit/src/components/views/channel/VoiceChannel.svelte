@@ -1,6 +1,6 @@
 <script lang="typescript" context="module">
     import Badge, { BadgeVariant } from "$src/components/general/Badge.svelte";
-	import Button, { ButtonStyle, ButtonVariant } from '$src/components/controls/Button.svelte';
+	import Button, { ButtonVariant } from '$src/components/controls/Button.svelte';
 	import NavigationItem from '$src/components/controls/NavigationItem.svelte';
 	import { Icons } from '$src/components/general/Icon.svelte';
 	import { createEventDispatcher, onMount } from "svelte";
@@ -38,8 +38,7 @@
     let:active>
     <div class="channel" class:opened={active}>
         <Button
-            variant={ButtonVariant.Transparent}
-            style={ButtonStyle.Card}
+            variant={ButtonVariant.Card}
             icon={Icons.VoiceChannel}
             text={channel.name}
             on:click={() => onClick(channel, redirect)}
@@ -55,8 +54,7 @@
         <div class="channel-users">
             {#each channel._voice_users as vcu}
                 <Button
-                    variant={ButtonVariant.Transparent}
-                    style={ButtonStyle.Card}
+                    variant={ButtonVariant.Card}
                     class={vcu.is_talking ? 'talking' : ''}>
                     <ImageIcon
                         src={vcu._server_user.user.image}

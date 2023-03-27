@@ -1,13 +1,8 @@
 <script lang="typescript" context="module">
 	import Button, { ButtonVariant } from '$src/components/controls/Button.svelte';
-	import { Icons } from '$src/components/general/Icon.svelte';
+	import type { Icons } from '$src/components/general/Icon.svelte';
 	import type { NavItem } from '$src/components/controls/Navigation.svelte';
 	import Navigation from "$src/components/controls/Navigation.svelte";
-	import { goto } from '$app/navigation';
-	import Logo from '$src/components/Logo.svelte';
-	import { browser } from '$app/environment';
-	import { onMount } from 'svelte';
-	import NavigationItem from '$src/components/controls/NavigationItem.svelte';
 	
 	export interface NavGroup {
 		title: string;

@@ -1,5 +1,5 @@
 <script lang="typescript">
-	import Button, { ButtonStyle, ButtonVariant } from '$src/components/controls/Button.svelte';
+	import Button, { ButtonVariant } from '$src/components/controls/Button.svelte';
 	import Icon, { Icons } from '$src/components/general/Icon.svelte';
 	import { getContext, onMount, setContext } from 'svelte';
 	import { mobile } from '$src/lib/viewSize';
@@ -46,8 +46,7 @@
 			let:redirect>
 			<Button
 				class="user-view"
-				variant={ButtonVariant.Transparent}
-				style={ButtonStyle.Card}
+				variant={ButtonVariant.Card}
 				icon={Icons.User}
 				text="Friends"
 				{active}
@@ -55,8 +54,7 @@
 		</NavigationItem>
 		{#each data.chats as chat}
 			<UserView user={chat.users?.[0]}
-				variant={ButtonVariant.Transparent}
-				style={ButtonStyle.Card}
+				variant={ButtonVariant.Card}
 				active={$page.params.chat_id == chat.id}
 				on:click={() => open(chat)}
 				showStatus />

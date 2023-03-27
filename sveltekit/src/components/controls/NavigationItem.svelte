@@ -1,6 +1,7 @@
 <script lang="typescript" context="module">
 	import { afterNavigate, goto } from '$app/navigation';
 	import { createEventDispatcher, onMount } from 'svelte';
+    import { match as _match } from '$src/lib/navigation';
 </script>
 
 <script lang="typescript">
@@ -24,19 +25,9 @@
         onNavigate();
 	});
 
-    function isActive(path: string) : boolean {
-        if (match == 0) return path === currentPath;
-        const currSplit = currentPath.split('/');
-        const pathSplit = path.split('/');
-        for (let i = 0; i <= match; i++) {
-            if (currSplit[i] !== pathSplit[i]) return false;
-        }
-        return true;
-    }
-
 	function onNavigate() {
         currentPath = window.location.pathname;
-        active = isActive(path);
+        active = _match(path, currentPath, match);
 	}
 
 </script>

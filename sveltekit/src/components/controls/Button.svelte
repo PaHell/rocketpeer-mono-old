@@ -5,16 +5,13 @@
 		Primary = 'button-pri',
 		Secondary = 'button-sec',
 		Transparent = 'button-trans',
+		Card = 'button-card',
 		None = '',
 	}
 	export enum ButtonAlignment {
 		Left = 'button-left',
 		Center = 'button-center',
 		Right = 'button-right',
-	}
-	export enum ButtonStyle {
-		None = '',
-		Card = 'button-card',
 	}
 </script>
 
@@ -28,7 +25,6 @@
 	export { classes as class };
 	export let disableTabIndex: boolean = false;
 	export let align: ButtonAlignment = ButtonAlignment.Left;
-	export let style: ButtonStyle = ButtonStyle.None;
 </script>
 
 
@@ -37,7 +33,7 @@
 		type="button"
 		{disabled}
 		class:active
-		class="button {variant} {align} {style} {classes}"
+		class="button {variant} {align} {classes}"
 		tabindex={disabled || disableTabIndex ? -1 : 0}
 	>
 		{#if icon}
@@ -124,7 +120,8 @@
 		}
 		/* TEXT/ICON STYLES */
 		&.button-sec,
-		&.button-trans {
+		&.button-trans,
+		&.button-card {
 			& > .text {
 				@apply text-sec dark:text-dark-sec;
 			}
@@ -171,7 +168,8 @@
 			dark:bg-gray-800 dark:border-gray-700;
 		}
 		/* TRANSPARENT */
-		&.button-trans {
+		&.button-trans,
+		&.button-card {
 			@apply bg-transparent border-transparent;
 			&:hover,
 			&:focus {
@@ -183,7 +181,7 @@
 			}
 		}
 		/* CARD */
-		&.button.button-card {
+		&.button-card {
 			&.active {
 				@apply shadow-sm
 				bg-white dark:bg-gray-800

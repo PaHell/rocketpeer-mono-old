@@ -1,5 +1,5 @@
 <script lang="typescript" context="module">
-    import Button, { ButtonStyle, ButtonVariant } from "$src/components/controls/Button.svelte";
+    import Button, { ButtonVariant } from "$src/components/controls/Button.svelte";
 	import { Icons } from "$src/components/general/Icon.svelte";
 	import ImageIcon from "$src/components/views/ImageIcon.svelte";
 </script>
@@ -8,7 +8,6 @@
     export let user: App.DB.User;
     export let display_name: string | null = null;
     export let variant: ButtonVariant = ButtonVariant.Transparent;
-    export let style: ButtonStyle = ButtonStyle.None;
     export let active = false;
     export let showStatus = false;
 </script>
@@ -18,7 +17,6 @@
         <Button
             {variant}
             {active}
-            style={ButtonStyle.Card}
             class="user-view"
             on:click>
             <ImageIcon

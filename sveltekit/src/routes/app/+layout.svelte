@@ -1,31 +1,47 @@
 <script lang="typescript">
-	import Button, { ButtonAlignment, ButtonStyle, ButtonVariant } from '$src/components/controls/Button.svelte';
+	import Button, { ButtonAlignment, ButtonVariant } from '$src/components/controls/Button.svelte';
 	import Icon, { Icons } from '$src/components/general/Icon.svelte';
 	import { goto } from '$app/navigation';
 	import Logo from '$src/components/Logo.svelte';
 	import type { LayoutData } from './$types';
 	import { browser } from '$app/environment';
-	import { onMount } from 'svelte';
+	import { onMount, type ComponentEvents } from 'svelte';
 	import NavigationItem from '$src/components/controls/NavigationItem.svelte';
 	import type { NavItem } from '$src/components/controls/Navigation.svelte';
 	import { connectedVoiceChannel } from '$src/store';
 	import ImageIcon from '$src/components/views/ImageIcon.svelte';
+	import Navigation from '$src/components/controls/Navigation.svelte';
 	
 	export let data: LayoutData;
 	data.server_users = data.server_users.sort((a, b) => a.order - b.order);
+
+	let refIndicator: HTMLElement;
+
+	onMount(() => {
+	});
+
+	function updateIndicator(evt: CustomEvent<ComponentEvents<Navigation<App.DB.ServerUser>>["change"]>) {
+		if (!refIndicator) return;
+		console.log(evt.detail.index, refIndicator);
+		if (evt.detail.index === -1) {
+			refIndicator.style.top = "1.75rem";
+			return;
+		}
+		refIndicator.style.top = `${evt.detail.index * 4.25 + 7}rem`;
+	}
 </script>
 
 <template>
 	<div id="layout-app" class="layout-pane row items-stretch">
 		<nav class={$connectedVoiceChannel ? 'padded' : ''}>
+			<div id="indicator" bind:this={refIndicator}></div>
 			<NavigationItem
-				path={'/app/messages'}
+				path="/app/messages"
 				match={2}
 				let:active
 				let:redirect>
 				<Button
-					variant={ButtonVariant.Transparent}
-					style={ButtonStyle.Card}
+					variant={ButtonVariant.Card}
 					align={ButtonAlignment.Center}
 					class="branding"
 					{active}
@@ -33,27 +49,26 @@
 					<Logo/>
 				</Button>
 			</NavigationItem>
-			{#each data.server_users as item (item.id)}
-				{#if item._server}
-					<NavigationItem
-						path={`/app/servers/${item.id}/text/${item._server.text_channel_id}`}
-						match={3}
-						let:active
-						let:redirect>
-							<Button
-								variant={ButtonVariant.Transparent}
-								style={ButtonStyle.Card}
-								align={ButtonAlignment.Center}
-								on:click={redirect}
-								{active}>
-								<ImageIcon
-									src={item._server.image}
-									alt={item._server.name}
-									placeholder={Icons.Home}/>
-							</Button>
-					</NavigationItem>
-				{/if}
-			{/each}
+			<hr/>
+			<Navigation
+				items={data.server_users}
+				pathSelector={i => `/app/servers/${i.id}/text/${i._server.text_channel_id}`}
+				match={3}
+				on:change={updateIndicator}
+				let:active
+				let:redirect
+				let:item>
+				<Button
+					variant={ButtonVariant.Card}
+					align={ButtonAlignment.Center}
+					on:click={redirect}
+					{active}>
+					<ImageIcon
+						src={item._server.image}
+						alt={item._server.name}
+						placeholder={Icons.Home}/>
+				</Button>
+			</Navigation>
 		</nav>
 		<slot/>
 	</div>
@@ -68,10 +83,20 @@
 			&.padded {
 				padding-bottom: calc(7.5rem + 2px);
 			}
-			& > .button {
+			& > hr {
+				@apply w-8 mx-auto my-2
+				border-t-2 border-gray-300 dark:border-gray-800;
+			}
+			& > #indicator {
+				@apply absolute top-0 left-0 w-1 h-6
+				bg-accent-500 dark:bg-gray-300 rounded-r
+				transition-[top] duration-200 ease-in-out;
+			}
+			& .button {
 				@apply flex-none
 				w-16 h-16 p-0
-				rounded-lg;
+				rounded-3xl
+				bg-gray-200 dark:bg-gray-800;
 				&:not(:last-child) {
 					@apply mb-1;
 				}
@@ -92,7 +117,7 @@
 					}
 				}
 				&.active {
-					@apply rounded-3xl;
+					@apply rounded-lg;
 					&:hover {
 						@apply rounded-lg delay-200;
 					}
@@ -100,14 +125,10 @@
 						@apply text-accent-500;
 					}
 				}
-				&:not(.active) {
-					@apply rounded-lg;
-					&:hover {
-						@apply rounded-3xl;
-					}
+				&.branding {
+					@apply mb-2;
 				}
 			}
-
 		}
 		& > #sidebar > header,
 		& > #content > header {
