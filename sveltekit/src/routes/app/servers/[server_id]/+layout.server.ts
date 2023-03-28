@@ -316,7 +316,7 @@ export const load = (async ({ parent, params }) => {
 		channel_groups,
 		text_channels,
 		voice_channels,
-		//voice_channel_users,
+		voice_channel_users,
 		tags,
 	};
 }) satisfies LayoutServerLoad;

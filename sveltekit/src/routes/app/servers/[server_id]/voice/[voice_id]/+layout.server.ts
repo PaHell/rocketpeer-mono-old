@@ -72,7 +72,7 @@ export const load = (async ({ params, parent }) => {
 	const pageData = await parent();
 	const voiceId = parseInt(params.voice_id);
 	messages.forEach((m) => {
-		m._user = pageData.userServers.find((us) => us._user?.id === m.user_id)?._user;
+		m._server_user = pageData.server_users.find((su) => su.id === m.server_user_id);
 		m.channel_id = voiceId;
 	});
 	return {

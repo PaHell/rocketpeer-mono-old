@@ -29,6 +29,8 @@
     export let pathSelector : (item: T) => string;
     export let match: number = 0; // 0 = exact, >0 = from start
     export let active: number = -1;
+    let classes = "";
+    export { classes as class };
 
     let paths: string[] = [];
 
@@ -60,7 +62,7 @@
     }
 
 </script>
-<div class="navigation">
+<div class="navigation {classes}">
     {#each items as item, i}
         <slot {item} active={i == active} redirect={() => goto(paths[i])}/>
     {/each}
