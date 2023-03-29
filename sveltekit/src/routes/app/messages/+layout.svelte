@@ -41,7 +41,8 @@
 	</header>
 	<div class="fill list-users">
 		<NavigationItem
-			path={'/app/messages'}
+			path={'/app/messages/friends/all'}
+			match={3}
 			let:active
 			let:redirect>
 			<Button

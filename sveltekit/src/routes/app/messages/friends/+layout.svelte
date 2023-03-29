@@ -4,18 +4,19 @@
 	import TextInput from "$src/components/controls/TextInput.svelte";
 	import Icon, { Icons } from "$src/components/general/Icon.svelte";
 
-    let search = "";
-
+    let activeNavItem = -1;
     const navItems = [
         {
             title: "Friends",
-            path: "/app/messages/friends",
-            icon: Icons.Users
+            path: "/app/messages/friends/all",
         },
         {
             title: "Pending",
-            path: "/app/messages/pending",
-            icon: Icons.Users
+            path: "/app/messages/friends/pending",
+        },
+        {
+            title: "Blocked",
+            path: "/app/messages/friends/blocked",
         },
     ];
 </script>
@@ -24,18 +25,18 @@
     <header>
         <div>
             <Icon name={Icons.Users} class="text-icon-sec dark:text-icon-dark-sec"/>
-            <p class="text text-headline ellipsis">Friends</p>
+            <p class="text text-headline ellipsis">{navItems[activeNavItem]?.title}</p>
             <Navigation
                 class="flex"
                 pathSelector={item => item.path}
                 items={navItems}
+                bind:active={activeNavItem}
                 let:item
                 let:active
                 let:redirect>
                 <Button
                     variant={ButtonVariant.Secondary}
                     text={item.title}
-                    icon={item.icon}
                     on:click={redirect}
                     {active}>
                 </Button>

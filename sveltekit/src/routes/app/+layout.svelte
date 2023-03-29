@@ -36,7 +36,7 @@
 		<nav class={$connectedVoiceChannel ? 'padded' : ''}>
 			<div id="indicator" bind:this={refIndicator}></div>
 			<NavigationItem
-				path="/app/messages"
+				path="/app/messages/friends/all"
 				match={2}
 				let:active
 				let:redirect>
@@ -95,8 +95,9 @@
 			& .button {
 				@apply flex-none
 				w-16 h-16 p-0
-				rounded-3xl
-				bg-gray-200 dark:bg-gray-800;
+				rounded-full
+				bg-gray-200 dark:bg-gray-800
+				transition-all duration-200 ease-in-out;
 				&:not(:last-child) {
 					@apply mb-1;
 				}
@@ -112,15 +113,12 @@
 				}
 				&:hover,
 				&.active {
+					@apply rounded-2xl;
 					& > svg > path {
 						@apply fill-white;
 					}
 				}
 				&.active {
-					@apply rounded-lg;
-					&:hover {
-						@apply rounded-lg delay-200;
-					}
 					& > .icon {
 						@apply text-accent-500;
 					}
