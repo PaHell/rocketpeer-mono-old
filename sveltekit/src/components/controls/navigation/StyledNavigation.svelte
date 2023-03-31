@@ -1,0 +1,88 @@
+<script lang="typescript" context="module">
+	import Button, { ButtonVariant } from '$src/components/controls/Button.svelte';
+	import type { Icons } from '$src/components/general/Icon.svelte';
+	import { type NavItem, default as Navigation } from '$src/components/controls/navigation/Navigation.svelte';
+	
+	export interface NavGroup {
+		title: string;
+		icon?: Icons;
+		items: NavItem[];
+	}
+
+	export enum NavStyle {
+		None,
+		Tabs,
+		List
+	}
+
+	const navStyleClasses = [
+		"",
+		"navigation-tabs",
+		"navigation-list",
+	];
+</script>
+
+<script lang="typescript">
+	export let items: NavGroup[] = [];
+	export let match: number = 0;
+	let classes = "";
+	export { classes as class };
+	export let active: [number, number] = [0, 0];
+	export let style: NavStyle = NavStyle.None;
+</script>
+
+<template>
+	<div class="navigation-group {classes} {navStyleClasses[style]}">
+		{#each items as group, index}
+			<p class="text tri bold">{group.title}</p>
+			<Navigation
+				{match}
+				pathSelector={item => item.path}
+				items={group.items}
+				on:change={(evt) => active = [index, evt.detail.index]}
+				let:item
+				let:active
+				let:redirect>
+				<Button
+					variant={ButtonVariant.Transparent}
+					text={item.title}
+					icon={item.icon}
+					on:click={redirect}
+					{active}>
+				</Button>
+			</Navigation>
+		{/each}
+	</div>
+</template>
+
+
+
+<style global lang="postcss">
+	.navigation-group {
+		&.navigation-tabs {
+			@apply flex items-center justify-center;
+			& > .navigation {
+				@apply flex items-center justify-center;
+			}
+		}
+		&.navigation-list {
+			& > .text {
+				@apply px-2 my-1 text-label uppercase;
+				&:first-child {
+					@apply mt-2;
+				}
+			}
+			& > .navigation {
+				@apply ml-[-1px];
+				& > .button {
+					@apply w-full px-2
+					border-r-0
+					rounded-none;
+					&:not(:last-child) {
+						@apply mb-[1px];
+					}
+				}
+			}
+		}
+	}
+</style>

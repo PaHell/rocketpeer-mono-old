@@ -1,7 +1,7 @@
 <script lang="typescript" context="module">
     import Badge, { BadgeVariant } from "$src/components/general/Badge.svelte";
 	import Button, { ButtonVariant } from '$src/components/controls/Button.svelte';
-	import NavigationItem from '$src/components/controls/NavigationItem.svelte';
+	import NavigationItem from '$src/components/controls/navigation/NavigationItem.svelte';
 	import { Icons } from '$src/components/general/Icon.svelte';
 	import { createEventDispatcher, onMount } from "svelte";
 	import { connectedVoiceChannel } from "$src/store";

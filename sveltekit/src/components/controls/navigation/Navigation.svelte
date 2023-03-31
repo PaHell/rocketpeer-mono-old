@@ -5,7 +5,7 @@
     import { match as _match } from '$src/lib/navigation';
     export interface NavItem {
         title: string;
-        icon: Icons;
+        icon?: Icons;
         path: string;
     }
 </script>

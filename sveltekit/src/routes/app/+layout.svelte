@@ -6,11 +6,11 @@
 	import type { LayoutData } from './$types';
 	import { browser } from '$app/environment';
 	import { onMount, type ComponentEvents } from 'svelte';
-	import NavigationItem from '$src/components/controls/NavigationItem.svelte';
-	import type { NavItem } from '$src/components/controls/Navigation.svelte';
+	import NavigationItem from '$src/components/controls/navigation/NavigationItem.svelte';
+	import type { NavItem } from '$src/components/controls/navigation/Navigation.svelte';
 	import { connectedVoiceChannel } from '$src/store';
 	import ImageIcon from '$src/components/views/ImageIcon.svelte';
-	import Navigation from '$src/components/controls/Navigation.svelte';
+	import Navigation from '$src/components/controls/navigation/Navigation.svelte';
 	
 	export let data: LayoutData;
 	data.server_users = data.server_users.sort((a, b) => a.order - b.order);
@@ -33,7 +33,7 @@
 
 <template>
 	<div id="layout-app" class="layout-pane row items-stretch">
-		<nav class={$connectedVoiceChannel ? 'padded' : ''}>
+		<nav id="dock" class={$connectedVoiceChannel ? 'padded' : ''}>
 			<div id="indicator" bind:this={refIndicator}></div>
 			<NavigationItem
 				path="/app/messages/friends/all"
@@ -69,6 +69,24 @@
 						placeholder={Icons.Home}/>
 				</Button>
 			</Navigation>
+			<hr/>
+			<Button
+				icon={Icons.Add}
+				variant={ButtonVariant.Card}
+				align={ButtonAlignment.Center}
+				class="create-join"/>
+			<NavigationItem
+				path="/app/settings"
+				let:active
+				let:redirect>
+				<Button
+					icon={Icons.Settings}
+					variant={ButtonVariant.Card}
+					align={ButtonAlignment.Center}
+					class="settings"
+					{active}
+					on:click={redirect}/>
+			</NavigationItem>
 		</nav>
 		<slot/>
 	</div>
@@ -76,8 +94,8 @@
 
 <style global lang="postcss">
 	#layout-app.layout-pane {
-		& > nav {
-			@apply w-20 p-2 items-stretch
+		& > nav#dock {
+			@apply w-20 p-2 flex flex-col items-stretch
 			border-r overflow-y-auto overflow-x-hidden
 			border-gray-300 dark:border-gray-800;
 			&.padded {
@@ -97,19 +115,16 @@
 				w-16 h-16 p-0
 				rounded-full
 				bg-gray-200 dark:bg-gray-800
-				transition-all duration-200 ease-in-out;
+				transition-all duration-200 ease-linear;
+				will-change: border-radius;
 				&:not(:last-child) {
 					@apply mb-1;
 				}
 				& .icon {
-					@apply text-icon-large;
-				}
-				& > .icon,
-				& > .image-icon {
-					@apply w-full h-full;
+					@apply w-full text-icon-large;
 				}
 				& > .image-icon {
-					@apply rounded-[inherit];
+					@apply w-full h-full rounded-[inherit];
 				}
 				&:hover,
 				&.active {
@@ -124,7 +139,10 @@
 					}
 				}
 				&.branding {
-					@apply mb-2;
+					@apply mb-0;
+				}
+				&.settings {
+					@apply mt-auto;
 				}
 			}
 		}
@@ -159,6 +177,9 @@
 					&:hover {
 						@apply border-gray-300 dark:border-gray-700;
 					}
+				}
+				& > .navigation-group {
+					@apply ml-2;
 				}
 			}
 		}

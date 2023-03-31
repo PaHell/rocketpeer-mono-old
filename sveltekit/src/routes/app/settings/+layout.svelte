@@ -3,14 +3,12 @@
 	import Icon, { Icons } from '$src/components/general/Icon.svelte';
 	import { onMount } from 'svelte';
 	import { mobile } from '$src/lib/viewSize';
-	import type { NavItem } from '$src/components/controls/Navigation.svelte';
-	import Navigation from "$src/components/controls/Navigation.svelte";
 	import Footer from "$src/components/templates/Footer.svelte";
 	import TextInput from '$src/components/controls/TextInput.svelte';
 	import { goto } from '$app/navigation';
 	import Logo from '$src/components/Logo.svelte';
-	import type { NavGroup } from '$src/components/controls/NavigationGroup.svelte';
-	import NavigationGroup from '$src/components/controls/NavigationGroup.svelte';
+	import { NavStyle, type NavGroup } from '$src/components/controls/navigation/StyledNavigation.svelte';
+	import StyledNavigation from '$src/components/controls/navigation/StyledNavigation.svelte';
 
 	const categories: NavGroup[] = [
 		{
@@ -35,7 +33,10 @@
 		<div>
 		</div>
 	</header>
-	<NavigationGroup items={categories}/>
+	<StyledNavigation
+		items={categories}
+		style={NavStyle.List}
+		/>
 </nav>
 <div id="content">
 	<header>
@@ -47,7 +48,7 @@
 		</div>
 	</header>
 	<main>
-		<div>
+		<div class="p-2">
 			<slot />
 		</div>
 	</main>
