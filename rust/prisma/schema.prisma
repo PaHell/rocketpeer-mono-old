@@ -202,4 +202,5 @@ enum message_type {
   Picture
   Video
   Gif
+  Deleted
 }

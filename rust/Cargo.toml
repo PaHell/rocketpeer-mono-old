@@ -12,3 +12,4 @@ prisma-client-rust-cli = { git = "https://github.com/Brendonovich/prisma-client-
 serde = { version = "1.0.159", features = ["derive"] }
 actix-web-actors = "4.2.0"
 actix = "0.13.0"
+chrono = "0.4.24"
