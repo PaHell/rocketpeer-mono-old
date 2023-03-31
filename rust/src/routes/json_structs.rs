@@ -1,28 +1,16 @@
-use rocket::http::hyper::body::Bytes;
+use crate::prisma::{UsersPrivacyLevel, UsersRole, UsersStatus};
+use serde::Deserialize;
 
+#[derive(Deserialize)]
 pub struct User {
-    user_name: String,
-    password: String,
-    display_name: String,
-    first_name: String,
-    last_name: String,
-    image: Bytes,
-    status: UserStatus,
-    email: String,
-    privacy_level: PrivacyLevel,
-    role: UserRole,
-}
-
-pub enum UserStatus {
-    Online,
-    Away,
-    DoNotDisturb,
-    Offline,
-}
-pub enum PrivacyLevel {
-    Default,
-}
-pub enum UserRole {
-    Administrator,
-    Default,
+    pub user_name: String,
+    pub password: String,
+    pub display_name: String,
+    pub first_name: String,
+    pub last_name: String,
+    pub image: String,
+    pub status: UsersStatus,
+    pub email: String,
+    pub privacy_level: UsersPrivacyLevel,
+    pub role: UsersRole,
 }
