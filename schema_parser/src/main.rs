@@ -159,7 +159,8 @@ fn parse_enum_entries(input: &str) -> IResult<&str, String> {
     Ok((input, entry_data.to_owned()))
 }
 fn main() {
-    let input = fs::read_to_string("rust/prisma/schema.prisma").expect("Failed to read schema");
+    let input =
+        fs::read_to_string("../../rust/prisma/schema.prisma").expect("Failed to read schema");
     let mut data: Vec<String> = input.split("}\n\n").map(|s| s.to_string()).collect();
     data.drain(0..2);
     let mut models: Vec<Model> = Vec::new();
@@ -174,7 +175,7 @@ fn main() {
         }
     }
 
-    let mut output = generate_ts_interfaces(&models, &enums);
+    let output = generate_ts_interfaces(&models, &enums);
 
-    fs::write("sveltekit/src/database.d.ts", output).expect("failed to write ts file");
+    fs::write("../../sveltekit/src/database.d.ts", output).expect("failed to write ts file");
 }
