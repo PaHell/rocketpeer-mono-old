@@ -10,18 +10,28 @@
 	import { authenticated } from '$src/store';
 	import { redirectAuthed } from '$src/routes/+layout.svelte';
 
-	let usernameEmail: string = '';
+	let username: string = '';
+	let email: string = '';
+	let first_name: string = '';
+	let last_name: string = '';
 	let password: string = '';
+
 	let error: string = '';
 
 	if (import.meta.env.DEV) {
-		usernameEmail = import.meta.env.VITE_LOGIN_USERNAME;
+		username = import.meta.env.VITE_LOGIN_USERNAME;
 		password = import.meta.env.VITE_LOGIN_PASSWORD;
 	}
 
-	async function login() {
-		console.log('login');
-		Auth.login({ usernameEmail, password })
+	async function register() {
+		console.log('register');
+		Auth.register({
+			username,
+			email,
+			first_name,
+			last_name,
+			password
+		})
 			.then(async (resp: App.DB.AccessToken) => {
 				console.log({resp});
 				setHeaders({ Authorization: `Bearer ${resp.access_token}` });
@@ -38,20 +48,23 @@
 
 <template>
 	<h1 class="text text-heading text-center">{$_('routes.auth.login.title')}</h1>
-	<TextInput bind:value={usernameEmail} name="usernameEmail" />
+	<TextInput bind:value={username} name="username" />
+	<TextInput bind:value={email} name="email" />
+	<TextInput bind:value={first_name} name="first_name" />
+	<TextInput bind:value={last_name} name="last_name" />
 	<TextInput bind:value={password} name="password" type="password" />
 	{#if error}
 		<Alert title="messages.errors.error" text={error} variant={AlertVariant.Danger} />
 	{/if}
 	<Button
-		text="routes.auth.login.title"
+		text="routes.auth.register.title"
 		variant={ButtonVariant.Primary}
 		align={ButtonAlignment.Center}
-		on:click={login}
+		on:click={register}
 	/>
 	<p class="text">
-		<span>New here?</span>
-		<a href="/auth/register" class="text-link">{$_('routes.auth.register.title')}</a>
+		<span>Already signed up?</span>
+		<a href="/auth/login" class="text-link">{$_('routes.auth.login.title')}</a>
 	</p>
 </template>
 
