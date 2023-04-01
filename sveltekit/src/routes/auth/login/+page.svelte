@@ -10,18 +10,18 @@
 	import { authenticated } from '$src/store';
 	import { redirectAuthed } from '$src/routes/+layout.svelte';
 
-	let username: string = '';
+	let usernameEmail: string = '';
 	let password: string = '';
 	let error: string = '';
 
 	if (import.meta.env.VITE_MODE === 'DEV') {
-		username = import.meta.env.VITE_LOGIN_USERNAME;
+		usernameEmail = import.meta.env.VITE_LOGIN_USERNAME;
 		password = import.meta.env.VITE_LOGIN_PASSWORD;
 	}
 
 	async function login() {
 		console.log('login');
-		Auth.login({ username, password })
+		Auth.login({ usernameEmail, password })
 			.then(async (resp: App.DB.AccessToken) => {
 				setHeaders({ Authorization: `Bearer ${resp.access_token}` });
 				authenticated.set(true);
@@ -35,20 +35,20 @@
 </script>
 
 
-	<div class="flex flex-col space-y-4">
-		<h1 class="text text-heading text-center">{$_('routes.auth.login.title')}</h1>
-		<TextInput bind:value={username} name="username" />
-		<TextInput bind:value={password} name="password" type="password" />
-		{#if error}
-			<Alert title="messages.errors.error" text={error} variant={AlertVariant.Danger} />
-		{/if}
-		<Button
-			text="routes.auth.login.title"
-			variant={ButtonVariant.Primary}
-			align={ButtonAlignment.Center}
-			on:click={login}
-		/>
-	</div>
+<template>
+	<h1 class="text text-heading text-center">{$_('routes.auth.login.title')}</h1>
+	<TextInput bind:value={usernameEmail} name="usernameEmail" />
+	<TextInput bind:value={password} name="password" type="password" />
+	{#if error}
+		<Alert title="messages.errors.error" text={error} variant={AlertVariant.Danger} />
+	{/if}
+	<Button
+		text="routes.auth.login.title"
+		variant={ButtonVariant.Primary}
+		align={ButtonAlignment.Center}
+		on:click={login}
+	/>
+</template>
 
 
 <style global lang="postcss">

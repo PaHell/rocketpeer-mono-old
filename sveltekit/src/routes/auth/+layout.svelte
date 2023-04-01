@@ -6,47 +6,61 @@
 	import { Icons } from '$src/components/general/Icon.svelte';
 </script>
 
-
+<template>
 	<div id="layout-auth">
-		<header>
-			<Font />
-			<p class="text headline secondary">{import.meta.env.VITE_APP_NAME}</p>
-		</header>
-		<main>
-			<slot />
-			<Button variant={ButtonVariant.Secondary}
-			icon={Icons.Home}
-			text="Go to home"
-			class="mt-4"
-			on:click={() => goto("/app")}/>
-		</main>
-		<footer>
-			<Copyright/>
-		</footer>
+		<aside>
+			<header>
+				<Logo />
+				<p class="text headline secondary">{import.meta.env.VITE_APP_NAME}</p>
+			</header>
+			<main>
+				<slot />
+			</main>
+			<footer>
+				<p class="text tri">Version {import.meta.env.VITE_APP_VERSION}</p>
+				<Copyright/>
+			</footer>
+		</aside>
+		<div>
+			<img src="/img/bg-auth-3.png" alt="Authentication" />
+		</div>
 	</div>
-
+</template>
 
 <style global lang="postcss">
 	#layout-auth {
-		@apply flex-1 flex flex-col justify-center items-center;
-		& > header {
-			@apply flex flex-col items-center space-y-2;
-			& > svg {
-				@apply h-12;
-				& > path {
-					@apply fill-accent-500;
-				}
-			}
-		}
-		& > main {
-			@apply flex flex-col
-				w-full max-w-md p-8 my-6
-				rounded-lg shadow-lg
-				border border-gray-300 dark:border-gray-700
+		@apply flex-1 flex h-full;
+		& > aside {
+			@apply flex flex-col relative
+				w-full max-w-md shadow-lg
+				border-r border-gray-300 dark:border-gray-700
 				bg-gray-50 dark:bg-gray-800;
+				& > * {
+					@apply p-8;
+				}
+				& > header {
+					@apply flex flex-col items-center
+					space-y-2 py-4
+					border-b border-gray-300 dark:border-gray-700
+					bg-gray-100 dark:bg-gray-800;
+				}
+				& > main {
+					@apply flex-1 flex flex-col space-y-4;
+					& > .text.text-heading {
+						@apply mb-4 !important;
+					}
+				}
+				& > footer {
+					@apply text-center;
+				}
 		}
-		& > footer {
-			@apply text-center;
+		& > div {
+			@apply flex-1 overflow-hidden bg-black;
+			& > img {
+				@apply object-cover object-center
+				min-w-full min-h-full
+				opacity-40;
+			}
 		}
 	}
 </style>
