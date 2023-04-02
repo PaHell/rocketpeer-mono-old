@@ -32,11 +32,12 @@
 		@apply flex-1 flex h-full;
 		& > aside {
 			@apply flex flex-col relative
-				w-full max-w-md shadow-lg
-				border-r border-gray-300 dark:border-gray-700
+				w-full md:max-w-md shadow-lg
+				overflow-x-hidden overflow-y-auto
+				md:border-r border-gray-300 dark:border-gray-700
 				bg-gray-50 dark:bg-gray-800;
 				& > * {
-					@apply p-8;
+					@apply px-8 py-4;
 				}
 				& > header {
 					@apply flex flex-col items-center
@@ -46,9 +47,6 @@
 				}
 				& > main {
 					@apply flex-1 flex flex-col space-y-4;
-					& > .text.text-heading {
-						@apply mb-4 !important;
-					}
 				}
 				& > footer {
 					@apply text-center;
@@ -59,6 +57,7 @@
 			& > img {
 				@apply object-cover object-center
 				min-w-full min-h-full
+				md:block hidden
 				opacity-40;
 			}
 		}

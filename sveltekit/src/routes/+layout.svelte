@@ -15,7 +15,7 @@
 
 	const routeAuthed = '/app';
 	const routeUnauthed = '/auth';
-	export const redirectAuthed = '/app/customers/create';
+	export const redirectAuthed = '/app';
 	export const redirectUnauthed = '/auth/login';
 </script>
 

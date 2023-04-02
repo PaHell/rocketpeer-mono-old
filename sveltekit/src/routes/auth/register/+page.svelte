@@ -11,25 +11,22 @@
 	import { redirectAuthed } from '$src/routes/+layout.svelte';
 
 	let username: string = '';
-	let email: string = '';
+	let display_name: string = '';
 	let first_name: string = '';
 	let last_name: string = '';
+	let email: string = '';
 	let password: string = '';
 
 	let error: string = '';
-
-	if (import.meta.env.DEV) {
-		username = import.meta.env.VITE_LOGIN_USERNAME;
-		password = import.meta.env.VITE_LOGIN_PASSWORD;
-	}
 
 	async function register() {
 		console.log('register');
 		Auth.register({
 			username,
-			email,
+			display_name,
 			first_name,
 			last_name,
+			email,
 			password
 		})
 			.then(async (resp: App.DB.AccessToken) => {
@@ -49,9 +46,12 @@
 <template>
 	<h1 class="text text-heading text-center">{$_('routes.auth.login.title')}</h1>
 	<TextInput bind:value={username} name="username" />
+	<TextInput bind:value={display_name} name="display_name" />
+	<div class="flex space-x-4">
+		<TextInput bind:value={first_name} name="first_name" class="flex-1" />
+		<TextInput bind:value={last_name} name="last_name" class="flex-1" />
+	</div>
 	<TextInput bind:value={email} name="email" />
-	<TextInput bind:value={first_name} name="first_name" />
-	<TextInput bind:value={last_name} name="last_name" />
 	<TextInput bind:value={password} name="password" type="password" />
 	{#if error}
 		<Alert title="messages.errors.error" text={error} variant={AlertVariant.Danger} />

@@ -239,7 +239,7 @@ export const load = (({ params, url }) => {
 	if (url.pathname === '/app') {
 		if (server_users.length > 0) {
 			const server = server_users[0]._server;
-			if (server) throw redirect(307, `/app/servers/${server.id}/text/${server?.text_channel_id}`);
+			if (server) throw redirect(307, `/app/servers/${server.id}/text/${server.text_channel_id}`);
 		}
 		throw redirect(307, '/app/messages/friends/all');
 	}

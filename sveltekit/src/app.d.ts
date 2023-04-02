@@ -13,6 +13,38 @@ declare global {
 			type: PayloadType;
 			payload: string;
 		}
+		namespace Forms {
+			interface Login {
+				username: string;
+				password: string;
+			}
+			interface Register {
+				username: string;
+				display_name: string;
+				first_name: string;
+				last_name: string;
+				email: string;
+				password: string;
+			}
+			interface RequestPasswordReset {
+				email: string;
+			}
+			interface ResetPassword {
+				token: string;
+				password: string;
+			}
+			interface ChangePassword {
+				old_password: string;
+				new_password: string;
+			}
+			interface UpdateUser {
+				display_name: string;
+				first_name: string;
+				last_name: string;
+				email: string;
+				image?: string;
+			}
+		}
 		namespace P2P {
 			interface VoiceChatUser extends DB.PrimaryKey {
 				user_id: DB.User['id'];
@@ -63,10 +95,11 @@ declare global {
 			}
 			interface Register {
 				username: string;
-				password: string;
+				display_name: string;
 				first_name: string;
 				last_name: string;
 				email: string;
+				password: string;
 			}
 			interface AccessToken extends PrimaryKey, CreatedAt {
 				user_id: User['id'];
