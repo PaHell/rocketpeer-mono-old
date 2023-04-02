@@ -1,4 +1,0 @@
-[alias]
-main = "run --bin rust"
-prisma = "run --bin prisma  --"
-start = "watch -x main"
