@@ -53,6 +53,14 @@
 		<span>New here?</span>
 		<a href="/auth/register" class="text-link">{$_('routes.auth.register.title')}</a>
 	</p>
+	{#if import.meta.env.DEV}
+		<Button
+			text="Bypass Login"
+			variant={ButtonVariant.Secondary}
+			align={ButtonAlignment.Center}
+			on:click={() => goto('/app')}
+		/>
+	{/if}
 </template>
 
 

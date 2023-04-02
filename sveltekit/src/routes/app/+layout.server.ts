@@ -2,6 +2,7 @@ import { getStores } from '$app/stores';
 import { Icons } from '$src/components/general/Icon.svelte';
 import { UserStatus, ServerRole } from '$src/lib/enum';
 import type { LayoutServerLoad } from './$types';
+import { redirect } from '@sveltejs/kit';
 
 let _all_users: App.DB.User[] = [
 	{
@@ -234,7 +235,14 @@ server_users.forEach((userServer) => {
 	);
 });
 
-export const load = (async ({ params }) => {
+export const load = (({ params, url }) => {
+	if (url.pathname === '/app') {
+		if (server_users.length > 0) {
+			const server = server_users[0]._server;
+			if (server) throw redirect(307, `/app/servers/${server.id}/text/${server?.text_channel_id}`);
+		}
+		throw redirect(307, '/app/messages/friends/all');
+	}
 	return {
 		_all_users,
 		user,

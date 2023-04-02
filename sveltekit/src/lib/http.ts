@@ -25,13 +25,13 @@ export async function http<T extends object>(
 	options?: RequestInit
 ): Promise<T> {
 	try {
-		const resp = await fetch(import.meta.env.VITE_URL_BACKEND + url, {
+		const resp = await fetch(import.meta.env.VITE_URL_API + url, {
 			...defaultOptions,
 			...options,
 			method,
 			body: body ? JSON.stringify(body) : undefined
 		});
-		const data = resp.json() as T | App.Lib.RequestError;
+		const data = resp.json() as T | App.API.RequestError;
 		if (Object.hasOwn(data, 'error')) throw data;
 		return data as T;
 	} catch (error: any) {
