@@ -4,6 +4,7 @@ export enum PayloadType {
     Video,
     Audio,
     File,
+    //Deleted,
 }
 
 export enum UserStatus {
@@ -22,13 +23,14 @@ export const UserStatusColors = [
 
 export enum PrivacyLevel {
     Public,
-    FriendsOnly,
+    Friends,
+    SharedServerAndFriends,
     Private,
 }
 
 export enum ApplicationRole {
-    User,
     Admin,
+    User,
 }
 
 export enum UserFriendStatus {
