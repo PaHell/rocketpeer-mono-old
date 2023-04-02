@@ -1,6 +1,9 @@
 # base image
 FROM node:18-alpine
 
+ENV HOST=0.0.0.0
+ENV PORT=3000
+
 # create directories 
 RUN mkdir -p /home/repo
 RUN mkdir -p /home/app
@@ -12,18 +15,20 @@ WORKDIR /home/repo
 COPY ./ /home/repo
 COPY ../public /home/public
 COPY ../.env /home/.env
-RUN npm install
+RUN npm install -f
+RUN npm install dotenv
 #RUN npm ci
 
 # build and copy to app directory
 WORKDIR /home/repo/sveltekit
 RUN npm run build
 RUN cp -r /home/repo/sveltekit/build /home/app
-#RUN npm i -g pm2
+RUN npm i -g pm2
 
 
 # run app
-EXPOSE 4173
-WORKDIR /home/repo/sveltekit
-#ENTRYPOINT ["pm2", "start", "index.js"]
-ENTRYPOINT ["npm", "run", "preview"]
+EXPOSE 3000
+#WORKDIR /home/app
+ENTRYPOINT ["node", "build"]
+#ENTRYPOINT ["pm2", "start", "handler.js"]
+#ENTRYPOINT ["npm", "run", "preview"]
