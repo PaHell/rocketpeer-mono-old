@@ -38,6 +38,7 @@
 
 <template>
 	<h1 class="text text-heading text-center">{$_('routes.auth.login.title')}</h1>
+	<h1 class="text text-heading text-center">{$_('routes.auth.login.title')}</h1>
 	<TextInput bind:value={usernameEmail} name="usernameEmail" />
 	<TextInput bind:value={password} name="password" type="password" />
 	{#if error}
