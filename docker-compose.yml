@@ -73,6 +73,15 @@ services:
       - ${VITE_PORT}
     networks:
       - backend
+  webhook:
+    container_name: github-webhook
+    image: php:8.0-apache
+    volumes:
+      - ./webhook:/var/www/html/
+    ports:
+      - ${WEBHOOK_PORT}:80
+    expose:
+      - ${WEBHOOK_PORT}
 networks:
   database:
     driver: bridge
