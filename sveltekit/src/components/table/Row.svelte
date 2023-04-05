@@ -5,7 +5,15 @@
 	import Column from '$src/components/table/Column.svelte';
 	import Button, { ButtonVariant } from '$src/components/controls/Button.svelte';
 	import { Icons } from '$src/components/general/Icon.svelte';
-	import type { TableContext, RowContext } from '$src/components/table/Table.svelte';
+	import type { TableContext } from '$src/components/table/Table.svelte';
+
+	export interface RowContext<T> {
+		item: T;
+		index: number;
+		state: RowState;
+		initialState: RowState;
+		changed: (state: RowState) => void;
+	}
 
 	export enum RowState {
 		Unmodified,

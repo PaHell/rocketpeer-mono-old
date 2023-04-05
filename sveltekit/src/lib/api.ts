@@ -1,20 +1,20 @@
-import type { users } from '$src/database';
+import type { User } from '$src/database';
 import { http } from '$src/lib/http';
 
-export class Auth {
+export class UserResource {
 	static async login(payload: App.DB.Login) {
 		return await http<App.DB.AccessToken>('POST', `/login`, payload);
 	}
 	static async register(payload: App.DB.Register) {
-		return await http<App.DB.AccessToken>('POST', `/users/create_user`, payload);
+		return await http<App.DB.AccessToken>('POST', `/user`, payload);
 	}
 	static async me() {
-		return await http<users>('GET', `/users/me`);
+		return await http<User>('GET', `/user/me`);
 	}
 	static async one(number: number) {
-		return await http<users>('GET', `/users/getUser/${number}`);
+		return await http<User>('GET', `/user/${number}`);
 	}
 	static async all() {
-		return await http<users[]>('GET', `/users/getAllUsers`);
+		return await http<User[]>('GET', `/user`);
 	}
 }

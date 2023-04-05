@@ -3,7 +3,6 @@
 	import Icon, { Icons } from '$src/components/general/Icon.svelte';
 	import { goto } from '$app/navigation';
 	import Logo from '$src/components/Logo.svelte';
-	import type { LayoutData } from './$types';
 	import { browser } from '$app/environment';
 	import { onMount, type ComponentEvents } from 'svelte';
 	import NavigationItem from '$src/components/controls/navigation/NavigationItem.svelte';
@@ -11,6 +10,7 @@
 	import { connectedVoiceChannel } from '$src/store';
 	import ImageIcon from '$src/components/views/ImageIcon.svelte';
 	import Navigation from '$src/components/controls/navigation/Navigation.svelte';
+	import type { LayoutData } from './$types';
 	
 	export let data: LayoutData;
 	data.server_users = data.server_users.sort((a, b) => a.order - b.order);
@@ -37,7 +37,6 @@
 			<div id="indicator" bind:this={refIndicator}></div>
 			<NavigationItem
 				path="/app/messages/friends/all"
-				match={2}
 				let:active
 				let:redirect>
 				<Button
@@ -48,6 +47,17 @@
 					on:click={redirect}>
 					<Logo/>
 				</Button>
+			</NavigationItem>
+			<NavigationItem
+				path="/app/admin"
+				let:active
+				let:redirect>
+				<Button
+					variant={ButtonVariant.Card}
+					align={ButtonAlignment.Center}
+					icon={Icons.DevTools}
+					{active}
+					on:click={redirect}/>
 			</NavigationItem>
 			<hr/>
 			<Navigation
@@ -102,7 +112,7 @@
 				padding-bottom: calc(7.5rem + 2px);
 			}
 			& > hr {
-				@apply w-8 mx-auto my-2
+				@apply w-8 mx-auto mb-2
 				border-t-2 border-gray-300 dark:border-gray-800;
 			}
 			& > #indicator {
@@ -110,16 +120,16 @@
 				bg-accent-500 dark:bg-gray-300 rounded-r
 				transition-[top] duration-200 ease-in-out;
 			}
+			& > .navigation {
+				@apply flex-1;
+			}
 			& .button {
 				@apply flex-none
-				w-16 h-16 p-0
+				w-16 h-16 p-0 mb-2
 				rounded-full
 				bg-gray-200 dark:bg-gray-800
 				transition-all duration-200 ease-linear;
 				will-change: border-radius;
-				&:not(:last-child) {
-					@apply mb-1;
-				}
 				& .icon {
 					@apply w-full text-icon-large;
 				}
@@ -137,12 +147,6 @@
 					& > .icon {
 						@apply text-accent-500;
 					}
-				}
-				&.branding {
-					@apply mb-0;
-				}
-				&.settings {
-					@apply mt-auto;
 				}
 			}
 		}

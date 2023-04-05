@@ -1,8 +1,16 @@
 <svelte:options accessors />
+<script lang="ts" context="module">
+	import { getContext, onDestroy, onMount, setContext, SvelteComponent } from 'svelte';
+	import type { TableContext } from '$src/components/table/Table.svelte';
+	export interface Column<T> {
+		title: string;
+		width: string;
+		css: string;
+		sortKey: keyof T | null;
+	}
+</script>
 
 <script lang="typescript">
-	import { getContext, onDestroy, onMount, setContext, SvelteComponent } from 'svelte';
-	import { type TableContext } from '$src/components/table/Table.svelte';
 
 	type T = $$Generic;
 	interface $$Slots {

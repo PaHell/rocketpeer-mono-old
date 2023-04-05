@@ -1,7 +1,7 @@
 <script lang="typescript" context="module">
 	import { onDestroy, onMount, setContext, SvelteComponent } from 'svelte';
-	import Column from '$src/components/table/Column.svelte';
-	import Row, { classes, RowState, translations } from '$src/components/table/Row.svelte';
+	import type { Column } from '$src/components/table/Column.svelte';
+	import Row, { classes, RowState, translations, type RowContext } from '$src/components/table/Row.svelte';
 	import { writable, type Writable } from 'svelte/store';
 	import Button, { ButtonVariant } from '$src/components/controls/Button.svelte';
 	import Icon, { Icons } from '$src/components/general/Icon.svelte';
@@ -14,19 +14,6 @@
 			sortKey: keyof T | null
 		) => void;
 		getRowContext: (item: T, changed: () => void) => RowContext<T>;
-	}
-	export interface RowContext<T> {
-		item: T;
-		index: number;
-		state: RowState;
-		initialState: RowState;
-		changed: (state: RowState) => void;
-	}
-	export interface Column<T> {
-		title: string;
-		width: string;
-		css: string;
-		sortKey: keyof T | null;
 	}
 </script>
 <script lang="typescript">
@@ -148,9 +135,9 @@
 		};
 		return contexts[index];
 	}
-</>
+</script>
 
-
+<template>
 	<div class="table-container {css}">
 		<table class="table">
 			<thead>
@@ -210,7 +197,7 @@
 			/>
 		</footer>
 	</div>
-
+</template>
 
 <style global lang="postcss">
 	.table-container > footer {
