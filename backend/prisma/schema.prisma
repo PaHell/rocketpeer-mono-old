@@ -107,7 +107,7 @@ model AccessToken {
 
 model Server {
   id                                                   Int            @id @default(autoincrement())
-  text_channel_id                                      Int
+  text_channel_id                                      Int?
   name                                                 String
   image                                                String?
   description                                          String
@@ -115,7 +115,7 @@ model Server {
   channel_groups                                       ChannelGroup[]
   server_tags                                          ServerTag[]
   server_users                                         ServerUser[]
-  text_channels_servers_text_channel_idTotext_channels TextChannel    @relation("servers_text_channel_idTotext_channels", fields: [text_channel_id], references: [id], onUpdate: Restrict, map: "server_text_channel_id")
+  text_channels_servers_text_channel_idTotext_channels TextChannel?   @relation("servers_text_channel_idTotext_channels", fields: [text_channel_id], references: [id], onUpdate: Restrict, map: "server_text_channel_id")
   text_channels                                        TextChannel[]
   voice_channels                                       VoiceChannel[]
 

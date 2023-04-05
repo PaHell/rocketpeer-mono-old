@@ -21,3 +21,10 @@ pub struct Message {
     pub message_type: i32,
     pub payload: String,
 }
+
+#[derive(Deserialize)]
+pub struct Server {
+    pub name: String,
+    pub image: String,
+    pub description: String,
+}

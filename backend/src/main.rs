@@ -2,6 +2,7 @@ use actix_web::{web, App, HttpServer};
 mod prisma;
 mod routes;
 use prisma::PrismaClient;
+use routes::server_related::server::create_server;
 use routes::user_related::{
     access_tokens::validate_token,
     messages::{create_message, delete_message, get_messages_of_user, update_message},
@@ -18,14 +19,16 @@ async fn main() -> std::io::Result<()> {
     println!("starting server");
     HttpServer::new(move || {
         App::new().app_data(client.clone()).service(
-            web::scope("/api").service(
-                web::scope("/user")
-                    .route("", web::get().to(get_all_users))
-                    .route("{id}", web::get().to(get_specific_user))
-                    .route("", web::put().to(create_user))
-                    .route("{id}", web::delete().to(delete_user))
-                    .route("{id}", web::patch().to(update_user_personal_data)),
-            ),
+            web::scope("/api")
+                .service(
+                    web::scope("/user")
+                        .route("", web::get().to(get_all_users))
+                        .route("{id}", web::get().to(get_specific_user))
+                        .route("", web::put().to(create_user))
+                        .route("{id}", web::delete().to(delete_user))
+                        .route("{id}", web::patch().to(update_user_personal_data)),
+                )
+                .service(web::scope("/server").route("", web::put().to(create_server))),
         )
     })
     .bind(("0.0.0.0", 8000))?

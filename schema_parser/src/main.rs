@@ -160,7 +160,7 @@ fn parse_enum_entries(input: &str) -> IResult<&str, String> {
 }
 fn main() {
     let input =
-        fs::read_to_string("../../rust/prisma/schema.prisma").expect("Failed to read schema");
+        fs::read_to_string("../../backend/prisma/schema.prisma").expect("Failed to read schema");
     let mut data: Vec<String> = input.split("}\n\n").map(|s| s.to_string()).collect();
     data.drain(0..2);
     let mut models: Vec<Model> = Vec::new();

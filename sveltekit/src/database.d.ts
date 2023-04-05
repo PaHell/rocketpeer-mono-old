@@ -1,150 +1,184 @@
-export interface users {
-    id: number;
-    user_name: string;
-    password: string;
-    first_name: string;
-    image: string;
-    email: string;
-    privacy_level: users_privacy_level;
-    created_at: string;
-    access_token: access_token;
-    message_sender: message[];
-    text_channel_messages: text_channel_messages[];
-    friends_user_2: user_friends[];
-    users_servers: users_servers[];
+export interface User {
+  id: number;
+  username: string;
+  password: string;
+  first_name: string;
+  image: String;
+  email: string;
+  privacy_level: UserPrivacyLevel;
+  created_at: string;
+  access_tokens: AccessToken;
+  chat_users: ChatUser[];
+  server_users: ServerUser[];
 
 }
 
-export interface user_friends {
-    id: number;
-    user_1_id: number;
-    created_at: string;
-    friends_user_1: users;
-    friends_user_2: users;
+export interface UserFriend {
+  id: number;
+  sender_id: number;
+  status: UserFriendStatus;
+  users_user_friends_recipient_idTousers: User;
+  users_user_friends_sender_idTousers: User;
 
 }
 
-export interface message {
-    id: number;
-    sender_id: number;
-    type: message_type;
-    created_at: string;
-    deleted_at: DateTime;
-    message_sender: users;
+export interface Chat {
+  id: number;
+  name: String;
+  userId: Int;
+  chat_users: ChatUser[];
 
 }
 
-export interface access_token {
-    id: number;
-    user_id: number;
-    access_token: string;
-    users: users;
+export interface ChatMessage {
+  id: number;
+  chat_id: number;
+  type: PayloadType;
+  created_at: string;
+  updated_at: DateTime;
+  chats: Chat;
+  users: User;
 
 }
 
-export interface users_servers {
-    id: number;
-    user_id: number;
-    display_name: string;
-    user_server_tags: user_server_tags[];
-    users: users;
+export interface ChatUser {
+  id: number;
+  chat_id: number;
+  created_at: string;
+  deleted_at: DateTime;
+  users: User;
 
 }
 
-export interface servers {
-    id: number;
-    name: string;
-    text_channel_id: number;
-    description: string;
-    channel_groups: channel_groups[];
-    server_tags: server_tags[];
-    text_channels: text_channels[];
-    users_servers: users_servers[];
-    voice_channel: voice_channel[];
+export interface AccessToken {
+  id: number;
+  user_id: number;
+  access_token: string;
+  users: User;
 
 }
 
-export interface server_tags {
-    id: number;
-    server_id: number;
-    name: string;
-    servers: servers;
-    user_server_tags: user_server_tags[];
+export interface Server {
+  id: number;
+  text_channel_id: Int;
+  image: String;
+  created_at: string;
+  channel_groups: ChannelGroup[];
+  server_users: ServerUser[];
+  text_channels: TextChannel[];
 
 }
 
-export interface user_server_tags {
-    id: number;
-    server_tag_id: number;
-    server_tags: server_tags;
-    users_servers: users_servers;
+export interface ServerUser {
+  id: number;
+  user_id: number;
+  order: number;
+  created_at: string;
+  deleted_at: DateTime;
+  ServerUserTag: ServerUserTag[];
+  users: User;
+  TextChannelMessage: TextChannelMessage[];
 
 }
 
-export interface channel_groups {
-    id: number;
-    server_id: number;
-    name: string;
-    text_channels: text_channels[];
+export interface ServerTag {
+  id: number;
+  server_id: number;
+  name: string;
+  servers: Server;
+  user_server_tags: ServerUserTag[];
 
 }
 
-export interface voice_channel {
-    id: number;
-    server_id: number;
-    order: number;
-    max_users: number;
-    servers: servers;
+export interface ServerUserTag {
+  id: number;
+  server_tag_id: number;
+  server_tag: ServerTag;
+  server_user: ServerUser;
 
 }
 
-export interface text_channels {
-    id: number;
-    server_id: number;
-    order: number;
-    topic: string;
-    channel_groups: channel_groups;
-    servers: servers;
+export interface ChannelGroup {
+  id: number;
+  server_id: number;
+  name: string;
+  text_channels: TextChannel[];
 
 }
 
-export interface text_channel_messages {
-    id: number;
-    sender_id: number;
-    type: message_type;
-    created_at: string;
-    deleted_at: string;
-    users: users;
+export interface VoiceChannel {
+  id: number;
+  server_id: number;
+  order: number;
+  max_users: Int;
+  server: Server;
 
 }
 
-export enum users_status {
-    Online,
-    Away,
-    DoNotDisturb,
-    Offline,
+export interface TextChannel {
+  id: number;
+  server_id: number;
+  order: number;
+  topic: string;
+  text_channel_messages: TextChannelMessage[];
+  server: Server;
+
 }
-export enum colors {
-    Black,
-    White,
-    Purple,
+
+export interface TextChannelMessage {
+  id: number;
+  text_channel_id: number;
+  type: PayloadType;
+  created_at: string;
+  updated_at: DateTime;
+  text_channel: TextChannel;
+  server_user: ServerUser;
+
 }
-export enum users_privacy_level {
-    Default,
+
+export enum UserStatus {
+  Online,
+  Away,
+  DoNotDisturb,
+  Offline,
 }
-export enum users_role {
-    Administrator,
-    Default,
+export enum UserFriendStatus {
+  Pending,
+  Accepted,
 }
-export enum server_role {
-    Administrator,
-    Default,
+export enum Color {
+  Lime,
+  Green,
+  Teal,
+  Blue,
+  Indigo,
+  Purple,
+  Pink,
+  Red,
+  Orange,
+  Yellow,
 }
-export enum message_type {
-    Text,
-    Picture,
-    Video,
-    Gif,
-    Deleted,
-    ,
+export enum UserPrivacyLevel {
+  Public,
+  Friends,
+  SharedServerAndFriends,
+  Private,
+}
+export enum UserRole {
+  Administrator,
+  Default,
+}
+export enum ServerRole {
+  None,
+  Moderator,
+  Administrator,
+  Owner,
+}
+export enum PayloadType {
+  Text,
+  Image,
+  Video,
+  Audio,
+  File,
+  Deleted,
 }
