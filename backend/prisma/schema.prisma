@@ -72,8 +72,8 @@ model ChatMessage {
   created_at DateTime    @default(now())
   updated_at DateTime?
   deleted_at DateTime?
-  chats      Chat        @relation(fields: [chat_id], references: [id], onUpdate: Restrict, map: "chat_message_chat_id")
-  users      User        @relation(fields: [user_id], references: [id], onUpdate: Restrict, map: "chat_message_user_id")
+  chats      Chat?       @relation(fields: [chat_id], references: [id], onUpdate: Restrict, map: "chat_message_chat_id")
+  users      User?       @relation(fields: [user_id], references: [id], onUpdate: Restrict, map: "chat_message_user_id")
 
   @@index([chat_id], map: "cm_chat_id")
   @@index([user_id], map: "cm_user_id")
@@ -280,4 +280,5 @@ enum PayloadType {
   Video
   Audio
   File
+  Deleted
 }

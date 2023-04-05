@@ -1,4 +1,3 @@
-use crate::prisma::{MessageType, UsersPrivacyLevel, UsersRole, UsersStatus};
 use serde::Deserialize;
 
 #[derive(Deserialize)]
@@ -17,8 +16,8 @@ pub struct User {
 
 #[derive(Deserialize)]
 pub struct Message {
-    pub sender_id: i32,
-    pub receiver_id: i32,
+    pub chat_id: i32,
+    pub user_id: i32,
     pub message_type: i32,
     pub payload: String,
 }

@@ -19,23 +19,12 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(move || {
         App::new().app_data(client.clone()).service(
             web::scope("/api").service(
-                web::scope("/users")
-                    .route("getAllUsers", web::get().to(get_all_users))
-                    .route("/createUser", web::post().to(create_user))
-                    .route("/deleteUser/{id}", web::delete().to(delete_user))
-                    .route("/getUser/{id}", web::get().to(get_specific_user))
-                    .route(
-                        "/updateUser/{id}",
-                        web::post().to(update_user_personal_data),
-                    )
-                    .route(
-                        "/updateUserPassword/{id}",
-                        web::post().to(update_user_password),
-                    )
-                    .route("/messageSender/{id}", web::get().to(get_messages_of_user))
-                    .route("/createMessage", web::post().to(create_message))
-                    .route("/updateMessage/{id}", web::post().to(update_message))
-                    .route("/deleteMessage/{id}", web::delete().to(delete_message)),
+                web::scope("/user")
+                    .route("", web::get().to(get_all_users))
+                    .route("{id}", web::get().to(get_specific_user))
+                    .route("", web::put().to(create_user))
+                    .route("{id}", web::delete().to(delete_user))
+                    .route("{id}", web::patch().to(update_user_personal_data)),
             ),
         )
     })

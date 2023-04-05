@@ -1,4 +1,3 @@
-use crate::prisma::users;
 use actix_web::HttpResponse;
 use jsonwebtoken::{decode, encode, Algorithm, DecodingKey, EncodingKey, Header, Validation};
 use serde::{Deserialize, Serialize};

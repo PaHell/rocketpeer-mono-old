@@ -1,4 +1,4 @@
-use crate::prisma::{message, MessageType, PrismaClient};
+use crate::prisma::{chat_message, user, PayloadType, PrismaClient};
 use crate::routes::json_structs::Message;
 use actix_web::{
     web::{self, Json, Path},
@@ -6,14 +6,13 @@ use actix_web::{
 };
 use chrono::Utc;
 
-fn match_message_type(json_val: i32) -> MessageType {
+fn match_message_type(json_val: i32) -> PayloadType {
     let result = match json_val {
-        1 => MessageType::Text,
-        2 => MessageType::Picture,
-        3 => MessageType::Video,
-        4 => MessageType::Gif,
-        5 => MessageType::Deleted,
-        _ => MessageType::Text,
+        1 => PayloadType::Text,
+        2 => PayloadType::Image,
+        3 => PayloadType::Video,
+        4 => PayloadType::Audio,
+        _ => PayloadType::Text,
     };
     result
 }
@@ -23,8 +22,8 @@ pub async fn get_messages_of_user(
     user_id: Path<i32>,
 ) -> HttpResponse {
     let messages = client
-        .message()
-        .find_many(vec![message::sender_id::equals(user_id.to_owned())])
+        .chat_message()
+        .find_many(vec![chat_message::user_id::equals(user_id.to_owned())])
         .exec()
         .await;
 
@@ -36,13 +35,13 @@ pub async fn get_messages_of_user(
 
 pub async fn delete_message(client: web::Data<PrismaClient>, id: Path<i32>) -> HttpResponse {
     let message = client
-        .message()
+        .chat_message()
         .update(
-            message::id::equals(id.to_owned()),
+            chat_message::id::equals(id.to_owned()),
             vec![
-                message::r#type::set(MessageType::Deleted),
-                message::payload::set("".to_owned()),
-                message::deleted_at::set(Some(Utc::now().into())),
+                chat_message::r#type::set(PayloadType::Deleted),
+                chat_message::payload::set("".to_owned()),
+                chat_message::deleted_at::set(Some(Utc::now().into())),
             ],
         )
         .exec()
@@ -61,12 +60,12 @@ pub async fn update_message(
 ) -> HttpResponse {
     let message_type = match_message_type(new_message.message_type);
     let message = client
-        .message()
+        .chat_message()
         .update(
-            message::id::equals(id.to_owned()),
+            chat_message::id::equals(id.to_owned()),
             vec![
-                message::payload::set(new_message.payload.to_owned()),
-                message::r#type::set(message_type),
+                chat_message::payload::set(new_message.payload.to_owned()),
+                chat_message::r#type::set(message_type),
             ],
         )
         .exec()
@@ -84,12 +83,12 @@ pub async fn create_message(
 ) -> HttpResponse {
     let message_type = match_message_type(message.message_type);
     let new_message = client
-        .message()
+        .chat_message()
         .create(
-            message_type,
+            message.chat_id.to_owned(),
+            message.user_id.to_owned(),
+            message_type.to_owned(),
             message.payload.to_owned(),
-            crate::prisma::users::UniqueWhereParam::IdEquals(message.receiver_id.to_owned()),
-            crate::prisma::users::UniqueWhereParam::IdEquals(message.sender_id.to_owned()),
             vec![],
         )
         .exec()
