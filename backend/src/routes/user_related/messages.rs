@@ -81,21 +81,6 @@ pub async fn create_message(
     client: web::Data<PrismaClient>,
     message: Json<Message>,
 ) -> HttpResponse {
-    let message_type = match_message_type(message.message_type);
-    let new_message = client
-        .chat_message()
-        .create(
-            message.chat_id.to_owned(),
-            message.user_id.to_owned(),
-            message_type.to_owned(),
-            message.payload.to_owned(),
-            vec![],
-        )
-        .exec()
-        .await;
-
-    match new_message {
-        Ok(message) => HttpResponse::Ok().json(message),
-        Err(e) => HttpResponse::NotFound().body(format!("{:?}", e)),
-    }
+    HttpResponse::Ok().body("yesnt")
 }
+
