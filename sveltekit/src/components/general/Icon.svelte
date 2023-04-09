@@ -35,6 +35,7 @@
 		Down = 'arrow-down-s-line',
 		Fullscreen = 'fullscreen-line',
 		Volume = 'volume-up-line',
+		FileDownload = 'file-download-line',
 	}
 </script>
 

@@ -1,18 +1,17 @@
-<svelte:options accessors />
-
 <script lang="typescript" context="module">
 	import { getContext, onDestroy, onMount, setContext, SvelteComponent } from 'svelte';
 	import Column from '$src/components/table/Column.svelte';
 	import Button, { ButtonVariant } from '$src/components/controls/Button.svelte';
 	import { Icons } from '$src/components/general/Icon.svelte';
 	import type { TableContext } from '$src/components/table/Table.svelte';
+	import { get, type Writable } from 'svelte/store';
+	import type { RowContextStore } from './store';
 
 	export interface RowContext<T> {
 		item: T;
 		index: number;
 		state: RowState;
 		initialState: RowState;
-		changed: (state: RowState) => void;
 	}
 
 	export enum RowState {
@@ -22,62 +21,65 @@
 		Deleted
 	}
 
-	export const classes = {
-		[RowState.Unmodified]: 'unmodified',
-		[RowState.Modified]: 'modified',
-		[RowState.Added]: 'added',
-		[RowState.Deleted]: 'deleted'
-	};
+	export const classes = [
+		'unmodified',
+		'added',
+		'modified',
+		'deleted'
+	];
 
-	export const translations = {
-		[RowState.Unmodified]: 'unmodified',
-		[RowState.Modified]: 'modified',
-		[RowState.Added]: 'added',
-		[RowState.Deleted]: 'deleted'
-	};
+	export const translations = [
+		'unmodified',
+		'added',
+		'modified',
+		'deleted'
+	];
 </script>
 
 <script lang="typescript">
-	type T = $$Generic;
-	interface $$Slots {
-		default: {
-			context: RowContext<T>;
-		};
-	}
+	type T = $$Generic<App.DB.PrimaryKey>;
+
 	export let item: T;
+	export let hideState: boolean;
+	export let disableRemove: boolean;
 
 	const table = getContext<TableContext<T>>('table');
-	let context = table.getRowContext(item, changed);
-	setContext<number>('index', context.index);
+	const store = table.getRowContextStore(item);
+	setContext<RowContextStore<T>>('store', store);
+	let state: RowState = RowState.Unmodified;
+	state = get(store).state;
+	store.subscribe((ctx) => {
+		state = ctx.state;
+	});
 
-	function changed() {
-		refreshContext();
+	function toggleRemove() {
+		store.setState(state === RowState.Deleted
+			? RowState.Unmodified
+			: RowState.Deleted);
 	}
 
-	function refreshContext() {
-		context = table.getRowContext(item, changed);
-		//setContext<App.General.RowContext<T>>("row", context);
-	}
-
-	function toggleDelete() {
-		context.changed(context.state == RowState.Deleted ? context.initialState : RowState.Deleted);
-	}
 </script>
 
-
-	<tr class={classes[context.state]}>
-		<Column title="" class="state" width="1.5rem">
-			<div />
-		</Column>
-		<slot {context} />
-		<Column title="" width="2.25rem">
-			<Button
-				icon={context.state == RowState.Deleted ? Icons.UndoDelete : Icons.Delete}
-				variant={ButtonVariant.Secondary}
-				on:click={toggleDelete}
-			/>
-		</Column>
+<template>
+	<tr class={classes[state]}>
+		{#if !hideState}
+			<td class="state">
+				<div></div>
+			</td>
+		{/if}
+		<slot />
+		{#if !disableRemove}
+			<td>
+				<Button
+					icon={state === RowState.Deleted
+						? Icons.UndoDelete
+						: Icons.Delete}
+					variant={ButtonVariant.Secondary}
+					on:click={toggleRemove}/>
+			</td>
+		{/if}
 	</tr>
+</template>
 
 
 <style global lang="postcss">

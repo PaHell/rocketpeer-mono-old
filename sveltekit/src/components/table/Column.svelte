@@ -1,12 +1,16 @@
-<svelte:options accessors />
+<!--
+	<svelte:options accessors />
+-->
 <script lang="ts" context="module">
 	import { getContext, onDestroy, onMount, setContext, SvelteComponent } from 'svelte';
 	import type { TableContext } from '$src/components/table/Table.svelte';
-	export interface Column<T> {
+	import type { RowContext } from './Row.svelte';
+	import type { RowContextStore } from './store';
+	export interface IColumn<T> {
+		key: keyof T | null;
 		title: string;
 		width: string;
-		css: string;
-		sortKey: keyof T | null;
+		class: string;
 	}
 </script>
 
@@ -14,27 +18,36 @@
 
 	type T = $$Generic;
 	interface $$Slots {
-		default: {};
+		default: {
+			store: RowContextStore<T>
+		};
 	}
 
+	export let key: keyof T | undefined = undefined;
 	export let title: string = '';
 	export let width: string = 'auto';
 	let classes: string = '';
 	export { classes as class };
-	export let sortByKey: keyof T | null = null;
 
-	const index = getContext<number>('index');
-	if (index === 0) {
+	const store = getContext<RowContextStore<T>>('store');
+	if (!store) {
 		const table = getContext<TableContext<T>>('table');
-		table.registerColumn(title, width, classes, sortByKey);
+		table.registerColumn({key, title, width, class: classes} as IColumn<T>);
 	}
+
 </script>
 
-
-	<td class={classes}>
-		<slot />
-	</td>
-
+<template>
+	{#if store}
+		<td class={classes}>
+			{#if $$slots.default}
+				<slot store={store} />
+			{:else if key}
+				<p class="text">{$store.item[key] ?? ""}</p>
+			{/if}
+		</td>
+	{/if}
+</template>
 
 <style global lang="postcss">
 </style>

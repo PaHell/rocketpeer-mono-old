@@ -1,79 +1,114 @@
 <script lang="typescript" context="module">
-	import { onDestroy, onMount, setContext, SvelteComponent } from 'svelte';
-	import type { Column } from '$src/components/table/Column.svelte';
+	import { createEventDispatcher, onDestroy, onMount, setContext, SvelteComponent } from 'svelte';
 	import Row, { classes, RowState, translations, type RowContext } from '$src/components/table/Row.svelte';
-	import { writable, type Writable } from 'svelte/store';
+	import { derived, get } from 'svelte/store';
 	import Button, { ButtonVariant } from '$src/components/controls/Button.svelte';
 	import Icon, { Icons } from '$src/components/general/Icon.svelte';
 	import { _ } from 'svelte-i18n';
+	import type { IColumn } from '$src/components/table/Column.svelte';
+	import { createRowContextStore, type RowContextStore } from '$src/components/table/store';
 	export interface TableContext<T> {
-		registerColumn: (
-			name: string,
-			width: string,
-			css: string,
-			sortKey: keyof T | null
-		) => void;
-		getRowContext: (item: T, changed: () => void) => RowContext<T>;
+		registerColumn: (col: IColumn<T>) => void;
+		getRowContextStore: (item: T) => RowContextStore<T>;
 	}
 </script>
 <script lang="typescript">
 	type T = $$Generic<App.DB.PrimaryKey>;
-	interface $$Slots {
-		default: {
-			ctx: RowContext<T>;
-		};
+
+	// events
+	interface $$Events {
+		change: RowContext<T>;
 	}
+	// props
 	export let items: T[] = [];
 	export let css: string = '';
-	let columns: Column<T>[] = [];
-	let activeColumn: Column<T> | null = null;
+	// hooks
+	export let onAdd: () => T = () => ({ id: items.length + 1 } as T);
+	// toggles
+	export let disableAdd: boolean = false;
+	export let disableExport: boolean = false;
+	export let disableRemove: boolean = false;
+	export let disableSave: boolean = false;
+	export let hideState: boolean = false;
+
+	const dispatch = createEventDispatcher<$$Events>();
+
+	let columns: IColumn<T>[] = [];
+	let activeColumn: IColumn<T> | null = null;
 	let columnSortedAsc: boolean = false;
-	let contexts: RowContext<T>[] = [];
+	let contextStores: RowContextStore<T>[] = [];
 	let counters: [RowState, number][] = [];
+	let noItems: string = 'No items';
+	let filename: string = 'items';	
+
 	setContext<TableContext<T>>('table', {
 		registerColumn,
-		getRowContext
+		getRowContextStore,
 	});
 
 	onMount(() => {
-		// handle no items and thead columns
-		if (items.length === 0) {
-			addItem();
-			setTimeout(() => {
-				items = [];
-			});
-		}
 		// sort by first column
-		if (columns.length) {
-			sortByColumn(columns[0]);
+		if (columns.length > 0) {
+			const col = columns.find(c => c.key);
+			if (!col) return;
+			console.warn("Sort by first column", col.key);
+			sortByColumn(col);
 		}
 	});
 
-	function addItem() {
-		const item = {} as T;
-		items.push(item);
-		contexts.push({
-			item,
-			index: items.length - 1,
-			state: RowState.Added,
-			initialState: RowState.Added,
-			changed: () => {
-				onRowChanged(contexts[items.length - 1], RowState.Added);
-			}
+	function log(text: string, ctx: RowContext<T>) {
+		console.log(text + ":", {
+			id: ctx.item.id,
+			state: ctx.state,
 		});
-		items = items;
-		onRowChanged(contexts[items.length - 1], RowState.Added);
 	}
 
-	function sortByColumn(column: Column<T>) {
+	function addItem() {
+		const item = onAdd();
+		const length = items.push(item);
+		console.log('addItem', item.id);
+		const store = createRowContextStore(item, length, RowState.Added);
+		contextStores.push(store);
+		items = items;
+		store.subscribe(onRowChanged);
+	}
+	
+	function getRowContextStore(item: T): RowContextStore<T> {
+		const index = items.findIndex((i) => i.id === item.id);
+		let store = contextStores.find(c => get(c).item.id === item.id);
+		if (store) return store;
+		store = createRowContextStore(item, index, RowState.Unmodified);
+		console.log('getRowContextStore > created', store);
+		store.subscribe(onRowChanged);
+		contextStores.push(store);
+		//contexts = [...contexts];
+		return store;
+	}
+
+	function onRowChanged(context: RowContext<T>) {
+		console.warn('onRowChanged', context.item);
+		dispatch('change', context);
+		const contexts = contextStores.map(c => get(c));
+		counters = Object.values(RowState)
+			.filter((state) => !isNaN(state)
+				&& state !== RowState.Unmodified)
+			.map((state) => {
+				const count = contexts.filter((c) => c.state === state).length;
+				return [state, count] as [RowState, number];
+			});
+		items = items.map((item) => {
+			const context = contexts.find((c) => c.item.id === item.id);
+			return context?.item ?? item;
+		});
+	}
+
+	function sortByColumn(column: IColumn<T>) {
+		console.log("Sort by: ", column.key);
 		// toggle order or set column
-		if (!column.sortKey) return;
-		const key = column.sortKey;
-		if (activeColumn === column) columnSortedAsc = !columnSortedAsc;
-		else {
-			activeColumn = column;
-			columnSortedAsc = false;
-		}
+		if (!column.key) return;
+		columnSortedAsc = activeColumn === column;
+		activeColumn = column;
+		const key = column.key;
 		// sort items
 		items = items.sort((a, b) => {
 			let score = 0;
@@ -84,117 +119,125 @@
 			return score * (columnSortedAsc ? 1 : -1);
 		});
 		// update row indexes
-		items.forEach((item, index) => {
-			const ctx = contexts.find((ctx) => ctx.item.id === item.id);
-			if (ctx) ctx.index = index;
-		});
+		for (const store of contextStores) {
+			const context = get(store);
+			const index = items.findIndex((item) => item.id === context.item.id);
+			store.update(ctx => {
+				ctx.index = 10 + index;
+				return ctx;
+			});
+		}
 	}
 
 	function saveChanges() {
 		console.warn('Save Changes', JSON.stringify(items));
 	}
 
-	function onRowChanged(context: RowContext<T>, state: RowState) {
-		console.log('Table Changed', { item: context.item });
-		context.state = state;
-		if (state != RowState.Deleted) {
-			context.initialState = state;
-		}
-		counters = Object.values(RowState)
-			.filter((state) => state !== RowState.Unmodified)
-			.map((state) => {
-				const count = contexts.filter((ctx) => ctx.state === state).length;
-				return [state, count] as [RowState, number];
-			});
+	function exportAll() {
+		const jsonString = JSON.stringify(items, null, 4);
+		const url = 'data:text/plain;charset=utf-8,' + encodeURIComponent(jsonString);
+		const a = document.createElement('a');
+		a.style.display = 'none';
+		a.href = url;
+		// the filename you want
+		a.download = `${$_(filename)}.json`;
+		document.body.appendChild(a);
+		a.click();
 	}
 
-	function registerColumn(title: string, width: string, css: string, sortKey: keyof T | null) {
-		if (columns.find((c) => c.title == title)) return;
-		columns.push({
-			title,
-			width,
-			css,
-			sortKey
-		} as Column<T>);
-		columns = columns;
+	function registerColumn(col: IColumn<T>) {
+		console.log('Register col:', col.title);
+		columns.push(col);
 	}
 
-	function getRowContext(item: T, changed: () => void) {
-		const existing = contexts.find((ctx) => ctx.item.id == item.id);
-		if (existing) return existing;
-		const index = items.findIndex((i) => i.id == item.id);
-		contexts[index] = {
-			index,
-			item,
-			state: RowState.Unmodified,
-			initialState: RowState.Unmodified,
-			changed: (state: RowState = RowState.Modified) => {
-				changed();
-				onRowChanged(contexts[index], state);
-			}
-		};
-		return contexts[index];
+	function toggleDelete(store: RowContextStore<T>) {
+		const curr = get(store);
+		store.setState(curr.state == RowState.Deleted
+			? curr.initialState
+			: RowState.Deleted);
 	}
 </script>
 
 <template>
 	<div class="table-container {css}">
+		<slot/>
 		<table class="table">
 			<thead>
 				<tr>
+					{#if !hideState}
+						<th class="w-6"></th>
+					{/if}
 					{#each columns as col}
 						<th style="width: {col.width};">
-							{#if col.sortKey}
+							{#if col.key && items?.length}
 								<Button
 									variant={ButtonVariant.Secondary}
 									active={activeColumn === col}
-									on:click={() => sortByColumn(col)}
-								>
+									on:click={() => sortByColumn(col)}>
 									<p class="text flex-1">{$_(col.title)}</p>
 									<Icon
 										name={activeColumn === col && columnSortedAsc
 											? Icons.OrderByAsc
-											: Icons.OrderByDesc}
-									/>
+											: Icons.OrderByDesc}/>
 								</Button>
 							{:else}
-								<p class="text secondary">{$_(col.title)}</p>
+								<p class="text">{$_(col.title)}</p>
 							{/if}
 						</th>
 					{/each}
-					<th />
+					{#if !disableRemove}
+						<th class="w-10"></th>
+					{/if}
 				</tr>
 			</thead>
 			<tbody>
+				{#if !items?.length}
+					<tr>
+						<td colspan={columns.length}>
+							<p class="text sec">{$_('lib.table.noItems')}</p>
+						</td>
+					</tr>
+				{/if}
 				{#each items as item (item.id)}
-					<Row {item} let:context>
-						<slot ctx={context} />
+					<Row {item} {hideState} {disableRemove}>
+						<slot />
 					</Row>
 				{/each}
 			</tbody>
 		</table>
 		<footer>
-			<Button
-				icon={Icons.Add}
-				text="lib.table.add"
-				variant={ButtonVariant.Secondary}
-				on:click={addItem}
-			/>
+			{#if !disableAdd}
+				<Button
+					icon={Icons.Add}
+					text="lib.table.add"
+					variant={ButtonVariant.Secondary}
+					on:click={addItem}/>
+			{/if}
+			{#if !disableRemove}
+				<Button
+					icon={Icons.FileDownload}
+					text="lib.table.export_json"
+					variant={ButtonVariant.Secondary}
+					on:click={exportAll}/>
+			{/if}
 			<div class="flex-1" />
-			{#each counters as [state, count]}
-				{#if count > 0}
-					<p class="text badge {classes[state]}">
-						{count}
-						{$_('lib.table.row_state.' + translations[state])}
-					</p>
-				{/if}
-			{/each}
-			<Button
-				icon={Icons.SaveChanges}
-				text="lib.table.save"
-				variant={ButtonVariant.Primary}
-				on:click={saveChanges}
-			/>
+			{#if !hideState}
+				{#each counters as [state, count]}
+					{#if count > 0}
+						<p class="text badge {classes[state]}">
+							{count}
+							{$_('lib.table.row_state.' + translations[state])}
+						</p>
+					{/if}
+				{/each}
+			{/if}
+			{#if !disableSave}
+				<Button
+					icon={Icons.SaveChanges}
+					text="lib.table.save"
+					variant={ButtonVariant.Primary}
+					on:click={saveChanges}/>
+			{/if}
 		</footer>
 	</div>
 </template>
@@ -232,10 +275,10 @@
 
 		& th {
 			&:first-child {
-				@apply rounded-tl;
+				@apply rounded-tl overflow-hidden;
 			}
 			&:last-child {
-				@apply w-9;
+				@apply rounded-tr overflow-hidden;
 			}
 			& > .text {
 				@apply font-semibold;
