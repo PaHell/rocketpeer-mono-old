@@ -72,8 +72,8 @@ model ChatMessage {
   created_at DateTime    @default(now())
   updated_at DateTime?
   deleted_at DateTime?
-  chats      Chat?       @relation(fields: [chat_id], references: [id], onUpdate: Restrict, map: "chat_message_chat_id")
-  users      User?       @relation(fields: [user_id], references: [id], onUpdate: Restrict, map: "chat_message_user_id")
+  chats      Chat        @relation(fields: [chat_id], references: [id], onUpdate: Restrict, map: "chat_message_chat_id")
+  users      User        @relation(fields: [user_id], references: [id], onUpdate: Restrict, map: "chat_message_user_id")
 
   @@index([chat_id], map: "cm_chat_id")
   @@index([user_id], map: "cm_user_id")
@@ -107,7 +107,7 @@ model AccessToken {
 
 model Server {
   id                                                   Int            @id @default(autoincrement())
-  text_channel_id                                      Int?
+  general_text_channel                                 Int?
   name                                                 String
   image                                                String?
   description                                          String
@@ -115,12 +115,12 @@ model Server {
   channel_groups                                       ChannelGroup[]
   server_tags                                          ServerTag[]
   server_users                                         ServerUser[]
-  text_channels_servers_text_channel_idTotext_channels TextChannel?   @relation("servers_text_channel_idTotext_channels", fields: [text_channel_id], references: [id], onUpdate: Restrict, map: "server_text_channel_id")
+  text_channels_servers_text_channel_idTotext_channels TextChannel?   @relation("servers_text_channel_idTotext_channels", fields: [general_text_channel], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "general_text_channel_id")
   text_channels                                        TextChannel[]
   voice_channels                                       VoiceChannel[]
 
   @@index([name], map: "server_name")
-  @@index([text_channel_id], map: "server_text_channel_id")
+  @@index([general_text_channel], map: "general_text_channel_id")
   @@map("servers")
 }
 
