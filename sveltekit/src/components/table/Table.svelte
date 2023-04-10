@@ -209,14 +209,14 @@
 			{#if !disableAdd}
 				<Button
 					icon={Icons.Add}
-					text="lib.table.add"
+					text="components.table.add"
 					variant={ButtonVariant.Secondary}
 					on:click={addItem}/>
 			{/if}
 			{#if !disableRemove}
 				<Button
 					icon={Icons.FileDownload}
-					text="lib.table.export_json"
+					text="components.table.export_json"
 					variant={ButtonVariant.Secondary}
 					on:click={exportAll}/>
 			{/if}

@@ -36,6 +36,9 @@
 		Fullscreen = 'fullscreen-line',
 		Volume = 'volume-up-line',
 		FileDownload = 'file-download-line',
+		ExclamationCircle = 'error-warning-line',
+		WarningTriangle = 'alarm-warning-line',
+		CheckCircle = 'checkbox-circle-line',
 	}
 </script>
 

@@ -1,4 +1,21 @@
 {
+	"general": {
+		"success": "Success",
+		"error": "Error"
+	},
+	"components": {
+		"table": {
+			"add": "Add",
+			"export_json": "Export JSON",
+			"save": "Save",
+			"no_items": "No items",
+			"row_state": {
+				"modified": "Modified",
+				"added": "Added",
+				"deleted": "Deleted"
+			}
+		}
+	},
 	"lib": {
 		"controls": {
 			"select": {

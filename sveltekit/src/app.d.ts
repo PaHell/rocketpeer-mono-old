@@ -74,7 +74,8 @@ declare global {
 		}
 		namespace API {
 			interface RequestError {
-				error: string;
+				message: string;
+				detail: string;
 			}
 		}
 		namespace DB {

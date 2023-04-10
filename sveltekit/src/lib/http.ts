@@ -37,11 +37,13 @@ export async function http<T extends object>(
 	} catch (error: any) {
 		if (error.message.includes('fetch'))
 			throw {
-				error: 'messages.errors.fetch'
-			};
+				message: 'messages.errors.fetch',
+				detail: error.detail
+			} as App.API.RequestError;
 		else
 			throw {
-				error: error.message
-			};
+				message: error.message,
+				detail: error.detail
+			} as App.API.RequestError;
 	}
 }

@@ -2,49 +2,60 @@
 	import { default as Icon, Icons } from '$src/components/general/Icon.svelte';
 	import { _ } from 'svelte-i18n';
 	export enum AlertVariant {
-		Success = 'success',
-		Warning = 'warning',
-		Danger = 'danger'
+		Success,
+		Warning,
+		Danger,
 	}
+	const alert_icons: Icons[] = [
+		Icons.CheckCircle,
+		Icons.WarningTriangle,
+		Icons.ExclamationCircle,
+	];
+	const alert_classes: string[] = [
+		"success",
+		"warning",
+		"danger",
+	];
 </script>
 
 <script lang="typescript">
-	export let title: string | undefined = undefined;
-	export let text: string | undefined = undefined;
-	export let icon: Icons | undefined = undefined;
 	export let variant: AlertVariant = AlertVariant.Success;
-	export let transparent: boolean = false;
+	export let icon: Icons | undefined = undefined;
+	export let title: string | undefined = undefined;
+	export let message: string | undefined = undefined;
+	export let messages: string[] = [];
+	let classes = '';
+	export {classes as class};
+	
 	export let small: boolean = false;
-	export let css: string = '';
 </script>
 
-
+<template>
 	<div
-		class="alert alert-{variant} {css}"
-		class:alert-transparent={transparent}
-		class:alert-small={small}
-	>
-		{#if icon}
-			<Icon name={icon} />
-		{/if}
-		{#if title}
-			<p class="text">{$_(title)}</p>
-		{/if}
-		<div>
-			{#if text}
-				<p class="text">{$_(text)}</p>
+		class="alert alert-{alert_classes[variant]} {classes}"
+		class:alert-small={small}>
+		<div class="header">
+			<Icon name={icon ?? alert_icons[variant]} />
+			{#if title}
+				<p class="text bold ellipsis">{$_(title)}</p>
 			{/if}
-			<slot />
 		</div>
+		<div class="main indent">
+			{#if message}
+				<p class="text">{$_(message)}</p>
+			{/if}
+			{#each messages as msg}
+				<p class="text">{$_(msg)}</p>
+			{/each}
+		</div>
+		<slot />
 	</div>
-
+</template>
 
 <style global lang="postcss">
 	.alert {
-		@apply flex items-start justify-center flex-shrink-0
-        p-2 border rounded
-        border-gray-300 bg-gray-100
-        dark:border-gray-700 dark:bg-gray-900
+		@apply flex-shrink-0
+        p-2 rounded bg-gray-100
 		transition-all;
 
 		& > * {
@@ -55,61 +66,59 @@
 			}
 		}
 
-		& > .icon {
-			&:first-child {
-				@apply text-inherit;
-			}
-		}
-
-		& > .text {
-			@apply mb-[.5px]
-			overflow-ellipsis whitespace-nowrap overflow-hidden
-			text-left text-inherit font-medium;
-
-			&:first-child {
-				@apply pl-1;
-			}
-			&:not(:last-child) {
-			}
-		}
-
 		& > div {
 			@apply flex-1 mb-[.5px];
 
-			&:first-child {
-				@apply pl-1;
+			&.header {
+				@apply flex justify-center;
+				& > .text {
+					@apply flex-1;
+					&:not(:first-child) {
+						@apply ml-1;
+					}
+				}
 			}
+
+			&.main {
+				@apply flex flex-col
+				justify-center items-start;
+			}
+		}
+		& > .indent {
+			padding-left: calc(24px + .25rem);
 		}
 
 		&.alert-transparent {
-			@apply bg-transparent border-transparent
-          dark:bg-transparent dark:border-transparent;
+			@apply bg-transparent dark:bg-transparent;
 		}
 
 		&.alert-small {
-			@apply py-1 border-0;
-			& > .icon {
-				@apply text-[18px];
-			}
-			& > .text,
-			& > div > .text {
+			@apply p-1;
+			& > div {
 				@apply text-xs;
+				& > .icon {
+					@apply text-[18px];
+				}
+			}
+			& > .indent {
+				padding-left: calc(18px + .25rem);
 			}
 		}
 
-		&.alert-danger {
-			@apply border-danger-500
-          dark:border-danger-500;
-			& > *:first-child {
-				@apply text-danger-400 dark:text-danger-500;
-			}
-		}
 		&.alert-success {
-			@apply border-success-500
-          dark:border-success-400;
-			& > *:first-child {
-				@apply text-success-500 dark:text-success-400;
-			}
+			@apply bg-success-100
+			dark:bg-success-500 dark:bg-opacity-[12%]
+			text-success-500;
+		}
+		&.alert-warning {
+			@apply bg-warning-100
+			dark:bg-warning-500 dark:bg-opacity-[12%]
+			text-warning-500;
+		}
+		&.alert-danger {
+			@apply bg-danger-100
+			dark:bg-danger-500 dark:bg-opacity-[12%]
+			text-danger-500;
 		}
 	}
 
