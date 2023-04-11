@@ -20,6 +20,12 @@
 		"navigation-tabs",
 		"navigation-list",
 	];
+
+	const navBtnVariants = [
+		ButtonVariant.None,
+		ButtonVariant.Transparent,
+		ButtonVariant.Card,
+	];
 </script>
 
 <script lang="typescript">
@@ -44,7 +50,7 @@
 				let:active
 				let:redirect>
 				<Button
-					variant={ButtonVariant.Transparent}
+					variant={navBtnVariants[style]}
 					text={item.title}
 					icon={item.icon}
 					on:click={redirect}
@@ -69,15 +75,13 @@
 			& > .text {
 				@apply px-2 my-1 text-label uppercase;
 				&:first-child {
-					@apply mt-2;
+					@apply mt-3;
 				}
 			}
 			& > .navigation {
-				@apply ml-[-1px];
+				@apply ml-[-1px] px-2;
 				& > .button {
-					@apply w-full px-2
-					border-r-0
-					rounded-none;
+					@apply w-full px-2;
 					&:not(:last-child) {
 						@apply mb-[1px];
 					}

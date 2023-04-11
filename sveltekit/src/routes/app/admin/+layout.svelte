@@ -9,6 +9,10 @@
 	import Logo from '$src/components/Logo.svelte';
 	import { NavStyle, type NavGroup } from '$src/components/controls/navigation/StyledNavigation.svelte';
 	import StyledNavigation from '$src/components/controls/navigation/StyledNavigation.svelte';
+	import VoiceConnection from '$src/components/views/VoiceConnection.svelte';
+	import type { LayoutData } from './$types';
+
+	export let data: LayoutData;
 
 	const categories: NavGroup[] = [
 		{
@@ -25,7 +29,7 @@
 </script>
 
 
-<nav id="sidebar">
+<nav id="sidebar" class="layout-pane items-stretch">
 	<header>
 		<div>
 			<p class="text font-bold">Admin Panel</p>
@@ -36,7 +40,9 @@
 	<StyledNavigation
 		items={categories}
 		style={NavStyle.List}
+		class="fill"
 		/>
+	<VoiceConnection user={data.user}/>
 </nav>
 <div id="content">
 	<slot />

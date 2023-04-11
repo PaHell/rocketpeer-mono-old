@@ -14,6 +14,10 @@
 				"added": "Added",
 				"deleted": "Deleted"
 			}
+		},
+		"request_error": {
+			"retry": "Retry",
+			"reload": "Reload"
 		}
 	},
 	"lib": {

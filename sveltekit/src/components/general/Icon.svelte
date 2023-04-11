@@ -39,6 +39,8 @@
 		ExclamationCircle = 'error-warning-line',
 		WarningTriangle = 'alarm-warning-line',
 		CheckCircle = 'checkbox-circle-line',
+		InfoCircle = 'information-line',
+		Close = 'close-line',
 	}
 </script>
 

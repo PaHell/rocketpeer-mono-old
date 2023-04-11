@@ -1,20 +1,24 @@
 <script lang="typescript" context="module">
 	import { default as Icon, Icons } from '$src/components/general/Icon.svelte';
 	import { _ } from 'svelte-i18n';
+	import Button, { ButtonVariant } from '../controls/Button.svelte';
 	export enum AlertVariant {
 		Success,
 		Warning,
 		Danger,
+		Info,
 	}
 	const alert_icons: Icons[] = [
 		Icons.CheckCircle,
 		Icons.WarningTriangle,
 		Icons.ExclamationCircle,
+		Icons.InfoCircle,
 	];
 	const alert_classes: string[] = [
 		"success",
 		"warning",
 		"danger",
+		"info"
 	];
 </script>
 
@@ -28,6 +32,10 @@
 	export {classes as class};
 	
 	export let small: boolean = false;
+
+	function dismiss() {
+
+	}
 </script>
 
 <template>
@@ -39,6 +47,10 @@
 			{#if title}
 				<p class="text bold ellipsis">{$_(title)}</p>
 			{/if}
+			<Button
+				variant={ButtonVariant.Transparent}
+				icon={Icons.Close}
+				on:click={dismiss}/>
 		</div>
 		<div class="main indent">
 			{#if message}
@@ -55,37 +67,43 @@
 <style global lang="postcss">
 	.alert {
 		@apply flex-shrink-0
-        p-2 rounded bg-gray-100
+        rounded bg-gray-100
 		transition-all;
 
 		& > * {
 			@apply scale-0 opacity-50 origin-left;
 			animation: alert 0.4s ease-in-out forwards;
-			&:not(:last-child) {
-				@apply mr-1;
-			}
+		}
+
+		& .button > .text,
+		& .button > .icon {
+			@apply text-inherit !important;
 		}
 
 		& > div {
 			@apply flex-1 mb-[.5px];
 
 			&.header {
-				@apply flex justify-center;
+				@apply flex justify-center items-center h-10;
+				& > .icon {
+					@apply w-10 text-center;
+				}
 				& > .text {
 					@apply flex-1;
-					&:not(:first-child) {
-						@apply ml-1;
+					&:first-child {
+						@apply pl-2;
 					}
 				}
 			}
 
 			&.main {
 				@apply flex flex-col
-				justify-center items-start;
+				justify-center items-start
+				-mt-2;
 			}
 		}
 		& > .indent {
-			padding-left: calc(24px + .25rem);
+			@apply pl-10;
 		}
 
 		&.alert-transparent {
@@ -99,9 +117,6 @@
 				& > .icon {
 					@apply text-[18px];
 				}
-			}
-			& > .indent {
-				padding-left: calc(18px + .25rem);
 			}
 		}
 
@@ -119,6 +134,11 @@
 			@apply bg-danger-100
 			dark:bg-danger-500 dark:bg-opacity-[12%]
 			text-danger-500;
+		}
+		&.alert-info {
+			@apply bg-accent-100
+			dark:bg-accent-500 dark:bg-opacity-[12%]
+			text-accent-500;
 		}
 	}
 
