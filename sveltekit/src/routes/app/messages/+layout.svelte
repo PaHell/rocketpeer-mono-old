@@ -13,7 +13,6 @@
 	import NavigationItem from '$src/components/controls/navigation/NavigationItem.svelte';
 	import UserView from '$src/components/views/user/View.svelte';
 	import VoiceConnection from '$src/components/views/VoiceConnection.svelte';
-	import { connectedVoiceChannel } from '$src/store';
 	import VoiceChannel from '$src/components/views/channel/VoiceChannel.svelte';
 	import TextChannel from '$src/components/views/channel/TextChannel.svelte';
 	import { playSound, Sounds } from '$src/components/controls/MusicPlayer.svelte';
@@ -61,7 +60,6 @@
 				showStatus />
 		{/each}
 	</div>
-	<VoiceConnection user={data.user}/>
 </aside>
 <div id="content" class="layout-pane items-stretch">
 	<slot/>

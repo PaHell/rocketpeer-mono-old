@@ -42,7 +42,6 @@
 		style={NavStyle.List}
 		class="fill"
 		/>
-	<VoiceConnection user={data.user}/>
 </nav>
 <div id="content">
 	<slot />

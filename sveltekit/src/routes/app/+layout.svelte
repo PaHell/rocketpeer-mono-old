@@ -11,6 +11,7 @@
 	import ImageIcon from '$src/components/views/ImageIcon.svelte';
 	import Navigation from '$src/components/controls/navigation/Navigation.svelte';
 	import type { LayoutData } from './$types';
+	import VoiceConnection from '$src/components/views/VoiceConnection.svelte';
 	
 	export let data: LayoutData;
 	data.server_users = data.server_users.sort((a, b) => a.order - b.order);
@@ -32,33 +33,34 @@
 </script>
 
 <template>
-	<div id="layout-app" class="layout-pane row items-stretch">
-		<nav id="dock" class={$connectedVoiceChannel ? 'padded' : ''}>
+	<div id="layout-app" class="layout-pane row items-stretch {$connectedVoiceChannel ? 'voice-connected' : ''}">
+		<nav id="dock">
 			<div id="indicator" bind:this={refIndicator}></div>
-			<NavigationItem
-				path="/app/messages/friends/all"
-				let:active
-				let:redirect>
-				<Button
-					variant={ButtonVariant.Card}
-					align={ButtonAlignment.Center}
-					class="branding"
-					{active}
-					on:click={redirect}>
-					<Logo/>
-				</Button>
-			</NavigationItem>
-			<NavigationItem
-				path="/app/admin"
-				let:active
-				let:redirect>
-				<Button
-					variant={ButtonVariant.Card}
-					align={ButtonAlignment.Center}
-					icon={Icons.DevTools}
-					{active}
-					on:click={redirect}/>
-			</NavigationItem>
+			<div class="navigation">
+				<NavigationItem
+					path="/app/messages/friends/all"
+					let:active
+					let:redirect>
+					<Button
+						variant={ButtonVariant.Card}
+						align={ButtonAlignment.Center}
+						{active}
+						on:click={redirect}>
+						<Logo/>
+					</Button>
+				</NavigationItem>
+				<NavigationItem
+					path="/app/admin"
+					let:active
+					let:redirect>
+					<Button
+						variant={ButtonVariant.Card}
+						align={ButtonAlignment.Center}
+						icon={Icons.DevTools}
+						{active}
+						on:click={redirect}/>
+				</NavigationItem>
+			</div>
 			<hr/>
 			<Navigation
 				items={data.server_users}
@@ -71,8 +73,8 @@
 				<Button
 					variant={ButtonVariant.Card}
 					align={ButtonAlignment.Center}
-					on:click={redirect}
-					{active}>
+					{active}
+					on:click={redirect}>
 					<ImageIcon
 						src={item._server.image}
 						alt={item._server.name}
@@ -80,23 +82,26 @@
 				</Button>
 			</Navigation>
 			<hr/>
-			<Button
-				icon={Icons.Add}
-				variant={ButtonVariant.Card}
-				align={ButtonAlignment.Center}
-				class="create-join"/>
-			<NavigationItem
-				path="/app/settings"
-				let:active
-				let:redirect>
+			<div class="navigation !mb-auto">
 				<Button
-					icon={Icons.Settings}
+					icon={Icons.Add}
 					variant={ButtonVariant.Card}
-					align={ButtonAlignment.Center}
-					class="settings"
-					{active}
-					on:click={redirect}/>
-			</NavigationItem>
+					align={ButtonAlignment.Center}/>
+			</div>
+			<div class="navigation">
+				<NavigationItem
+					path="/app/settings"
+					let:active
+					let:redirect>
+					<Button
+						icon={Icons.Settings}
+						variant={ButtonVariant.Card}
+						align={ButtonAlignment.Center}
+						{active}
+						on:click={redirect}/>
+				</NavigationItem>
+			</div>
+			<VoiceConnection user={data.user}/>
 		</nav>
 		<slot/>
 	</div>
@@ -104,13 +109,15 @@
 
 <style global lang="postcss">
 	#layout-app.layout-pane {
+		& > #dock,
+		& > #sidebar { padding-bottom: calc(3.5rem + 1px) !important; }
+		&.voice-connected > #dock,
+		&.voice-connected > #sidebar { padding-bottom: calc(7.5rem + 2px) !important; }
+
 		& > nav#dock {
 			@apply w-20 p-2 flex flex-col items-stretch
 			border-r overflow-y-auto overflow-x-hidden
 			border-gray-300 dark:border-gray-800;
-			&.padded {
-				padding-bottom: calc(7.5rem + 2px);
-			}
 			& > hr {
 				@apply w-8 mx-auto mb-2
 				border-t-2 border-gray-300 dark:border-gray-800;
@@ -120,10 +127,7 @@
 				bg-accent-500 dark:bg-gray-300 rounded-r
 				transition-[top] duration-200 ease-in-out;
 			}
-			& > .navigation {
-				@apply flex-1;
-			}
-			& .button {
+			& > .navigation > .button {
 				@apply flex-none
 				w-16 h-16 p-0 mb-2
 				rounded-full
@@ -191,6 +195,12 @@
 			@apply w-72 ml-[-1px]
 			border-x border-l
 			border-gray-300 dark:border-gray-800;
+			&:not(.padded) {
+				padding-bottom: calc(3.5rem + 1px);
+			}
+			&.padded {
+				padding-bottom: calc(7.5rem + 2px);
+			}
 			& > header {
 				@apply border-gray-300 dark:border-gray-800;
 			}

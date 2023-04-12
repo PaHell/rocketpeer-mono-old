@@ -75,10 +75,10 @@
 		}
 	}
 	.voice-connection {
-		@apply relative
+		@apply absolute bottom-0 left-0
 		bg-gray-100 dark:bg-gray-900
 		border-t border-gray-300 dark:border-gray-800;
-		margin-left: calc(-5rem - 1px);
+		width: calc(23rem - 2px);
 		& > section {
 			@apply flex items-center;
 			&:not(:last-child) {
