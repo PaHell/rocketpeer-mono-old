@@ -12,6 +12,8 @@
 	import Navigation from '$src/components/controls/navigation/Navigation.svelte';
 	import type { LayoutData } from './$types';
 	import VoiceConnection from '$src/components/views/VoiceConnection.svelte';
+	import DockItem from '$src/components/controls/navigation/DockItem.svelte';
+	import { match } from '$src/lib/navigation';
 	
 	export let data: LayoutData;
 	data.server_users = data.server_users.sort((a, b) => a.order - b.order);
@@ -36,71 +38,39 @@
 	<div id="layout-app" class="layout-pane row items-stretch {$connectedVoiceChannel ? 'voice-connected' : ''}">
 		<nav id="dock">
 			<div id="indicator" bind:this={refIndicator}></div>
-			<div class="navigation">
-				<NavigationItem
-					path="/app/messages/friends/all"
-					let:active
-					let:redirect>
-					<Button
-						variant={ButtonVariant.Card}
-						align={ButtonAlignment.Center}
-						{active}
-						on:click={redirect}>
-						<Logo/>
-					</Button>
-				</NavigationItem>
-				<NavigationItem
-					path="/app/admin"
-					let:active
-					let:redirect>
-					<Button
-						variant={ButtonVariant.Card}
-						align={ButtonAlignment.Center}
-						icon={Icons.DevTools}
-						{active}
-						on:click={redirect}/>
-				</NavigationItem>
-			</div>
+			<DockItem
+				path="/app/messages/friends/all"
+				match={2}
+				title="Messages">
+				<Logo/>
+			</DockItem>
+			<DockItem
+				path="/app/admin"
+				match={2}
+				title="Admin"
+				icon={Icons.DevTools}/>
 			<hr/>
-			<Navigation
-				items={data.server_users}
-				pathSelector={i => `/app/servers/${i.id}/text/${i._server.text_channel_id}`}
-				match={3}
-				on:change={updateIndicator}
-				let:active
-				let:redirect
-				let:item>
-				<Button
-					variant={ButtonVariant.Card}
-					align={ButtonAlignment.Center}
-					{active}
-					on:click={redirect}>
-					<ImageIcon
-						src={item._server.image}
-						alt={item._server.name}
-						placeholder={Icons.Home}/>
-				</Button>
-			</Navigation>
+			{#each data.server_users as item}
+				{#if item._server}
+					<DockItem
+						path={`/app/servers/${item.id}/text/${item._server.text_channel_id}`}
+						match={3}
+						title={item._server.name}
+						img={item._server.image}
+						icon={Icons.Home}/>
+				{/if}
+			{/each}
 			<hr/>
-			<div class="navigation !mb-auto">
-				<Button
-					icon={Icons.Add}
-					variant={ButtonVariant.Card}
-					align={ButtonAlignment.Center}/>
-			</div>
-			<div class="navigation">
-				<NavigationItem
-					path="/app/settings"
-					let:active
-					let:redirect>
-					<Button
-						icon={Icons.Settings}
-						variant={ButtonVariant.Card}
-						align={ButtonAlignment.Center}
-						{active}
-						on:click={redirect}/>
-				</NavigationItem>
-			</div>
+			<DockItem
+				class="!mb-auto"
+				path="/app/servers/create"
+				title="Create Server"
+				icon={Icons.Add}/>
+			<DockItem
+				path="/app/settings"
+				match={2}
+				title="Settings"
+				icon={Icons.Settings}/>
 			<VoiceConnection user={data.user}/>
 		</nav>
 		<slot/>
@@ -112,7 +82,7 @@
 		& > #dock,
 		& > #sidebar { padding-bottom: calc(3.5rem + 1px) !important; }
 		&.voice-connected > #dock,
-		&.voice-connected > #sidebar { padding-bottom: calc(7.5rem + 2px) !important; }
+		&.voice-connected > #sidebar { padding-bottom: calc(7rem + 2px) !important; }
 
 		& > nav#dock {
 			@apply w-20 p-2 flex flex-col items-stretch
@@ -127,31 +97,8 @@
 				bg-accent-500 dark:bg-gray-300 rounded-r
 				transition-[top] duration-200 ease-in-out;
 			}
-			& > .navigation > .button {
-				@apply flex-none
-				w-16 h-16 p-0 mb-2
-				rounded-full
-				bg-gray-200 dark:bg-gray-800
-				transition-all duration-200 ease-linear;
-				will-change: border-radius;
-				& .icon {
-					@apply w-full text-icon-large;
-				}
-				& > .image-icon {
-					@apply w-full h-full rounded-[inherit];
-				}
-				&:hover,
-				&.active {
-					@apply rounded-2xl;
-					& > svg > path {
-						@apply fill-white;
-					}
-				}
-				&.active {
-					& > .icon {
-						@apply text-accent-500;
-					}
-				}
+			& > .dock-item {
+				@apply flex-none mb-2;
 			}
 		}
 		& > #sidebar > header,
