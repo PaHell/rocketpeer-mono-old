@@ -7,6 +7,9 @@
 </script>
 
 <script lang="typescript">
+    interface $$Events {
+        active: number;
+    }
     interface $$Slots {
         default: {};
     }
@@ -18,103 +21,87 @@
     let classes = "";
     export { classes as class };
 
+    let ref: HTMLButtonElement;
     let active: boolean = false;
-    let currentPath: string = "";
     let size = 64;
     let guid = Math.trunc(Math.random() * Math.pow(16, 6)).toString(16);
-    let imgSize: [number, number] = [0, 0];
 
-    onMount(() => {
-        if (img) {
-            const image = new Image();
-            image.src = img;
-            image.decode().then(() => {
-                imgSize = [image.width, image.height];
-            });
-        }
-        onNavigate();
-	});
-    
-	afterNavigate(() => {
-        onNavigate();
-	});
+    const dispatch = createEventDispatcher<$$Events>();
+
+    onMount(onNavigate);
+	afterNavigate(onNavigate);
 
 	function onNavigate() {
-        currentPath = window.location.pathname;
-        active = _match(path, currentPath, match);
+        active = _match(path, window.location.pathname, match);
+        if (active) dispatch("active", ref.getBoundingClientRect().top);
 	}
 
 </script>
 
 <template>
-    <NavigationItem
-        {path}
-        {match}
-        let:active
-        let:redirect>
-        <button
-            class="dock-item {classes}"
-            class:active
-            on:click={redirect}>
-            <svg viewBox="0 0 {size} {size}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                <rect x=".5" y=".5" width={size - 1} height={size - 1} />
-            </svg>
+    <button
+        bind:this={ref}
+        class="dock-item {classes}"
+        class:active
+        on:click={() => goto(path)}>
+        <svg viewBox="0 0 {size} {size}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <rect class="bg" x=".5" y=".5" width={size - 1} height={size - 1} />
             {#if img}
-                <svg viewBox="0 0 {size} {size}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                    <rect x=".5" y=".5" width={size - 1} height={size - 1} fill="url(#pattern_{guid})"/>
-                    <defs>
-                        <pattern id="pattern_{guid}" patternContentUnits="objectBoundingBox" width="1" height="1">
-                            <use xlink:href="#img_{guid}"/>
-                        </pattern>
-                        <image id="img_{guid}" width="1" height="1" preserveAspectRatio="xMidYMid slice" xlink:href={img}/>
-                    </defs>
-                </svg>
+                <rect class="img" x=".5" y=".5" width={size - 1} height={size - 1} fill="url(#pattern_{guid})"/>
+                <defs>
+                    <pattern id="pattern_{guid}" patternContentUnits="objectBoundingBox" width="1" height="1">
+                        <use xlink:href="#img_{guid}"/>
+                    </pattern>
+                    <image id="img_{guid}" width="1" height="1" preserveAspectRatio="xMidYMid slice" xlink:href={img}/>
+                </defs>
             {/if}
-            {#if !img && icon}
-                <Icon name={icon} class="lg"/>
-            {/if}
-            <slot/>
-        </button>
-    </NavigationItem>
+        </svg>
+        {#if !img && icon}
+            <Icon name={icon} class="lg"/>
+        {/if}
+        <slot/>
+    </button>
 </template>
 
 <style global lang="postcss">
     .dock-item {
         @apply transition-transform;
+        
         & > * {
             @apply w-16 h-16;
             &:not(:first-child) {
                 @apply -mt-16;
             }
         }
+
         & > svg {
             & > rect {
                 rx: 32;
                 transition: rx .25s;
                 will-change: rx, fill, stroke;
-            }
-            &:first-child {
-                @apply fill-gray-200 dark:fill-gray-800
-                stroke-1 stroke-gray-300 dark:stroke-gray-700;
+                &.bg {
+                    @apply fill-gray-200 dark:fill-gray-800
+                    stroke-1 stroke-gray-300 dark:stroke-gray-700;
+                }
             }
         }
         & > .icon {
             @apply leading-[4rem] text-icon-large;
         }
-        & > .logo > svg {
-            @apply transition-[fill];
+        &:hover,
+        &.active {
+            & > svg > rect {
+                rx: 16;
+            }
         }
 
         &:hover {
-            & > svg {
-                & > rect {
-                    rx: 16;
-                }
-                &:first-child {
+            & > svg > rect {
+                &.bg {
                     @apply fill-accent-500
                     stroke-accent-600 dark:stroke-accent-400;
                 }
-                &:nth-child(2) {
+                &.img {
                     @apply stroke-gray-700 dark:stroke-gray-700;
                 }
             }
@@ -127,14 +114,13 @@
         }
         &:active {
             @apply transform scale-95 ease-in-out;
-            & > svg {
-                &:first-child {
+            & > svg > rect {
+                &.bg {
                     @apply fill-accent-500
                     stroke-accent-400;
                 }
-                &:nth-child(2) {
-                    @apply fill-gray-700 dark:fill-gray-700
-                    stroke-gray-700 dark:stroke-gray-700;
+                &.img {
+                    @apply stroke-gray-700 dark:stroke-gray-700;
                 }
             }
         }

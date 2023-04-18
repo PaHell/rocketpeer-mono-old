@@ -18,37 +18,33 @@
 	export let data: LayoutData;
 	data.server_users = data.server_users.sort((a, b) => a.order - b.order);
 
-	let refIndicator: HTMLElement;
+	let indicatorTop: number;
 
 	onMount(() => {
 	});
 
-	function updateIndicator(evt: CustomEvent<ComponentEvents<Navigation<App.DB.ServerUser>>["change"]>) {
-		if (!refIndicator) return;
-		console.log(evt.detail.index, refIndicator);
-		if (evt.detail.index === -1) {
-			refIndicator.style.top = "1.75rem";
-			return;
-		}
-		refIndicator.style.top = `${evt.detail.index * 4.25 + 7}rem`;
+	function updateIndicator(evt: CustomEvent<ComponentEvents<DockItem>["active"]>) {
+		indicatorTop = evt.detail;
 	}
 </script>
 
 <template>
 	<div id="layout-app" class="layout-pane row items-stretch {$connectedVoiceChannel ? 'voice-connected' : ''}">
 		<nav id="dock">
-			<div id="indicator" bind:this={refIndicator}></div>
+			<div id="indicator" style="top: calc({indicatorTop}px + 1.25rem);"></div>
 			<DockItem
 				path="/app/messages/friends/all"
 				match={2}
-				title="Messages">
+				title="Messages"
+				on:active={updateIndicator}>
 				<Logo/>
 			</DockItem>
 			<DockItem
 				path="/app/admin"
 				match={2}
 				title="Admin"
-				icon={Icons.DevTools}/>
+				icon={Icons.DevTools}
+				on:active={updateIndicator}/>
 			<hr/>
 			{#each data.server_users as item}
 				{#if item._server}
@@ -57,7 +53,8 @@
 						match={3}
 						title={item._server.name}
 						img={item._server.image}
-						icon={Icons.Home}/>
+						icon={Icons.Home}
+						on:active={updateIndicator}/>
 				{/if}
 			{/each}
 			<hr/>
@@ -65,12 +62,14 @@
 				class="!mb-auto"
 				path="/app/servers/create"
 				title="Create Server"
-				icon={Icons.Add}/>
+				icon={Icons.Add}
+				on:active={updateIndicator}/>
 			<DockItem
 				path="/app/settings"
 				match={2}
 				title="Settings"
-				icon={Icons.Settings}/>
+				icon={Icons.Settings}
+				on:active={updateIndicator}/>
 			<VoiceConnection user={data.user}/>
 		</nav>
 		<slot/>
