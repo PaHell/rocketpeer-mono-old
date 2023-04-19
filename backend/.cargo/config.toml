@@ -1,4 +1,4 @@
 [alias]
-main = "run --bin rust"
-prisma = "run --bin prisma  --"
+main = "run --bin backend"
 start = "watch -x main"
+migrate = "run -- --migrate"
