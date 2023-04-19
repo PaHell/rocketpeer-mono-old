@@ -1,6 +1,7 @@
+
 CREATE TABLE `access_tokens` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
+  `id` varchar(200) NOT NULL,
+  `user_id` varchar(200) NOT NULL,
   `access_token` varchar(191)  NOT NULL,
   `refresh_token` varchar(191)  NOT NULL
 );
@@ -11,8 +12,8 @@ CREATE TABLE `access_tokens` (
 --
 
 CREATE TABLE `channel_groups` (
-  `id` int(11) NOT NULL,
-  `server_id` int(11) NOT NULL,
+  `id` varchar(200) NOT NULL,
+  `server_id` varchar(200) NOT NULL,
   `order` int(11) NOT NULL,
   `name` varchar(191)  NOT NULL
 );
@@ -23,10 +24,10 @@ CREATE TABLE `channel_groups` (
 --
 
 CREATE TABLE `chats` (
-  `id` int(11) NOT NULL,
+  `id` varchar(200) NOT NULL,
   `name` varchar(191)  DEFAULT NULL,
   `created_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-  `userId` int(11) DEFAULT NULL
+  `userId` varchar(200) DEFAULT NULL
 );
 -- --------------------------------------------------------
 
@@ -35,9 +36,9 @@ CREATE TABLE `chats` (
 --
 
 CREATE TABLE `chat_messages` (
-  `id` int(11) NOT NULL,
-  `chat_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
+  `id` varchar(200) NOT NULL,
+  `chat_id` varchar(200) NOT NULL,
+  `user_id` varchar(200) NOT NULL,
   `type` enum('Text','Image','Video','Audio','File','Deleted')  NOT NULL,
   `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -51,9 +52,9 @@ CREATE TABLE `chat_messages` (
 --
 
 CREATE TABLE `chat_users` (
-  `id` int(11) NOT NULL,
-  `chat_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
+  `id` varchar(200) NOT NULL,
+  `chat_id` varchar(200) NOT NULL,
+  `user_id` varchar(200) NOT NULL,
   `created_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   `deleted_at` datetime(3) DEFAULT NULL
 );
@@ -64,20 +65,20 @@ CREATE TABLE `chat_users` (
 --
 
 CREATE TABLE `servers` (
-  `id` int(11) NOT NULL,
+  `id` varchar(200) NOT NULL,
   `name` varchar(191) NOT NULL,
   `image` varchar(191)  DEFAULT NULL,
   `description` varchar(191)  NOT NULL,
   `created_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-  `general_text_channel` int(11) DEFAULT NULL
+  `general_text_channel` varchar(200) DEFAULT NULL
 );
 --
 -- Table structure for table `server_tags`
 --
 
 CREATE TABLE `server_tags` (
-  `id` int(11) NOT NULL,
-  `server_id` int(11) NOT NULL,
+  `id` varchar(200) NOT NULL,
+  `server_id` varchar(200) NOT NULL,
   `order` int(11) NOT NULL,
   `name` varchar(191)  NOT NULL,
   `color` enum('Lime','Green','Teal','Blue','Indigo','Purple','Pink','Red','Orange','Yellow')  NOT NULL
@@ -89,9 +90,9 @@ CREATE TABLE `server_tags` (
 --
 
 CREATE TABLE `server_users` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `server_id` int(11) NOT NULL,
+  `id` varchar(200) NOT NULL,
+  `user_id` varchar(200) NOT NULL,
+  `server_id` varchar(200) NOT NULL,
   `order` int(11) NOT NULL,
   `display_name` varchar(191)  DEFAULT NULL,
   `created_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -105,9 +106,9 @@ CREATE TABLE `server_users` (
 --
 
 CREATE TABLE `server_user_tags` (
-  `id` int(11) NOT NULL,
-  `server_tag_id` int(11) NOT NULL,
-  `server_user_id` int(11) NOT NULL
+  `id` varchar(200) NOT NULL,
+  `server_tag_id` varchar(200) NOT NULL,
+  `server_user_id` varchar(200) NOT NULL
 );
 -- --------------------------------------------------------
 
@@ -116,9 +117,9 @@ CREATE TABLE `server_user_tags` (
 --
 
 CREATE TABLE `text_channels` (
-  `id` int(11) NOT NULL,
-  `server_id` int(11) NOT NULL,
-  `channel_group_id` int(11) DEFAULT NULL,
+  `id` varchar(200) NOT NULL,
+  `server_id` varchar(200) NOT NULL,
+  `channel_group_id` varchar(200) DEFAULT NULL,
   `order` int(11) NOT NULL,
   `name` varchar(191) NOT NULL,
   `topic` varchar(191) NOT NULL
@@ -128,9 +129,9 @@ CREATE TABLE `text_channels` (
 --
 
 CREATE TABLE `text_channel_messages` (
-  `id` int(11) NOT NULL,
-  `text_channel_id` int(11) NOT NULL,
-  `server_user_id` int(11) NOT NULL,
+  `id` varchar(200) NOT NULL,
+  `text_channel_id` varchar(200) NOT NULL,
+  `server_user_id` varchar(200) NOT NULL,
   `type` enum('Text','Image','Video','Audio','File','Deleted') NOT NULL,
   `payload` varchar(191) NOT NULL,
   `created_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -144,7 +145,7 @@ CREATE TABLE `text_channel_messages` (
 --
 
 CREATE TABLE `users` (
-  `id` int(11) NOT NULL,
+  `id` varchar(200) NOT NULL,
   `username` varchar(191) NOT NULL,
   `password` varchar(191) NOT NULL,
   `display_name` varchar(191) DEFAULT NULL,
@@ -162,9 +163,9 @@ CREATE TABLE `users` (
 --
 
 CREATE TABLE `user_friends` (
-  `id` int(11) NOT NULL,
-  `sender_id` int(11) NOT NULL,
-  `recipient_id` int(11) NOT NULL,
+  `id` varchar(200) NOT NULL,
+  `sender_id` varchar(200) NOT NULL,
+  `recipient_id` varchar(200) NOT NULL,
   `status` enum('Pending','Accepted') NOT NULL,
   `created_at` datetime NOT NULL
 );
@@ -175,9 +176,9 @@ CREATE TABLE `user_friends` (
 --
 
 CREATE TABLE `voice_channels` (
-  `id` int(11) NOT NULL,
-  `server_id` int(11) NOT NULL,
-  `channel_group_id` int(11) DEFAULT NULL,
+  `id` varchar(200) NOT NULL,
+  `server_id` varchar(200) NOT NULL,
+  `channel_group_id` varchar(200) DEFAULT NULL,
   `order` int(11) NOT NULL,
   `name` varchar(191)  NOT NULL,
   `max_users` int(11) DEFAULT NULL
@@ -302,91 +303,6 @@ ALTER TABLE `voice_channels`
 --
 -- AUTO_INCREMENT for dumped tables
 --
-
---
--- AUTO_INCREMENT for table `access_tokens`
---
-ALTER TABLE `access_tokens`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `channel_groups`
---
-ALTER TABLE `channel_groups`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `chats`
---
-ALTER TABLE `chats`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `chat_messages`
---
-ALTER TABLE `chat_messages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `chat_users`
---
-ALTER TABLE `chat_users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `servers`
---
-ALTER TABLE `servers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
--- AUTO_INCREMENT for table `server_tags`
---
-ALTER TABLE `server_tags`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `server_users`
---
-ALTER TABLE `server_users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `server_user_tags`
---
-ALTER TABLE `server_user_tags`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `text_channels`
---
-ALTER TABLE `text_channels`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT for table `text_channel_messages`
---
-ALTER TABLE `text_channel_messages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `users`
---
-ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
-
---
--- AUTO_INCREMENT for table `user_friends`
---
-ALTER TABLE `user_friends`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `voice_channels`
---
-ALTER TABLE `voice_channels`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
 --
 -- Constraints for dumped tables
 --
@@ -477,4 +393,3 @@ ALTER TABLE `voice_channels`
   ADD CONSTRAINT `voice_channel_id` FOREIGN KEY (`channel_group_id`) REFERENCES `channel_groups` (`id`),
   ADD CONSTRAINT `voice_server_id` FOREIGN KEY (`server_id`) REFERENCES `servers` (`id`);
 COMMIT;
-
