@@ -7,8 +7,7 @@
 	import TextInput from '$src/components/controls/TextInput.svelte';
 	import { goto } from '$app/navigation';
 	import Logo from '$src/components/Logo.svelte';
-	import { NavStyle, type NavGroup } from '$src/components/controls/navigation/StyledNavigation.svelte';
-	import StyledNavigation from '$src/components/controls/navigation/StyledNavigation.svelte';
+	import { default as GroupedNavigation, type NavGroup } from '$src/components/controls/navigation/GroupedNavigation.svelte';
 	import VoiceConnection from '$src/components/views/VoiceConnection.svelte';
 	import type { LayoutData } from './$types';
 
@@ -37,9 +36,8 @@
 		<div>
 		</div>
 	</header>
-	<StyledNavigation
+	<GroupedNavigation
 		items={categories}
-		style={NavStyle.List}
 		class="fill"
 		/>
 </nav>

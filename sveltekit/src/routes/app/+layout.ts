@@ -1,7 +1,7 @@
 import { getStores } from '$app/stores';
 import { Icons } from '$src/components/general/Icon.svelte';
 import { UserStatus, ServerRole } from '$src/lib/enum';
-import type { LayoutServerLoad } from './$types';
+import type { LayoutLoad } from './$types';
 import { redirect } from '@sveltejs/kit';
 
 let _all_users: App.DB.User[] = [
@@ -248,4 +248,4 @@ export const load = (({ params, url }) => {
 		user,
 		server_users,
 	};
-}) satisfies LayoutServerLoad;
+}) satisfies LayoutLoad;

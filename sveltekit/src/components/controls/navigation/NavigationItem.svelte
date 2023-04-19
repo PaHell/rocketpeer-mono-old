@@ -17,13 +17,8 @@
     let active: boolean = false;
     let currentPath: string = "";
 
-    onMount(() => {
-        onNavigate();
-	});
-    
-	afterNavigate(() => {
-        onNavigate();
-	});
+    onMount(onNavigate);
+	afterNavigate(onNavigate);
 
 	function onNavigate() {
         currentPath = window.location.pathname;

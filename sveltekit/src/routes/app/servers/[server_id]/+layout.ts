@@ -3,7 +3,7 @@ import { goto } from '$app/navigation';
 import { page } from '$app/stores';
 import { Icons } from '$src/components/general/Icon.svelte';
 import { ServerTagColor, UserStatus, ServerRole } from '$src/lib/enum';
-import type { LayoutServerLoad } from './$types';
+import type { LayoutLoad } from './$types';
 
 let server_users: App.DB.ServerUser[] = [
 	{
@@ -319,4 +319,4 @@ export const load = (async ({ parent, params }) => {
 		voice_channel_users,
 		tags,
 	};
-}) satisfies LayoutServerLoad;
+}) satisfies LayoutLoad;

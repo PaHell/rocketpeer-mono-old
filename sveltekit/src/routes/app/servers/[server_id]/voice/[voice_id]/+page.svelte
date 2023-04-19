@@ -81,7 +81,7 @@
 		{/if}
 		<div>
 			<ChatView>
-				{#each data.messages as message}
+				{#each data.channel.messages as message}
 					<ChatMessage
 						sender={message._server_user?.user}
 						display_name={message._server_user?.display_name}

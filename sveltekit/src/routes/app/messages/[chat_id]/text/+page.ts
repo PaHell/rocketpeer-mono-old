@@ -3,7 +3,7 @@ import { goto } from '$app/navigation';
 import { page } from '$app/stores';
 import { Icons } from '$src/components/general/Icon.svelte';
 import { PayloadType, UserFriendStatus, UserStatus } from '$src/lib/enum';
-import type { LayoutServerLoad } from './$types';
+import type { LayoutLoad } from './$types';
 
 const messages: App.DB.ChatMessage[] = [
 	{
@@ -107,4 +107,4 @@ export const load = (async ({params, parent}) => {
 	return {
 		messages,
 	};
-}) satisfies LayoutServerLoad;
+}) satisfies LayoutLoad;

@@ -26,7 +26,7 @@
         };
     }
 	export let items: T[] = [];
-    export let pathSelector : (item: T) => string;
+    export let pathSelector: (item: T) => string;
     export let match: number = 0; // 0 = exact, >0 = from start
     export let active: number = -1;
     let classes = "";
@@ -40,13 +40,8 @@
 
     $: updatePaths();
 
-    onMount(() => {
-        onNavigate();
-	});
-    
-	afterNavigate(() => {
-        onNavigate();
-	});
+    onMount(onNavigate);
+	afterNavigate(onNavigate);
     
 	function onNavigate() {
         currentPath = window.location.pathname;
@@ -69,4 +64,9 @@
 </div>
 
 <style global lang="postcss">
+    .navigation {
+        &.navigation-tabs {
+            @apply flex items-center justify-center;
+        }
+	}
 </style>

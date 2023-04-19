@@ -8,24 +8,6 @@
 		icon?: Icons;
 		items: NavItem[];
 	}
-
-	export enum NavStyle {
-		None,
-		Tabs,
-		List
-	}
-
-	const navStyleClasses = [
-		"",
-		"navigation-tabs",
-		"navigation-list",
-	];
-
-	const navBtnVariants = [
-		ButtonVariant.None,
-		ButtonVariant.Transparent,
-		ButtonVariant.Card,
-	];
 </script>
 
 <script lang="typescript">
@@ -34,11 +16,10 @@
 	let classes = "";
 	export { classes as class };
 	export let active: [number, number] = [0, 0];
-	export let style: NavStyle = NavStyle.None;
 </script>
 
 <template>
-	<div class="navigation-group {classes} {navStyleClasses[style]}">
+	<div class="navigation-group {classes}">
 		{#each items as group, index}
 			<p class="text tri bold">{group.title}</p>
 			<Navigation
@@ -50,7 +31,7 @@
 				let:active
 				let:redirect>
 				<Button
-					variant={navBtnVariants[style]}
+					variant={ButtonVariant.Card}
 					text={item.title}
 					icon={item.icon}
 					on:click={redirect}
@@ -65,26 +46,18 @@
 
 <style global lang="postcss">
 	.navigation-group {
-		&.navigation-tabs {
-			@apply flex items-center justify-center;
-			& > .navigation {
-				@apply flex items-center justify-center;
+		& > .text {
+			@apply px-2 my-1 text-label uppercase;
+			&:first-child {
+				@apply mt-3;
 			}
 		}
-		&.navigation-list {
-			& > .text {
-				@apply px-2 my-1 text-label uppercase;
-				&:first-child {
-					@apply mt-3;
-				}
-			}
-			& > .navigation {
-				@apply ml-[-1px] px-2;
-				& > .button {
-					@apply w-full px-2;
-					&:not(:last-child) {
-						@apply mb-[1px];
-					}
+		& > .navigation {
+			@apply ml-[-1px] px-2;
+			& > .button {
+				@apply w-full px-2;
+				&:not(:last-child) {
+					@apply mb-[1px];
 				}
 			}
 		}

@@ -3,7 +3,7 @@ import { goto } from '$app/navigation';
 import { page } from '$app/stores';
 import { Icons } from '$src/components/general/Icon.svelte';
 import { PayloadType, UserFriendStatus, UserStatus } from '$src/lib/enum';
-import type { LayoutServerLoad } from './$types';
+import type { LayoutLoad } from './$types';
 import { redirect } from '@sveltejs/kit';
 
 const chats: App.DB.Chat[] = [
@@ -113,4 +113,4 @@ export const load = (async ({params, parent, url}) => {
 		chats,
 		user_friends,
 	};
-}) satisfies LayoutServerLoad;
+}) satisfies LayoutLoad;

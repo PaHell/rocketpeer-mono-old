@@ -2,7 +2,7 @@ import { getStores } from '$app/stores';
 import { Icons } from '$src/components/general/Icon.svelte';
 import { UserResource } from '$src/lib/api';
 import { UserStatus, ServerRole } from '$src/lib/enum';
-import type { LayoutServerLoad } from './$types';
+import type { LayoutLoad } from './$types';
 import { error, redirect } from '@sveltejs/kit';
 
 export const load = (async ({ params, url }) => {
@@ -15,4 +15,4 @@ export const load = (async ({ params, url }) => {
 		// TODO handle any -> types for error page
 		throw error(404, err);
 	}
-}) satisfies LayoutServerLoad;
+}) satisfies LayoutLoad;
