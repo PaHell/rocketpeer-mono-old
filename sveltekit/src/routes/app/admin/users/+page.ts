@@ -1,18 +1,15 @@
-import { getStores } from '$app/stores';
-import { Icons } from '$src/components/general/Icon.svelte';
 import { UserResource } from '$src/lib/api';
-import { UserStatus, ServerRole } from '$src/lib/enum';
-import type { LayoutLoad } from './$types';
-import { error, redirect } from '@sveltejs/kit';
+import type { PageLoad } from './$types';
+import { error } from '@sveltejs/kit';
 
-export const load = (async ({ params, url }) => {
+export const load = (async () => {
 	try {
 		const users = await UserResource.all();
 		return {
-			users,
-		}
+			users
+		};
 	} catch (err: App.API.RequestError) {
 		// TODO handle any -> types for error page
 		throw error(404, err);
 	}
-}) satisfies LayoutLoad;
+}) satisfies PageLoad;

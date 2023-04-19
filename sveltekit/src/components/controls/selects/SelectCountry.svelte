@@ -2,7 +2,7 @@
 	import Select from '$src/components/controls/selects/Select.svelte';
 	import type { Country } from '$src/lib/countries';
 	import { countries } from '$src/lib/countries';
-	import { createEventDispatcher, onMount, type ComponentEvents } from 'svelte';
+	import { createEventDispatcher, type ComponentEvents } from 'svelte';
 
 	interface $$Events {
 		change: {
@@ -24,7 +24,7 @@
 		}
 	}
 
-	function onChange(event: CustomEvent<ComponentEvents<Select<App.Lib.Country>>['change']>) {
+	function onChange(event: CustomEvent<ComponentEvents<Select<Country>>['change']>) {
 		value = event.detail.item;
 		iso3 = event.detail.item.iso3;
 		dispatch('change', event.detail);

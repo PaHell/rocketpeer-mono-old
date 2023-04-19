@@ -2,7 +2,6 @@
 	import { afterNavigate, goto } from '$app/navigation';
 	import { createEventDispatcher, onMount } from 'svelte';
     import { match as _match } from '$src/lib/navigation';
-	import NavigationItem from '$src/components/controls/navigation/NavigationItem.svelte';
 	import Icon, { Icons } from '$src/components/general/Icon.svelte';
 </script>
 
@@ -15,14 +14,14 @@
     }
 	export let icon: Icons | undefined = undefined;
 	export let img: string | null = null;
-	export let title: string = "Title";
-	export let path: string = "";
-    export let match: number = 0; // 0 = exact, >0 = from start
+	export let title = "Title";
+	export let path = "";
+    export let match = 0; // 0 = exact, >0 = from start
     let classes = "";
     export { classes as class };
 
     let ref: HTMLButtonElement;
-    let active: boolean = false;
+    let active = false;
     let size = 64;
     let guid = Math.trunc(Math.random() * Math.pow(16, 6)).toString(16);
 

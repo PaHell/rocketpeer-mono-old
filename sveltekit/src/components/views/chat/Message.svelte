@@ -1,10 +1,8 @@
 <script lang="typescript" context="module">
-    import Button, { ButtonAlignment, ButtonVariant } from "$src/components/controls/Button.svelte";
     import moment from "moment";
 	import { locale } from "$src/lib/i18n";
-	import { onMount } from "svelte";
 	import { time as _time } from "$src/lib/time";
-import type { PayloadType } from "$src/lib/enum";
+    import type { PayloadType } from "$src/lib/enum";
 	import ImageIcon from "../ImageIcon.svelte";
 	import { Icons } from "$src/components/general/Icon.svelte";
 </script>

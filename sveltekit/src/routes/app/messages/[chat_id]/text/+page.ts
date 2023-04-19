@@ -1,9 +1,5 @@
-import { browser } from '$app/environment';
-import { goto } from '$app/navigation';
-import { page } from '$app/stores';
-import { Icons } from '$src/components/general/Icon.svelte';
-import { PayloadType, UserFriendStatus, UserStatus } from '$src/lib/enum';
-import type { LayoutLoad } from './$types';
+import { PayloadType } from '$src/lib/enum';
+import type { PageLoad } from './$types';
 
 const messages: App.DB.ChatMessage[] = [
 	{
@@ -99,12 +95,12 @@ const messages: App.DB.ChatMessage[] = [
 	}
 ];
 
-export const load = (async ({params, parent}) => {
+export const load = (async ({ parent }) => {
 	const pageData = await parent();
 	messages.forEach((message) => {
 		message._user = pageData._all_users.find((user) => user.id === message.user_id);
 	});
 	return {
-		messages,
+		messages
 	};
-}) satisfies LayoutLoad;
+}) satisfies PageLoad;

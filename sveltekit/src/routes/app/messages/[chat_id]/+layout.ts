@@ -1,10 +1,6 @@
 export const prerender = 'auto';
 
-import { browser } from '$app/environment';
-import { goto } from '$app/navigation';
-import { page } from '$app/stores';
-import { Icons } from '$src/components/general/Icon.svelte';
-import { PayloadType, UserFriendStatus, UserStatus } from '$src/lib/enum';
+import { PayloadType } from '$src/lib/enum';
 import type { LayoutLoad } from './$types';
 
 const messages: App.DB.ChatMessage[] = [
@@ -101,7 +97,7 @@ const messages: App.DB.ChatMessage[] = [
 	}
 ];
 
-export const load = (async ({params, parent}) => {
+export const load = (async ({ params, parent }) => {
 	const pageData = await parent();
 	const chatId = parseInt(params.chat_id);
 	messages.forEach((message) => {
@@ -109,6 +105,6 @@ export const load = (async ({params, parent}) => {
 	});
 	return {
 		chat: pageData.chats.find((chat) => chat.id === chatId),
-		messages,
+		messages
 	};
 }) satisfies LayoutLoad;

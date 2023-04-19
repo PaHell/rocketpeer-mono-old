@@ -1,10 +1,10 @@
 export enum PayloadType {
-    Text,
-    Image,
-    Video,
-    Audio,
-    File,
-    //Deleted,
+	Text,
+	Image,
+	Video,
+	Audio,
+	File
+	//Deleted,
 }
 
 export enum UserStatus {
@@ -14,48 +14,43 @@ export enum UserStatus {
 	Offline
 }
 
-export const UserStatusColors = [
-    'bg-success-500',
-    'bg-warning-500',
-    'bg-danger-500',
-    'hidden'
-];
+export const UserStatusColors = ['bg-success-500', 'bg-warning-500', 'bg-danger-500', 'hidden'];
 
 export enum PrivacyLevel {
-    Public,
-    Friends,
-    SharedServerAndFriends,
-    Private,
+	Public,
+	Friends,
+	SharedServerAndFriends,
+	Private
 }
 
 export enum ApplicationRole {
-    Admin,
-    User,
+	Admin,
+	User
 }
 
 export enum UserFriendStatus {
-    Pending,
-    Accepted,
+	Pending,
+	Accepted
 }
 
 export enum ServerRole {
-    None,
-    Moderator,
-    Admin,
-    Owner,
+	None,
+	Moderator,
+	Admin,
+	Owner
 }
 
 export enum ServerTagColor {
-    _Online,
-    _Offline,
-    Lime,
-    Green,
-    Teal,
-    Blue,
-    Indigo,
-    Purple,
-    Pink,
-    Red,
-    Orange,
-    Yellow,
+	_Online,
+	_Offline,
+	Lime,
+	Green,
+	Teal,
+	Blue,
+	Indigo,
+	Purple,
+	Pink,
+	Red,
+	Orange,
+	Yellow
 }

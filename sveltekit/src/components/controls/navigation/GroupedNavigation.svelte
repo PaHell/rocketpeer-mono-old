@@ -12,7 +12,7 @@
 
 <script lang="typescript">
 	export let items: NavGroup[] = [];
-	export let match: number = 0;
+	export let match = 0;
 	let classes = "";
 	export { classes as class };
 	export let active: [number, number] = [0, 0];

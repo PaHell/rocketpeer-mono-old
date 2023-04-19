@@ -16,7 +16,7 @@
 
 <script lang="typescript">
     export let icon: Icons | undefined = undefined;
-	export let text: string = "";
+	export let text = "";
     export {classes as class};
     let classes = "";
     export let variant: BadgeVariant = BadgeVariant.Secondary;

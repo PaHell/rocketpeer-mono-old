@@ -46,7 +46,7 @@
 
 <script lang="typescript">
 	export let name: Icons = Icons.Home;
-	let classes: string = '';
+	let classes = '';
 	export { classes as class };
 </script>
 

@@ -1,10 +1,9 @@
 <script lang="ts">
 	import Button, { ButtonVariant } from "$src/components/controls/Button.svelte";
-	import TextInput from "$src/components/controls/TextInput.svelte";
 	import Icon, { Icons } from "$src/components/general/Icon.svelte";
 	import Navigation, { type NavItem } from "$src/components/controls/navigation/Navigation.svelte";
 
-    let activeNavItem: number = 0;
+    let activeNavItem = 0;
     const navItems: NavItem[] = [
         {
             title: "Friends",

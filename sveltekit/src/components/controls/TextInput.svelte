@@ -4,13 +4,11 @@
 		createEventDispatcher,
 		getContext,
 		onMount,
-		type ComponentConstructorOptions
 	} from 'svelte';
 	import Alert, { AlertVariant } from '$src/components/general/Alert.svelte';
 	import { debounce } from '$src/lib/helpers';
 	import { validate as _validate, ValidationRuleName } from '$src/lib/validate';
 	import { format, _ } from 'svelte-i18n';
-	import type { stringify } from 'postcss';
 	import type { FormContext } from '../general/Form.svelte';
 </script>
 
@@ -27,18 +25,18 @@
 	export let parse: (str: string) => T = (str) => str as T;
 	export let serialize: (el: T) => string = (el) => el as string;
 	export let name: string;
-	let classes: string = '';
+	let classes = '';
 	export { classes as class };
 	export let icon: Icons | undefined = undefined;
-	export let hideLabel: boolean = false;
-	export let disabled: boolean = false;
-	export let type: string = 'text';
-	export let alignRight: boolean = false;
-	export let disableTabIndex: boolean = false;
-	export let disableAutocomplete: boolean = false;
-	export let autofocus: boolean = false;
+	export let hideLabel = false;
+	export let disabled = false;
+	export let type = 'text';
+	export let alignRight = false;
+	export let disableTabIndex = false;
+	export let disableAutocomplete = false;
+	export let autofocus = false;
 	export let rules: [ValidationRuleName, ...number[]][] = [];
-	export let keyFocusSwitch: boolean = true;
+	export let keyFocusSwitch = true;
 	export function focus() {
 		ref?.focus();
 	}

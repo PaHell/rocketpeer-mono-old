@@ -1,4 +1,4 @@
-import type { PayloadType, RoleColor, ServerRole } from "./lib/enum";
+import type { PayloadType, RoleColor, ServerRole } from './lib/enum';
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
 // and what to do when importing types
@@ -180,8 +180,7 @@ declare global {
 				order: number;
 				name: string;
 			}
-			interface TextChannel extends Channel {
-			}
+			interface TextChannel extends Channel {}
 			interface VoiceChannel extends Channel {
 				max_users: null | number;
 				_voice_users?: VoiceChannelUser[];

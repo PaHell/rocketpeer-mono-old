@@ -1,19 +1,18 @@
 <script lang="typescript" strictEvents>
 	import Button, { ButtonVariant } from '$src/components/controls/Button.svelte';
 	import { default as Icon, Icons } from '$src/components/general/Icon.svelte';
-	import { createEventDispatcher, onMount, SvelteComponent, type ComponentEvents } from 'svelte';
-	import { _ } from 'svelte-i18n';
+	import { createEventDispatcher } from 'svelte';
 
 	interface $$Events {
 		change: void;
 	}
 
-	export let value: boolean = false;
+	export let value = false;
 	export let icon: Icons | undefined = undefined;
 	export let text: string | undefined = undefined;
-	export let css: string = '';
-	export let disabled: boolean = false;
-	export let isToggle: boolean = false;
+	export let css = '';
+	export let disabled = false;
+	export let isToggle = false;
 
 	const dispatch = createEventDispatcher<$$Events>();
 

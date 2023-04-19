@@ -19,11 +19,11 @@
 	export let text: string | undefined = undefined;
 	export let icon: Icons | undefined = undefined;
 	export let variant: ButtonVariant = ButtonVariant.Secondary;
-	export let disabled: boolean = false;
-	export let active: boolean = false;
-	let classes: string = '';
+	export let disabled = false;
+	export let active = false;
+	let classes = '';
 	export { classes as class };
-	export let disableTabIndex: boolean = false;
+	export let disableTabIndex = false;
 	export let align: ButtonAlignment = ButtonAlignment.Left;
 </script>
 

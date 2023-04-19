@@ -6,9 +6,7 @@ import {
 	init as _init,
 	getLocaleFromNavigator,
 	locale as _locale,
-	dictionary,
-	locales as _locales,
-	waitLocale
+	dictionary
 } from 'svelte-i18n';
 
 export interface Locale {
@@ -83,7 +81,7 @@ async function loadLocale(iso2: string): Promise<any> {
 export const locale = (function () {
 	const { set, subscribe } = writable<Locale | undefined>(userLocale);
 	function setLocale(loc: Locale) {
-		loadLocale(loc.iso2).then((_) => {
+		loadLocale(loc.iso2).then(() => {
 			set(loc);
 			localStorage.setItem('locale', loc.iso2);
 			_locale.set(loc.iso2);

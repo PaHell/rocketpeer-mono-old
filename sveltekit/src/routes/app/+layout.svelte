@@ -1,19 +1,11 @@
 <script lang="typescript">
-	import Button, { ButtonAlignment, ButtonVariant } from '$src/components/controls/Button.svelte';
-	import Icon, { Icons } from '$src/components/general/Icon.svelte';
-	import { goto } from '$app/navigation';
+	import { Icons } from '$src/components/general/Icon.svelte';
 	import Logo from '$src/components/Logo.svelte';
-	import { browser } from '$app/environment';
 	import { onMount, type ComponentEvents } from 'svelte';
-	import NavigationItem from '$src/components/controls/navigation/NavigationItem.svelte';
-	import type { NavItem } from '$src/components/controls/navigation/Navigation.svelte';
 	import { connectedVoiceChannel } from '$src/store';
-	import ImageIcon from '$src/components/views/ImageIcon.svelte';
-	import Navigation from '$src/components/controls/navigation/Navigation.svelte';
 	import type { LayoutData } from './$types';
 	import VoiceConnection from '$src/components/views/VoiceConnection.svelte';
 	import DockItem from '$src/components/controls/navigation/DockItem.svelte';
-	import { match } from '$src/lib/navigation';
 	
 	export let data: LayoutData;
 	data.server_users = data.server_users.sort((a, b) => a.order - b.order);

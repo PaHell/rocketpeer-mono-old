@@ -1,21 +1,11 @@
 <script lang="typescript">
 	import Button, { ButtonVariant } from '$src/components/controls/Button.svelte';
 	import Icon, { Icons } from '$src/components/general/Icon.svelte';
-	import { getContext, onMount, setContext } from 'svelte';
-	import { mobile } from '$src/lib/viewSize';
-	import Navigation from "$src/components/controls/navigation/Navigation.svelte";
-	import Footer from "$src/components/templates/Footer.svelte";
-	import TextInput from '$src/components/controls/TextInput.svelte';
-	import { afterNavigate, goto } from '$app/navigation';
-	import Logo from '$src/components/Logo.svelte';
+	import { onMount } from 'svelte';
 	import type { LayoutData } from './$types';
-	import { page } from '$app/stores';
-	import NavigationItem from '$src/components/controls/navigation/NavigationItem.svelte';
-	import UserView from '$src/components/views/user/View.svelte';
-	import VoiceConnection from '$src/components/views/VoiceConnection.svelte';
 	import VoiceChannel from '$src/components/views/channel/VoiceChannel.svelte';
 	import TextChannel from '$src/components/views/channel/TextChannel.svelte';
-	import { playSound, Sounds } from '$src/components/controls/MusicPlayer.svelte';
+	import { page } from '$app/stores';
 
 	enum ChannelType {
 		Text,
@@ -38,9 +28,7 @@
 		refreshServer();
 	});
 
-	page.subscribe((page) => {
-		refreshServer();
-	});
+	page.subscribe(refreshServer);
 	
 	function refreshServer() {
 		var serverId = parseInt($page.params.server_id);

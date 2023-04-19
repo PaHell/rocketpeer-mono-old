@@ -1,6 +1,6 @@
 <script lang="typescript" context="module">
 	import { afterNavigate, goto } from '$app/navigation';
-	import { createEventDispatcher, onMount } from 'svelte';
+	import { onMount } from 'svelte';
     import { match as _match } from '$src/lib/navigation';
 </script>
 
@@ -11,11 +11,11 @@
             redirect: () => void,
         };
     }
-	export let path: string = "";
-    export let match: number = 0; // 0 = exact, >0 = from start
+	export let path = "";
+    export let match = 0; // 0 = exact, >0 = from start
 
-    let active: boolean = false;
-    let currentPath: string = "";
+    let active = false;
+    let currentPath = "";
 
     onMount(onNavigate);
 	afterNavigate(onNavigate);

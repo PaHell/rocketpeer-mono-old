@@ -1,14 +1,10 @@
 <script lang="typescript" context="module">
-    import Button, { ButtonAlignment, ButtonVariant } from "$src/components/controls/Button.svelte";
-    import moment from "moment";
-	import { locale } from "$src/lib/i18n";
-	import { createEventDispatcher, onMount } from "svelte";
-	import { time } from "$src/lib/time";
+    import Button, { ButtonVariant } from "$src/components/controls/Button.svelte";
+	import { createEventDispatcher } from "svelte";
 	import TextInput from "$src/components/controls/TextInput.svelte";
 	import { debounce } from "$src/lib/helpers";
 	import { afterNavigate } from "$app/navigation";
 	import { Icons } from "$src/components/general/Icon.svelte";
-	import { PayloadType } from "$src/lib/enum";
 </script>
 
 <script lang="typescript">

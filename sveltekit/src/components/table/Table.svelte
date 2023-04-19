@@ -1,7 +1,7 @@
 <script lang="typescript" context="module">
-	import { createEventDispatcher, onDestroy, onMount, setContext, SvelteComponent } from 'svelte';
+	import { createEventDispatcher, onMount, setContext } from 'svelte';
 	import Row, { classes, RowState, translations, type RowContext } from '$src/components/table/Row.svelte';
-	import { derived, get } from 'svelte/store';
+	import { get } from 'svelte/store';
 	import Button, { ButtonVariant } from '$src/components/controls/Button.svelte';
 	import Icon, { Icons } from '$src/components/general/Icon.svelte';
 	import { _ } from 'svelte-i18n';
@@ -21,25 +21,26 @@
 	}
 	// props
 	export let items: T[] = [];
-	export let css: string = '';
+	let classes = '';
+	export {classes as class};
 	// hooks
 	export let onAdd: () => T = () => ({ id: items.length + 1 } as T);
 	// toggles
-	export let disableAdd: boolean = false;
-	export let disableExport: boolean = false;
-	export let disableRemove: boolean = false;
-	export let disableSave: boolean = false;
-	export let hideState: boolean = false;
+	export let disableAdd = false;
+	export let disableExport = false;
+	export let disableRemove = false;
+	export let disableSave = false;
+	export let hideState = false;
 
 	const dispatch = createEventDispatcher<$$Events>();
 
 	let columns: IColumn<T>[] = [];
 	let activeColumn: IColumn<T> | null = null;
-	let columnSortedAsc: boolean = false;
+	let columnSortedAsc = false;
 	let contextStores: RowContextStore<T>[] = [];
 	let counters: [RowState, number][] = [];
-	let noItems: string = 'No items';
-	let filename: string = 'items';	
+	let noItems = 'No items';
+	let filename = 'items';	
 
 	setContext<TableContext<T>>('table', {
 		registerColumn,
@@ -55,13 +56,6 @@
 			sortByColumn(col);
 		}
 	});
-
-	function log(text: string, ctx: RowContext<T>) {
-		console.log(text + ":", {
-			id: ctx.item.id,
-			state: ctx.state,
-		});
-	}
 
 	function addItem() {
 		const item = onAdd();
@@ -159,7 +153,7 @@
 </script>
 
 <template>
-	<div class="table-container {css}">
+	<div class="table-container {classes}">
 		<slot/>
 		<table class="table">
 			<thead>

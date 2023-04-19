@@ -1,7 +1,6 @@
 <script lang="ts">
 	import Alert, { AlertVariant } from '$src/components/general/Alert.svelte';
 	import { createEventDispatcher } from 'svelte';
-	import { _ } from 'svelte-i18n';
 	import Button, { ButtonVariant } from '$src/components/controls/Button.svelte';
 
     interface $$Events {
@@ -9,7 +8,7 @@
         reload: void;
     }
 
-    export let title: string = 'general.error';
+    export let title = 'general.error';
     export let error: App.API.RequestError;
 
     const dispatch = createEventDispatcher<$$Events>();
@@ -24,7 +23,7 @@
             {#if import.meta.env.DEV}
                 <p class="indent text">Details:</p>
                 <p class="indent text font-mono">{@html JSON
-                    .stringify(error, null, 2)
+                    .stringify(error?.detail, null, 2)
                     .replaceAll("\n", "<br/>")
                     .replaceAll("  ", "&nbsp;&nbsp;")}
                 </p>

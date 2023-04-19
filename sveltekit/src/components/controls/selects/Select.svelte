@@ -9,12 +9,10 @@
 		getContext,
 		onMount,
 		SvelteComponent,
-		SvelteComponentTyped,
 		type ComponentEvents
 	} from 'svelte';
 	import { _ } from 'svelte-i18n';
 	import { debounce, searchByKeys } from '$src/lib/helpers';
-	import { clickOutside } from '$src/lib/use';
 	import Overlay from '$src/components/controls/Overlay.svelte';
 	import TextInput from '$src/components/controls/TextInput.svelte';
 	import type { FormContext } from '$src/components/general/Form.svelte';
@@ -49,25 +47,25 @@
 	export let value: T | undefined = undefined;
 	export let values: T[] = [];
 	export let none: string | undefined = undefined;
-	export let index: number = -1;
+	export let index = -1;
 	export let name: string;
 	export let searchName: string = 'search';
-	export let hideLabel: boolean = false;
-	export let allowMultiple: boolean = false;
-	export let enableSearch: boolean = false;
+	export let hideLabel = false;
+	export let allowMultiple = false;
+	export let enableSearch = false;
 	export let searchKeysOrdered: (keyof T)[] = [];
-	export let searchDebounce: number = 75;
-	export let disabled: boolean = false;
-	export let required: boolean = false;
+	export let searchDebounce = 75;
+	export let disabled = false;
+	export let required = false;
 	// REFS
 	let refSearch: SvelteComponent | undefined;
 	// DATA
-	let opened: boolean = false;
+	let opened = false;
 	const debouncedSearch = debounce((evt: CustomEvent<ComponentEvents<TextInput<string>>['change']>) => {
 		searchItems = searchByKeys(evt.detail, items, searchKeysOrdered);
 	}, searchDebounce);
 	let searchItems: T[] = [];
-	let searchValue: string = '';
+	let searchValue = '';
 	// EVENTS
 	const dispatch = createEventDispatcher<$$Events>();
 	// LIFECYCLE

@@ -1,10 +1,8 @@
 <script lang="typescript" context="module">
 	import { arrow, autoUpdate, computePosition, flip, inline, offset, shift, type Placement, type Platform, type Strategy} from '@floating-ui/dom';
-	import { default as Icon, Icons } from '$src/components/general/Icon.svelte';
 	import { createEventDispatcher, getContext, onDestroy, onMount, setContext } from 'svelte';
 	import { debounce } from '$src/lib/helpers';
 	import { clickOutside } from '$src/lib/use';
-	import Button, { ButtonVariant } from '$src/components/controls/Button.svelte';
 
 	// fixed
 	// absolute
@@ -31,16 +29,16 @@
 		};
 	}
 	interface $$Events {
-		open: {};
-		close: {};
+		open: void;
+		close: void;
 	}
 
 	export let position: Placement = "bottom";
-	let classes: string = '';
+	let classes = '';
 	export { classes as class };
-	export let opened: boolean = false;
+	export let opened = false;
 	
-	let render: boolean = false;
+	let render = false;
 	let strategy: Strategy = "absolute";
 
 	let refContainer: HTMLElement | undefined;

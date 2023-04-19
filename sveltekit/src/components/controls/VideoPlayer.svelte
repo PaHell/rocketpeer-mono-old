@@ -1,19 +1,13 @@
 <script lang="typescript">
 	import Button, { ButtonVariant } from '$src/components/controls/Button.svelte';
-	import { default as Icon, Icons } from '$src/components/general/Icon.svelte';
-	import TextInput from '$src/components/controls/TextInput.svelte';
-	import { _ } from 'svelte-i18n';
-	import { afterNavigate } from '$app/navigation';
-	import { debounce } from '$src/lib/helpers';
-	import ChatView from '$src/components/views/chat/View.svelte';
+	import { Icons } from '$src/components/general/Icon.svelte';
 	import Alert, { AlertVariant } from '$src/components/general/Alert.svelte';
-	import { onDestroy } from 'svelte';
 	import Overlay from './Overlay.svelte';
 	import Slider from './Slider.svelte';
 
 	export let stream: MediaStream | undefined;
     
-    let volume: number = 50;
+    let volume = 50;
 
     let video: HTMLVideoElement | undefined;
 	let videoWidth = 0;
@@ -42,7 +36,7 @@
         <video bind:this={video} on:canplay={onCanPlay} autoplay playsinline>
             <Alert variant={AlertVariant.Danger}
                 title="Error!"
-                text="Your browser does not support video streaming." />
+                message="Your browser does not support video streaming." />
             <track kind="captions" />
         </video>
         <footer>

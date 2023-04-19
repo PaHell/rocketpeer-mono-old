@@ -27,8 +27,8 @@
     }
 	export let items: T[] = [];
     export let pathSelector: (item: T) => string;
-    export let match: number = 0; // 0 = exact, >0 = from start
-    export let active: number = -1;
+    export let match = 0; // 0 = exact, >0 = from start
+    export let active = -1;
     let classes = "";
     export { classes as class };
 
@@ -36,7 +36,7 @@
 
     const dispatch = createEventDispatcher<$$Events>();
 
-    let currentPath: string = "";
+    let currentPath = "";
 
     $: updatePaths();
 

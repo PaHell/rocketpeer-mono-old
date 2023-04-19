@@ -30,8 +30,7 @@
 	export let messages: string[] = [];
 	let classes = '';
 	export {classes as class};
-	
-	export let small: boolean = false;
+	export let small = false;
 
 	function dismiss() {
 

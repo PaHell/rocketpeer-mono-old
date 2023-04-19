@@ -1,16 +1,12 @@
-<script lang="typescript" context="module">
-</script>
-
 <script lang="typescript">
 	import Overlay from "$src/components/controls/Overlay.svelte";
-    import Button, { ButtonVariant } from '$src/components/controls/Button.svelte';
+    import Button from '$src/components/controls/Button.svelte';
     import SelectLanguage from '$src/components/controls/selects/SelectLanguage.svelte';
     import SelectTheme from '$src/components/controls/selects/SelectTheme.svelte';
     import { Icons } from '$src/components/general/Icon.svelte';
     import { _ } from 'svelte-i18n';
 	import Checkbox from "$src/components/controls/Checkbox.svelte";
 
-    let refDevTools: Overlay;
     let devToolsOpened = false;
     let outlinesEnabled = false;
 

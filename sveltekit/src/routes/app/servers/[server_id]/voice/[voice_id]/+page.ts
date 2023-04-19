@@ -1,7 +1,6 @@
 export const prerender = false;
 export const ssr = false;
 
-import { Icons } from '$src/components/general/Icon.svelte';
 import { PayloadType } from '$src/lib/enum';
 import type { LayoutLoad } from './$types';
 
@@ -65,7 +64,7 @@ const messages: App.DB.TextChannelMessage[] = [
 		created_at: new Date('2008-07-06 05:04:03 PDT').toUTCString(),
 		updated_at: null,
 		deleted_at: null
-	},
+	}
 ];
 
 export const load = (async ({ params, parent }) => {

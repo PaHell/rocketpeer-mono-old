@@ -1,10 +1,9 @@
 <script lang="typescript" context="module">
-	import { getContext, onDestroy, onMount, setContext, SvelteComponent } from 'svelte';
-	import Column from '$src/components/table/Column.svelte';
+	import { getContext, setContext } from 'svelte';
 	import Button, { ButtonVariant } from '$src/components/controls/Button.svelte';
 	import { Icons } from '$src/components/general/Icon.svelte';
 	import type { TableContext } from '$src/components/table/Table.svelte';
-	import { get, type Writable } from 'svelte/store';
+	import { get } from 'svelte/store';
 	import type { RowContextStore } from './store';
 
 	export interface RowContext<T> {

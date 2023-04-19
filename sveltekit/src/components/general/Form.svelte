@@ -6,8 +6,8 @@
 </script>
 
 <script lang="typescript">
-	export let id: string = '';
-	export let allValid: boolean = false;
+	export let id = '';
+	export let allValid = false;
 	let fields: { [field: string]: boolean } = {};
 	let method: RequestInit["method"] = 'POST';
 

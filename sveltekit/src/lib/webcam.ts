@@ -3,8 +3,8 @@ import { browser } from '$app/environment';
 export class Webcam {
 	_stream: MediaStream | null = null;
 	_video: HTMLVideoElement;
-	_width: number = 0;
-	_height: number = 0;
+	_width = 0;
+	_height = 0;
 
 	constructor(video: HTMLVideoElement) {
 		this._video = video;

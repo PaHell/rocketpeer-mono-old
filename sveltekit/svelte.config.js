@@ -16,7 +16,7 @@ const config = {
 			out: 'build'
 		}),
 		alias: {
-			$src: './src',
+			$src: './src'
 		},
 		files: {
 			assets: '../public'

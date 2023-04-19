@@ -18,12 +18,16 @@ export function setHeaders(headers: { [key: string]: any }) {
 	};
 }
 
-export async function http<T extends object>(
+const translations: { [key: string]: string } = {
+	'fetch failed': 'messages.errors.fetch'
+};
+
+export async function http<TIn extends object, TOut extends object>(
 	method: RequestInit['method'],
 	url: string,
-	body: any = null,
+	body: TIn | null = null,
 	options?: RequestInit
-): Promise<T> {
+): Promise<TOut> {
 	try {
 		const resp = await fetch(import.meta.env.VITE_URL_API + url, {
 			...defaultOptions,
@@ -31,19 +35,17 @@ export async function http<T extends object>(
 			method,
 			body: body ? JSON.stringify(body) : undefined
 		});
-		const data = resp.json() as T | App.API.RequestError;
+		const data = resp.json() as TOut | App.API.RequestError;
 		if (Object.hasOwn(data, 'error')) throw data;
-		return data as T;
-	} catch (error: any) {
-		if (error.message.includes('fetch'))
+		return data as TOut;
+	} catch (error) {
+		if (error instanceof Error) {
+			const message: string = translations[error.message] || error.message;
 			throw {
-				message: 'messages.errors.fetch',
-				detail: error.detail
+				message,
+				detail: JSON.stringify(error, null, 4)
 			} as App.API.RequestError;
-		else
-			throw {
-				message: error.message,
-				detail: error.detail
-			} as App.API.RequestError;
+		}
+		throw error;
 	}
 }

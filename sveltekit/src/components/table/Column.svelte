@@ -2,9 +2,8 @@
 	<svelte:options accessors />
 -->
 <script lang="ts" context="module">
-	import { getContext, onDestroy, onMount, setContext, SvelteComponent } from 'svelte';
+	import { getContext } from 'svelte';
 	import type { TableContext } from '$src/components/table/Table.svelte';
-	import type { RowContext } from './Row.svelte';
 	import type { RowContextStore } from './store';
 	export interface IColumn<T> {
 		key: keyof T | null;
@@ -24,9 +23,9 @@
 	}
 
 	export let key: keyof T | undefined = undefined;
-	export let title: string = '';
-	export let width: string = 'auto';
-	let classes: string = '';
+	export let title = '';
+	export let width = 'auto';
+	let classes = '';
 	export { classes as class };
 
 	const store = getContext<RowContextStore<T>>('store');

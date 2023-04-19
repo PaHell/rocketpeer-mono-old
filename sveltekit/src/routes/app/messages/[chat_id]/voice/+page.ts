@@ -1,9 +1,8 @@
 export const prerender = false;
 export const ssr = false;
 
-import { Icons } from '$src/components/general/Icon.svelte';
 import { PayloadType } from '$src/lib/enum';
-import type { LayoutLoad } from './$types';
+import type { PageLoad } from './$types';
 
 const messages: App.P2P.VoiceChatMessage[] = [
 	{
@@ -65,7 +64,7 @@ const messages: App.P2P.VoiceChatMessage[] = [
 		created_at: new Date('2008-07-06 05:04:03 PDT').toUTCString(),
 		updated_at: null,
 		deleted_at: null
-	},
+	}
 ];
 
 const voice_chat_users: App.P2P.VoiceChatUser[] = [
@@ -75,10 +74,9 @@ const voice_chat_users: App.P2P.VoiceChatUser[] = [
 		chat_id: -1,
 		connected: true,
 		is_live: true,
-		is_talking: true,
+		is_talking: true
 	}
 ];
-
 
 export const load = (async ({ params, parent }) => {
 	const pageData = await parent();
@@ -92,6 +90,6 @@ export const load = (async ({ params, parent }) => {
 	});
 	return {
 		voice_chat_users,
-		messages,
+		messages
 	};
-}) satisfies LayoutLoad;
+}) satisfies PageLoad;

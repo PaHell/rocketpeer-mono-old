@@ -1,18 +1,17 @@
 <script lang="typescript">
 	import TextInput from '$src/components/controls/TextInput.svelte';
-	import { Icons } from '$src/components/general/Icon.svelte';
 	import { _ } from 'svelte-i18n';
 	import { goto } from '$app/navigation';
-	import { Auth } from '$src/lib/api';
+	import { UserResource } from '$src/lib/api';
 	import Button, { ButtonAlignment, ButtonVariant } from '$src/components/controls/Button.svelte';
 	import Alert, { AlertVariant } from '$src/components/general/Alert.svelte';
 	import { setHeaders } from '$src/lib/http';
 	import { authenticated } from '$src/store';
 	import { redirectAuthed } from '$src/routes/+layout.svelte';
 
-	let usernameEmail: string = '';
-	let password: string = '';
-	let error: string = '';
+	let usernameEmail = '';
+	let password = '';
+	let error = '';
 
 	if (import.meta.env.DEV) {
 		usernameEmail = import.meta.env.VITE_LOGIN_USERNAME;
@@ -21,7 +20,7 @@
 
 	async function login() {
 		console.log('login');
-		Auth.login({ usernameEmail, password })
+		UserResource.login({ usernameEmail, password })
 			.then(async (resp: App.DB.AccessToken) => {
 				console.log({resp});
 				setHeaders({ Authorization: `Bearer ${resp.access_token}` });

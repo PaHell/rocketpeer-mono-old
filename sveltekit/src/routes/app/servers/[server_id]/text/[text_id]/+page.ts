@@ -1,9 +1,8 @@
 export const prerender = false;
 export const ssr = false;
 
-import { Icons } from '$src/components/general/Icon.svelte';
 import { PayloadType } from '$src/lib/enum';
-import type { LayoutLoad } from './$types';
+import type { PageLoad } from './$types';
 
 const messages: App.DB.TextChannelMessage[] = [
 	{
@@ -108,6 +107,6 @@ export const load = (async ({ params, parent }) => {
 	});
 	return {
 		channel: pageData.text_channels.find((c) => c.id === textId),
-		messages,
+		messages
 	};
-}) satisfies LayoutLoad;
+}) satisfies PageLoad;

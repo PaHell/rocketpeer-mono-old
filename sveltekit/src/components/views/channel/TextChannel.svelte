@@ -1,5 +1,4 @@
 <script lang="typescript" context="module">
-    import Badge, { BadgeVariant } from "$src/components/general/Badge.svelte";
 	import Button, { ButtonVariant } from '$src/components/controls/Button.svelte';
 	import NavigationItem from '$src/components/controls/navigation/NavigationItem.svelte';
 	import { Icons } from '$src/components/general/Icon.svelte';

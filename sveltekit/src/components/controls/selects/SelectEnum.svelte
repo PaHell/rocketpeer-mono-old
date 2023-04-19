@@ -30,8 +30,8 @@
 
 <template>
     <Select name="enum" bind:value={internalValue} {items} on:change={onChange}>
-		<p slot="value" let:item class="text">{item[0]}</p>
-		<p slot="item" let:item class="text">{item[0]}</p>
+		<p slot="value" let:item class="text">{$_(item[0])}</p>
+		<p slot="item" let:item class="text">{$_(item[0])}</p>
 	</Select>
 </template>
     

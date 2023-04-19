@@ -4,12 +4,12 @@
 </script>
 
 <script lang="typescript">
-    let classes: string = "";
+    let classes = "";
     export { classes as class };
     export let src: string | null = null;
-    export let alt: string = "";
+    export let alt = "";
     export let placeholder: Icons = Icons.NoImage;
-    export let counter: number = 0;
+    export let counter = 0;
     export let status: UserStatus | undefined = undefined;
 </script>
 
@@ -23,6 +23,9 @@
     </div>
     {#if status != undefined}
         <div class="status {UserStatusColors[status]}"></div>
+    {/if}
+    {#if counter}
+        <p class="text counter">{counter}</p>
     {/if}
 </div>
 

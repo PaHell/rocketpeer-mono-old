@@ -1,23 +1,21 @@
-<script lang="typescript" context="module">
+<script lang="typescript">
 	import { default as Icon, Icons } from '$src/components/general/Icon.svelte';
 	import Overlay from '$src/components/controls/Overlay.svelte';
-	import { createEventDispatcher, onDestroy, onMount, SvelteComponent } from 'svelte';
+	import { onDestroy } from 'svelte';
 	import Button, { ButtonVariant } from '$src/components/controls/Button.svelte';
 	import Alert, { AlertVariant } from '$src/components/general/Alert.svelte';
 	import { Webcam } from '$src/lib/webcam';
 	import { _ } from 'svelte-i18n';
-
+	
 	enum State {
 		Init,
 		Error,
 		Streaming,
 		Viewing
 	}
-</script>
-
-<script lang="typescript">
 	export let value: string | undefined = undefined;
-	export let css: string = '';
+	let classes = '';
+	export {classes as class};
 	let preview: string | undefined;
 
 	let webcam: Webcam | undefined;
@@ -79,7 +77,7 @@
 		position="top-end"
 		on:open={onOpen}
 		on:close={onClose}
-		class="picture-input {css}"
+		class="picture-input {classes}"
 	>
 		<svelte:fragment slot="item" let:toggle>
 			<Button variant={ButtonVariant.Secondary} on:click={toggle}>
