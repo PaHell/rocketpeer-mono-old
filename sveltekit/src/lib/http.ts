@@ -11,7 +11,7 @@ const defaultOptions: RequestInit = {
 	referrerPolicy: 'no-referrer' // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
 };
 
-export function setHeaders(headers: { [key: string]: any }) {
+export function setHeaders(headers: HeadersInit) {
 	defaultOptions.headers = {
 		...defaultOptions.headers,
 		...headers
@@ -22,12 +22,12 @@ const translations: { [key: string]: string } = {
 	'fetch failed': 'messages.errors.fetch'
 };
 
-export async function http<TIn extends object, TOut extends object>(
+export async function http<T extends object>(
 	method: RequestInit['method'],
 	url: string,
-	body: TIn | null = null,
+	body: object | null = null,
 	options?: RequestInit
-): Promise<TOut> {
+): Promise<T> {
 	try {
 		const resp = await fetch(import.meta.env.VITE_URL_API + url, {
 			...defaultOptions,
@@ -35,9 +35,9 @@ export async function http<TIn extends object, TOut extends object>(
 			method,
 			body: body ? JSON.stringify(body) : undefined
 		});
-		const data = resp.json() as TOut | App.API.RequestError;
+		const data = resp.json() as T | App.API.RequestError;
 		if (Object.hasOwn(data, 'error')) throw data;
-		return data as TOut;
+		return data as T;
 	} catch (error) {
 		if (error instanceof Error) {
 			const message: string = translations[error.message] || error.message;

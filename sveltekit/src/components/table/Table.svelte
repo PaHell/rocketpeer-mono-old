@@ -1,6 +1,6 @@
 <script lang="typescript" context="module">
 	import { createEventDispatcher, onMount, setContext } from 'svelte';
-	import Row, { classes, RowState, translations, type RowContext } from '$src/components/table/Row.svelte';
+	import Row, { RowState, translations, type RowContext } from '$src/components/table/Row.svelte';
 	import { get } from 'svelte/store';
 	import Button, { ButtonVariant } from '$src/components/controls/Button.svelte';
 	import Icon, { Icons } from '$src/components/general/Icon.svelte';

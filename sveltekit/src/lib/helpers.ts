@@ -19,20 +19,17 @@ export function searchByKeys<T>(searchTerm: string, items: T[], keys: (keyof T)[
 		.map(([, item]) => item);
 }
 
-export function debounce<T extends Function>(func: T, wait: number, immediate: boolean = false): T {
-	var timeout: NodeJS.Timeout | null = null;
-	return function (this: T) {
-		var context = this;
-		var args = arguments;
-		var later = function () {
-			timeout = null;
-			if (!immediate) func.apply(context, args);
-		};
-		var callNow = immediate && !timeout;
-		if (timeout) clearTimeout(timeout);
-		timeout = setTimeout(later, wait);
-		if (callNow) func.apply(context, args);
-	} as unknown as T;
+// from: https://gist.github.com/ca0v/73a31f57b397606c9813472f7493a940
+// great fight there
+export const debounce = <F extends (...args: any[]) => any>(func: F, waitFor: number) => {
+	let timeout: NodeJS.Timeout | null = null;
+	return (...args: Parameters<F>): Promise<ReturnType<F>> =>
+		new Promise(resolve => {
+		if (timeout) {
+		  clearTimeout(timeout);
+		}
+		timeout = setTimeout(() => resolve(func(...args)), waitFor);
+	});
 }
 
 export function isMobile(): boolean {

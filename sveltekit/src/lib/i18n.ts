@@ -30,7 +30,7 @@ export const locales: Locale[] = [
 export const localeInitialized = writable<boolean>(false);
 
 let userLocale: Locale | undefined;
-export const initLocale: Function = (function () {
+export const initLocale = (function () {
 	if (!browser) return () => {};
 	console.log('init locale');
 	const defaultLocale = locales[0];

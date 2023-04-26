@@ -21,8 +21,13 @@
     export { classes as class };
 
     let ref: HTMLButtonElement;
+    const svgRectArgs = {
+        x: .5,
+        y: .5,
+        width: 63,
+        height: 63,
+    };
     let active = false;
-    let size = 64;
     let guid = Math.trunc(Math.random() * Math.pow(16, 6)).toString(16);
 
     const dispatch = createEventDispatcher<$$Events>();
@@ -43,16 +48,17 @@
         class="dock-item {classes}"
         class:active
         on:click={() => goto(path)}>
-        <svg viewBox="0 0 {size} {size}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-            <rect class="bg" x=".5" y=".5" width={size - 1} height={size - 1} />
+        <svg viewBox="0 0 {svgRectArgs.width + 1} {svgRectArgs.height + 1}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
             {#if img}
-                <rect class="img" x=".5" y=".5" width={size - 1} height={size - 1} fill="url(#pattern_{guid})"/>
+                <rect class="img" {...svgRectArgs} fill="url(#pattern_{guid})"/>
                 <defs>
                     <pattern id="pattern_{guid}" patternContentUnits="objectBoundingBox" width="1" height="1">
                         <use xlink:href="#img_{guid}"/>
                     </pattern>
                     <image id="img_{guid}" width="1" height="1" preserveAspectRatio="xMidYMid slice" xlink:href={img}/>
                 </defs>
+            {:else}
+                <rect class="bg" {...svgRectArgs} />
             {/if}
         </svg>
         {#if !img && icon}
@@ -75,12 +81,12 @@
 
         & > svg {
             & > rect {
+                @apply stroke-1 stroke-gray-300 dark:stroke-gray-700;
                 rx: 32;
-                transition: rx .25s;
+                transition: rx .25s ease-in-out;
                 will-change: rx, fill, stroke;
                 &.bg {
-                    @apply fill-gray-200 dark:fill-gray-800
-                    stroke-1 stroke-gray-300 dark:stroke-gray-700;
+                    @apply fill-gray-200 dark:fill-gray-800;
                 }
             }
         }
@@ -101,7 +107,7 @@
                     stroke-accent-600 dark:stroke-accent-400;
                 }
                 &.img {
-                    @apply stroke-gray-700 dark:stroke-gray-700;
+                    @apply stroke-gray-400 dark:stroke-gray-600;
                 }
             }
             & > .icon {
@@ -117,9 +123,6 @@
                 &.bg {
                     @apply fill-accent-500
                     stroke-accent-400;
-                }
-                &.img {
-                    @apply stroke-gray-700 dark:stroke-gray-700;
                 }
             }
         }

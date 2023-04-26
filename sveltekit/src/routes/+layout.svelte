@@ -50,10 +50,10 @@
 </script>
 
 <template>
-	{#if import.meta.env.DEV}
-		<DeveloperTools/>
-	{/if}
 	{#if $localeInitialized}
+		{#if import.meta.env.DEV}
+			<DeveloperTools/>
+		{/if}
 		<MusicPlayer/>
 		<slot />
 	{:else}
