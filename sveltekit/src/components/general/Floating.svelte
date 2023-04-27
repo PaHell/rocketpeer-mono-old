@@ -117,10 +117,10 @@
 				offset(spacing),
 				size({
 					apply({availableHeight, availableWidth, elements}) {
-						const contentHeight = elements.floating.children[0].getBoundingClientRect().height;
+						const {width, height} = elements.floating.children[0].getBoundingClientRect();
 						if (!opened) styleMenu["height"] = '0';
-						else styleMenu["height"] = `${availableHeight > contentHeight
-							? contentHeight + 2*spacing
+						else styleMenu["height"] = `${availableHeight > height
+							? height + 2*spacing
 							: availableHeight + 2*spacing
 						}px`;
 						styleMenu = {...styleMenu};
@@ -187,9 +187,10 @@
 			w-56 scale-90
 			transition-all
 			duration-200 ease-in-out;
-			will-change: height;
+			will-change: height, transform;
 			&.opened {
-				@apply scale-100;
+				@apply overflow-visible;
+				animation: floatingIn 200ms forwards ease-in-out;
 				& > div {
 					@apply opacity-100;
 				}
@@ -199,8 +200,8 @@
 			}
 			& > div {
 				@apply flex flex-col border shadow-md rounded
-				overflow-hidden opacity-0
-				transition-opacity duration-100 ease-in-out
+				overflow-auto opacity-0
+				transition-opacity duration-200 ease-in-out
 				border-gray-300 dark:border-gray-700
 				bg-gray-50 dark:bg-gray-800;
 			}
@@ -214,6 +215,15 @@
 			& > menu {
 				@apply w-96;
 			}
+		}
+	}
+
+	@keyframes floatingIn {
+		50% {
+			@apply scale-105;
+		}
+		100% {
+			@apply scale-100;
 		}
 	}
 </style>
