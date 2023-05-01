@@ -57,14 +57,14 @@
 	tagDict.push(tagOffline);
 	tagDict = tagDict.filter(kvp => kvp[1].length > 0);
 
-	function onUserClick(e: MouseEvent, su: App.DB.ServerUser) {
+	function onUserClick(e: MouseEvent & { target: HTMLElement }, su: App.DB.ServerUser) {
 		if (currentShownUser?.id === su.id) {
 			currentShownUser = null;
 			refUserMenu.close();
 			return;
 		}
 		currentShownUser = su;
-		refUserMenu.open(e.target);
+		refUserMenu.open(e.target.closest(".user-view") as HTMLElement);
 	}
 </script>
 
