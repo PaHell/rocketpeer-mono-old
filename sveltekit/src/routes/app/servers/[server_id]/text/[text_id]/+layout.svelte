@@ -4,11 +4,16 @@
 	import TextInput from '$src/components/controls/TextInput.svelte';
 	import { UserStatus } from '$src/lib/enum';
 	import UserView from '$src/components/views/user/View.svelte';
+	import UserProfile from '$src/components/views/user/Profile.svelte';
 	import { ServerTagColor } from '$src/lib/enum';
-	import type { LayoutData } from './$types';
+	import type { PageData } from './$types';
+	import Floating, { FloatingAlignment } from '$src/components/general/Floating.svelte';
 
-	export let data: LayoutData;
+	export let data: PageData;
 	let search = "";
+
+	let refUserMenu: Floating;
+	let currentShownUser: App.DB.ServerUser | null = null;
 
 	type ServerTagView = [App.DB.ServerTag, App.DB.ServerUser[]];
 
@@ -51,6 +56,16 @@
 	tagDict.forEach(kvp => kvp[1] = kvp[1].sort((a, b) => a.status - b.status));
 	tagDict.push(tagOffline);
 	tagDict = tagDict.filter(kvp => kvp[1].length > 0);
+
+	function onUserClick(e: MouseEvent, su: App.DB.ServerUser) {
+		if (currentShownUser?.id === su.id) {
+			currentShownUser = null;
+			refUserMenu.close();
+			return;
+		}
+		currentShownUser = su;
+		refUserMenu.open(e.target);
+	}
 </script>
 
 
@@ -89,9 +104,19 @@
 					user={su.user}
 					display_name={su.display_name}
 					variant={ButtonVariant.Transparent}
-					showStatus />
+					showStatus
+					on:click={(e) => onUserClick(e, su)} />
 			{/each}
 		{/each}
+		<Floating bind:this={refUserMenu} alignment={FloatingAlignment.RightLeft}>
+			<svelte:fragment slot="menu">
+				{#if currentShownUser}
+					<UserProfile data={currentShownUser} />
+				{:else}
+					<p>Loading...</p>
+				{/if}
+			</svelte:fragment>
+		</Floating>
 	</div>
 </main>
 

@@ -43,7 +43,7 @@
     }
     .dev-tools {
 		@apply fixed right-4 z-40;
-		top: calc((100% - 2.5rem) / 1.75);
+		top: calc((100% - 2.5rem) / 2);
 	}
 
 </style>

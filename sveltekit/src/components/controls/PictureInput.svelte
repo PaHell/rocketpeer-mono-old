@@ -1,11 +1,11 @@
 <script lang="typescript">
 	import { default as Icon, Icons } from '$src/components/general/Icon.svelte';
-	import Overlay from '$src/components/controls/Overlay.svelte';
 	import { onDestroy } from 'svelte';
 	import Button, { ButtonVariant } from '$src/components/controls/Button.svelte';
 	import Alert, { AlertVariant } from '$src/components/general/Alert.svelte';
 	import { Webcam } from '$src/lib/webcam';
 	import { _ } from 'svelte-i18n';
+	import Floating, { FloatingAlignment } from '../general/Floating.svelte';
 	
 	enum State {
 		Init,
@@ -73,8 +73,8 @@
 </script>
 
 
-	<Overlay
-		position="top-end"
+	<Floating
+		alignment={FloatingAlignment.RightLeft}
 		on:open={onOpen}
 		on:close={onClose}
 		class="picture-input {classes}"
@@ -129,7 +129,7 @@
 				{/if}
 			</footer>
 		</svelte:fragment>
-	</Overlay>
+	</Floating>
 
 
 <style global lang="postcss">

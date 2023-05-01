@@ -2,8 +2,8 @@
 	import Button, { ButtonVariant } from '$src/components/controls/Button.svelte';
 	import { Icons } from '$src/components/general/Icon.svelte';
 	import Alert, { AlertVariant } from '$src/components/general/Alert.svelte';
-	import Overlay from './Overlay.svelte';
 	import Slider from './Slider.svelte';
+	import Floating, { FloatingAlignment } from '../general/Floating.svelte';
 
 	export let stream: MediaStream | undefined;
     
@@ -43,7 +43,7 @@
             <div class="justify-start"><slot name="left"/></div>
             <div class="justify-center"><slot name="center"/></div>
             <div class="justify-end">
-                <Overlay position="top">
+                <Floating alignment={FloatingAlignment.BottomTop}>
                     <svelte:fragment slot="item" let:toggle>
                         <Button variant={ButtonVariant.Transparent}
                             icon={Icons.Volume}
@@ -53,7 +53,7 @@
                         <p class="text">{volume}</p>
                         <Slider bind:value={volume} />
                     </svelte:fragment>
-                </Overlay>
+                </Floating>
                 <Button variant={ButtonVariant.Transparent}
                     icon={Icons.Fullscreen}
                     on:click={toggleFullscreen} />
