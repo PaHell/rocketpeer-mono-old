@@ -1,395 +1,212 @@
+DROP TYPE IF EXISTS "public"."status";
+CREATE TYPE "public"."status" AS ENUM ('Online', 'Away', 'DoNotDisturb', 'Offline');
+DROP TYPE IF EXISTS "public"."privacy_level";
+CREATE TYPE "public"."privacy_level" AS ENUM ('Public', 'Friends', 'SharedServerAndFriends', 'Private');
+DROP TYPE IF EXISTS "public"."role";
+CREATE TYPE "public"."role" AS ENUM ('None', 'Moderator', 'Administrator', 'Owner');
+DROP TYPE IF EXISTS "public"."message_type";
+CREATE TYPE "public"."message_type" AS ENUM ('Text', 'Image', 'Video', 'Audio', 'File', 'Deleted');
+DROP TYPE IF EXISTS "public"."role";
+CREATE TYPE "public"."role" AS ENUM ('None', 'Moderator', 'Administrator', 'Owner');
+DROP TYPE IF EXISTS "public"."color";
+CREATE TYPE "public"."color" AS ENUM ('Lime', 'Green', 'Teal', 'Blue', 'Indigo', 'Purple', 'Pink', 'Red', 'Orange', 'Yellow');
+DROP TYPE IF EXISTS "public"."message_type";
+CREATE TYPE "public"."message_type" AS ENUM ('Text', 'Image', 'Video', 'Audio', 'File', 'Deleted');
 
-CREATE TABLE `access_tokens` (
-  `id` varchar(200) NOT NULL,
-  `user_id` varchar(200) NOT NULL,
-  `access_token` varchar(191)  NOT NULL,
-  `refresh_token` varchar(191)  NOT NULL
+-- Table Definition
+CREATE TABLE "public"."access_tokens" (
+    "id" uuid NOT NULL,
+    "user_id" uuid NOT NULL,
+    "access_token" varchar(200) NOT NULL,
+    "refresh_token" varchar(200) NOT NULL,
+    PRIMARY KEY ("id")
 );
--- --------------------------------------------------------
 
---
--- Table structure for table `channel_groups`
---
+-- This script only contains the table creation statements and does not fully represent the table in the database. It's still missing: indices, triggers. Do not use it as a backup.
 
-CREATE TABLE `channel_groups` (
-  `id` varchar(200) NOT NULL,
-  `server_id` varchar(200) NOT NULL,
-  `order` int(11) NOT NULL,
-  `name` varchar(191)  NOT NULL
+-- Table Definition
+CREATE TABLE "public"."channel_groups" (
+    "id" uuid NOT NULL,
+    "server_id" uuid NOT NULL,
+    "order" int4 NOT NULL,
+    "name" varchar(200) NOT NULL,
+    PRIMARY KEY ("id")
 );
--- --------------------------------------------------------
 
---
--- Table structure for table `chats`
---
-
-CREATE TABLE `chats` (
-  `id` varchar(200) NOT NULL,
-  `name` varchar(191)  DEFAULT NULL,
-  `created_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-  `userId` varchar(200) DEFAULT NULL
+-- This script only contains the table creation statements and does not fully represent the table in the database. It's still missing: indices, triggers. Do not use it as a backup.
+-- Table Definition
+CREATE TABLE "public"."chat_messages" (
+    "id" uuid NOT NULL,
+    "chat_id" uuid NOT NULL,
+    "user_id" uuid NOT NULL,
+    "type" "public"."message_type" NOT NULL,
+    "payload" varchar(400) NOT NULL,
+    "created_at" timestamptz NOT NULL DEFAULT now(),
+    "updated_at" timestamptz,
+    "deleted_at" timestamptz,
+    PRIMARY KEY ("id")
 );
--- --------------------------------------------------------
 
---
--- Table structure for table `chat_messages`
---
+-- This script only contains the table creation statements and does not fully represent the table in the database. It's still missing: indices, triggers. Do not use it as a backup.
 
-CREATE TABLE `chat_messages` (
-  `id` varchar(200) NOT NULL,
-  `chat_id` varchar(200) NOT NULL,
-  `user_id` varchar(200) NOT NULL,
-  `type` enum('Text','Image','Video','Audio','File','Deleted')  NOT NULL,
-  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-  `updated_at` datetime(3) DEFAULT NULL,
-  `deleted_at` datetime(3) DEFAULT NULL
+-- Table Definition
+CREATE TABLE "public"."chat_users" (
+    "id" uuid NOT NULL,
+    "chat_id" uuid NOT NULL,
+    "user_id" uuid,
+    "created_at" timestamptz NOT NULL DEFAULT now(),
+    "deleted_at" timestamptz,
+    PRIMARY KEY ("id")
 );
--- --------------------------------------------------------
 
---
--- Table structure for table `chat_users`
---
+-- This script only contains the table creation statements and does not fully represent the table in the database. It's still missing: indices, triggers. Do not use it as a backup.
 
-CREATE TABLE `chat_users` (
-  `id` varchar(200) NOT NULL,
-  `chat_id` varchar(200) NOT NULL,
-  `user_id` varchar(200) NOT NULL,
-  `created_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-  `deleted_at` datetime(3) DEFAULT NULL
+-- Table Definition
+CREATE TABLE "public"."chats" (
+    "id" uuid NOT NULL,
+    "name" varchar(200) NOT NULL,
+    "created_at" timestamptz NOT NULL DEFAULT now(),
+    "user_id" uuid,
+    PRIMARY KEY ("id")
 );
--- --------------------------------------------------------
 
---
--- Table structure for table `servers`
---
-
-CREATE TABLE `servers` (
-  `id` varchar(200) NOT NULL,
-  `name` varchar(191) NOT NULL,
-  `image` varchar(191)  DEFAULT NULL,
-  `description` varchar(191)  NOT NULL,
-  `created_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-  `general_text_channel` varchar(200) DEFAULT NULL
+-- This script only contains the table creation statements and does not fully represent the table in the database. It's still missing: indices, triggers. Do not use it as a backup.
+-- Table Definition
+CREATE TABLE "public"."server_tags" (
+    "id" uuid NOT NULL,
+    "server_id" uuid NOT NULL,
+    "order" int4 NOT NULL,
+    "name" varchar(200) NOT NULL,
+    "color" "public"."color" NOT NULL,
+    PRIMARY KEY ("id")
 );
---
--- Table structure for table `server_tags`
---
 
-CREATE TABLE `server_tags` (
-  `id` varchar(200) NOT NULL,
-  `server_id` varchar(200) NOT NULL,
-  `order` int(11) NOT NULL,
-  `name` varchar(191)  NOT NULL,
-  `color` enum('Lime','Green','Teal','Blue','Indigo','Purple','Pink','Red','Orange','Yellow')  NOT NULL
+-- This script only contains the table creation statements and does not fully represent the table in the database. It's still missing: indices, triggers. Do not use it as a backup.
+
+-- Table Definition
+CREATE TABLE "public"."server_user_tags" (
+    "id" uuid NOT NULL,
+    "server_tag_id" uuid,
+    "server_user_id" uuid,
+    PRIMARY KEY ("id")
 );
--- --------------------------------------------------------
 
---
--- Table structure for table `server_users`
---
-
-CREATE TABLE `server_users` (
-  `id` varchar(200) NOT NULL,
-  `user_id` varchar(200) NOT NULL,
-  `server_id` varchar(200) NOT NULL,
-  `order` int(11) NOT NULL,
-  `display_name` varchar(191)  DEFAULT NULL,
-  `created_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-  `deleted_at` datetime(3) DEFAULT NULL,
-  `role` enum('None','Moderator','Administrator','Owner') NOT NULL
+-- This script only contains the table creation statements and does not fully represent the table in the database. It's still missing: indices, triggers. Do not use it as a backup.
+-- Table Definition
+CREATE TABLE "public"."server_users" (
+    "id" uuid NOT NULL,
+    "user_id" uuid,
+    "server_id" uuid,
+    "order" int4,
+    "display_name" varchar(200),
+    "created_at" timestamptz DEFAULT now(),
+    "deleted_at" timestamptz,
+    "role" "public"."role",
+    PRIMARY KEY ("id")
 );
--- --------------------------------------------------------
 
---
--- Table structure for table `server_user_tags`
---
+-- This script only contains the table creation statements and does not fully represent the table in the database. It's still missing: indices, triggers. Do not use it as a backup.
 
-CREATE TABLE `server_user_tags` (
-  `id` varchar(200) NOT NULL,
-  `server_tag_id` varchar(200) NOT NULL,
-  `server_user_id` varchar(200) NOT NULL
+-- Table Definition
+CREATE TABLE "public"."servers" (
+    "id" uuid NOT NULL,
+    "name" varchar(200) NOT NULL,
+    "image" varchar(200),
+    "description" varchar(200),
+    "created_at" timestamptz NOT NULL DEFAULT now(),
+    "general_text_chat" uuid,
+    PRIMARY KEY ("id")
 );
--- --------------------------------------------------------
 
---
--- Table structure for table `text_channels`
---
-
-CREATE TABLE `text_channels` (
-  `id` varchar(200) NOT NULL,
-  `server_id` varchar(200) NOT NULL,
-  `channel_group_id` varchar(200) DEFAULT NULL,
-  `order` int(11) NOT NULL,
-  `name` varchar(191) NOT NULL,
-  `topic` varchar(191) NOT NULL
+-- This script only contains the table creation statements and does not fully represent the table in the database. It's still missing: indices, triggers. Do not use it as a backup.
+-- Table Definition
+CREATE TABLE "public"."text_channel_messages" (
+    "id" uuid NOT NULL,
+    "text_channel_id" uuid,
+    "server_user_id" uuid,
+    "type" "public"."message_type",
+    "payload" varchar(200),
+    "created_at" timestamptz NOT NULL DEFAULT now(),
+    "updated_at" timestamptz,
+    "deleted_at" timestamptz,
+    PRIMARY KEY ("id")
 );
---
--- Table structure for table `text_channel_messages`
---
 
-CREATE TABLE `text_channel_messages` (
-  `id` varchar(200) NOT NULL,
-  `text_channel_id` varchar(200) NOT NULL,
-  `server_user_id` varchar(200) NOT NULL,
-  `type` enum('Text','Image','Video','Audio','File','Deleted') NOT NULL,
-  `payload` varchar(191) NOT NULL,
-  `created_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-  `updated_at` datetime(3) DEFAULT NULL,
-  `deleted_at` datetime(3) DEFAULT NULL
+-- This script only contains the table creation statements and does not fully represent the table in the database. It's still missing: indices, triggers. Do not use it as a backup.
+
+-- Table Definition
+CREATE TABLE "public"."text_channels" (
+    "id" uuid NOT NULL,
+    "order" int4,
+    "name" varchar(200),
+    "topic" varchar(200),
+    "channel_group_id" uuid,
+    PRIMARY KEY ("id")
 );
--- --------------------------------------------------------
 
---
--- Table structure for table `users`
---
+-- This script only contains the table creation statements and does not fully represent the table in the database. It's still missing: indices, triggers. Do not use it as a backup.
 
-CREATE TABLE `users` (
-  `id` varchar(200) NOT NULL,
-  `username` varchar(191) NOT NULL,
-  `password` varchar(191) NOT NULL,
-  `display_name` varchar(191) DEFAULT NULL,
-  `first_name` varchar(191) NOT NULL,
-  `last_name` varchar(191) NOT NULL,
-  `image` varchar(191) DEFAULT NULL,
-  `status` enum('Online','Away','DoNotDisturb','Offline') NOT NULL,
-  `email` varchar(191) NOT NULL,
-  `privacy_level` enum('Public','Friends','SharedServerAndFriends','Private') NOT NULL,
-  `role` enum('Administrator','Default')  NOT NULL,
-  `created_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3)
+DROP TYPE IF EXISTS "public"."friend_request_status";
+CREATE TYPE "public"."friend_request_status" AS ENUM ('Pending', 'Accepted', 'Blocked');
+
+-- Table Definition
+CREATE TABLE "public"."user_friends" (
+    "id" uuid NOT NULL,
+    "sender_id" uuid,
+    "recipient_id" uuid,
+    "created_at" timestamptz,
+    "status" "public"."friend_request_status" NOT NULL,
+    PRIMARY KEY ("id")
 );
---
--- Table structure for table `user_friends`
---
 
-CREATE TABLE `user_friends` (
-  `id` varchar(200) NOT NULL,
-  `sender_id` varchar(200) NOT NULL,
-  `recipient_id` varchar(200) NOT NULL,
-  `status` enum('Pending','Accepted') NOT NULL,
-  `created_at` datetime NOT NULL
+-- This script only contains the table creation statements and does not fully represent the table in the database. It's still missing: indices, triggers. Do not use it as a backup.
+-- Table Definition
+CREATE TABLE "public"."users" (
+    "id" uuid NOT NULL,
+    "username" varchar(200) NOT NULL,
+    "password" varchar(200) NOT NULL,
+    "display_name" varchar(200) DEFAULT NULL::character varying,
+    "first_name" varchar(200) NOT NULL,
+    "last_name" varchar(200) NOT NULL,
+    "image" varchar(200) DEFAULT NULL::character varying,
+    "status" "public"."status" NOT NULL,
+    "email" varchar(200) NOT NULL,
+    "privacy_level" "public"."privacy_level" NOT NULL,
+    "role" "public"."role" NOT NULL,
+    "created_at" timestamptz DEFAULT now(),
+    PRIMARY KEY ("id")
 );
--- --------------------------------------------------------
 
---
--- Table structure for table `voice_channels`
---
+-- This script only contains the table creation statements and does not fully represent the table in the database. It's still missing: indices, triggers. Do not use it as a backup.
 
-CREATE TABLE `voice_channels` (
-  `id` varchar(200) NOT NULL,
-  `server_id` varchar(200) NOT NULL,
-  `channel_group_id` varchar(200) DEFAULT NULL,
-  `order` int(11) NOT NULL,
-  `name` varchar(191)  NOT NULL,
-  `max_users` int(11) DEFAULT NULL
+-- Table Definition
+CREATE TABLE "public"."voice_channel" (
+    "id" uuid NOT NULL,
+    "server_id" uuid,
+    "channel_group_id" uuid,
+    "order" int4,
+    "name" varchar(200),
+    "max_users" int4,
+    PRIMARY KEY ("id")
 );
---
--- Indexes for dumped tables
---
 
---
--- Indexes for table `access_tokens`
---
-ALTER TABLE `access_tokens`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `access_tokens_user_id_key` (`user_id`),
-  ADD KEY `at_user_id` (`user_id`);
-
---
--- Indexes for table `channel_groups`
---
-ALTER TABLE `channel_groups`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `cg_server_id` (`server_id`);
-
---
--- Indexes for table `chats`
---
-ALTER TABLE `chats`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `chat_messages`
---
-ALTER TABLE `chat_messages`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `cm_chat_id` (`chat_id`),
-  ADD KEY `cm_user_id` (`user_id`);
-
---
--- Indexes for table `chat_users`
---
-ALTER TABLE `chat_users`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `cu_chat_id` (`chat_id`),
-  ADD KEY `cu_user_id` (`user_id`);
-
---
--- Indexes for table `servers`
---
-ALTER TABLE `servers`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `server_name` (`name`),
-  ADD KEY `general_text_channel_id` (`general_text_channel`);
-
---
--- Indexes for table `server_tags`
---
-ALTER TABLE `server_tags`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `st_server_id` (`server_id`);
-
---
--- Indexes for table `server_users`
---
-ALTER TABLE `server_users`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `su_user_id` (`user_id`),
-  ADD KEY `su_server_id` (`server_id`);
-
---
--- Indexes for table `server_user_tags`
---
-ALTER TABLE `server_user_tags`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `sut_server_tag_id` (`server_tag_id`),
-  ADD KEY `sut_server_user_id` (`server_user_id`);
-
---
--- Indexes for table `text_channels`
---
-ALTER TABLE `text_channels`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `tc_server_id` (`server_id`),
-  ADD KEY `text_channel_group` (`channel_group_id`);
-
---
--- Indexes for table `text_channel_messages`
---
-ALTER TABLE `text_channel_messages`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `tcm_text_channel_id` (`text_channel_id`),
-  ADD KEY `tcm_server_user_id` (`server_user_id`);
-
---
--- Indexes for table `users`
---
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `users_username_key` (`username`),
-  ADD UNIQUE KEY `users_email_key` (`email`),
-  ADD KEY `user_username` (`username`),
-  ADD KEY `user_display_name` (`display_name`),
-  ADD KEY `user_first_name` (`first_name`),
-  ADD KEY `user_last_name` (`last_name`),
-  ADD KEY `user_email` (`email`);
-
---
--- Indexes for table `user_friends`
---
-ALTER TABLE `user_friends`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `uf_sender_id` (`sender_id`),
-  ADD KEY `uf_recipient_id` (`recipient_id`);
-
---
--- Indexes for table `voice_channels`
---
-ALTER TABLE `voice_channels`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `vc_server_id` (`server_id`),
-  ADD KEY `voice_channel_id` (`channel_group_id`);
-
---
--- AUTO_INCREMENT for dumped tables
---
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `access_tokens`
---
-ALTER TABLE `access_tokens`
-  ADD CONSTRAINT `user_access_key` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
-
---
--- Constraints for table `channel_groups`
---
-ALTER TABLE `channel_groups`
-  ADD CONSTRAINT `channel_server_id` FOREIGN KEY (`server_id`) REFERENCES `servers` (`id`);
-
---
--- Constraints for table `chats`
---
-ALTER TABLE `chats`
-  ADD CONSTRAINT `chat_user_id` FOREIGN KEY (`id`) REFERENCES `users` (`id`);
-
---
--- Constraints for table `chat_messages`
---
-ALTER TABLE `chat_messages`
-  ADD CONSTRAINT `chat_message_chat_id` FOREIGN KEY (`chat_id`) REFERENCES `chats` (`id`),
-  ADD CONSTRAINT `chat_message_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
-
---
--- Constraints for table `chat_users`
---
-ALTER TABLE `chat_users`
-  ADD CONSTRAINT `chat_id` FOREIGN KEY (`chat_id`) REFERENCES `chats` (`id`),
-  ADD CONSTRAINT `user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
-
---
--- Constraints for table `servers`
---
-ALTER TABLE `servers`
-  ADD CONSTRAINT `general_text_channel_id` FOREIGN KEY (`general_text_channel`) REFERENCES `text_channels` (`id`);
-
---
--- Constraints for table `server_tags`
---
-ALTER TABLE `server_tags`
-  ADD CONSTRAINT `server_id_from_tags` FOREIGN KEY (`server_id`) REFERENCES `servers` (`id`);
-
---
--- Constraints for table `server_users`
---
-ALTER TABLE `server_users`
-  ADD CONSTRAINT `server_users_server_id` FOREIGN KEY (`server_id`) REFERENCES `servers` (`id`),
-  ADD CONSTRAINT `server_users_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
-
---
--- Constraints for table `server_user_tags`
---
-ALTER TABLE `server_user_tags`
-  ADD CONSTRAINT `server_tag` FOREIGN KEY (`server_tag_id`) REFERENCES `server_tags` (`id`),
-  ADD CONSTRAINT `user_servers_id` FOREIGN KEY (`server_user_id`) REFERENCES `server_users` (`id`);
-
---
--- Constraints for table `text_channels`
---
-ALTER TABLE `text_channels`
-  ADD CONSTRAINT `text_channel_group` FOREIGN KEY (`channel_group_id`) REFERENCES `channel_groups` (`id`),
-  ADD CONSTRAINT `text_server_id` FOREIGN KEY (`server_id`) REFERENCES `servers` (`id`);
-
---
--- Constraints for table `text_channel_messages`
---
-ALTER TABLE `text_channel_messages`
-  ADD CONSTRAINT `text_channel_id` FOREIGN KEY (`text_channel_id`) REFERENCES `text_channels` (`id`),
-  ADD CONSTRAINT `text_sender_id` FOREIGN KEY (`server_user_id`) REFERENCES `server_users` (`id`);
-
---
--- Constraints for table `user_friends`
---
-ALTER TABLE `user_friends`
-  ADD CONSTRAINT `friendrequest_receiver` FOREIGN KEY (`recipient_id`) REFERENCES `users` (`id`),
-  ADD CONSTRAINT `friendrequest_sender` FOREIGN KEY (`sender_id`) REFERENCES `users` (`id`);
-
---
--- Constraints for table `voice_channels`
---
-ALTER TABLE `voice_channels`
-  ADD CONSTRAINT `voice_channel_id` FOREIGN KEY (`channel_group_id`) REFERENCES `channel_groups` (`id`),
-  ADD CONSTRAINT `voice_server_id` FOREIGN KEY (`server_id`) REFERENCES `servers` (`id`);
-COMMIT;
+ALTER TABLE "public"."access_tokens" ADD FOREIGN KEY ("user_id") REFERENCES "public"."users"("id");
+ALTER TABLE "public"."channel_groups" ADD FOREIGN KEY ("server_id") REFERENCES "public"."servers"("id");
+ALTER TABLE "public"."chat_messages" ADD FOREIGN KEY ("chat_id") REFERENCES "public"."chats"("id");
+ALTER TABLE "public"."chat_messages" ADD FOREIGN KEY ("user_id") REFERENCES "public"."users"("id");
+ALTER TABLE "public"."chat_users" ADD FOREIGN KEY ("chat_id") REFERENCES "public"."chats"("id");
+ALTER TABLE "public"."chat_users" ADD FOREIGN KEY ("user_id") REFERENCES "public"."users"("id");
+ALTER TABLE "public"."chats" ADD FOREIGN KEY ("user_id") REFERENCES "public"."users"("id");
+ALTER TABLE "public"."server_tags" ADD FOREIGN KEY ("server_id") REFERENCES "public"."servers"("id");
+ALTER TABLE "public"."server_user_tags" ADD FOREIGN KEY ("server_tag_id") REFERENCES "public"."server_tags"("id");
+ALTER TABLE "public"."server_user_tags" ADD FOREIGN KEY ("server_user_id") REFERENCES "public"."server_users"("id");
+ALTER TABLE "public"."server_users" ADD FOREIGN KEY ("server_id") REFERENCES "public"."servers"("id");
+ALTER TABLE "public"."server_users" ADD FOREIGN KEY ("user_id") REFERENCES "public"."users"("id");
+ALTER TABLE "public"."servers" ADD FOREIGN KEY ("general_text_chat") REFERENCES "public"."text_channels"("id");
+ALTER TABLE "public"."text_channel_messages" ADD FOREIGN KEY ("text_channel_id") REFERENCES "public"."text_channels"("id");
+ALTER TABLE "public"."text_channel_messages" ADD FOREIGN KEY ("server_user_id") REFERENCES "public"."server_users"("id");
+ALTER TABLE "public"."text_channels" ADD FOREIGN KEY ("channel_group_id") REFERENCES "public"."channel_groups"("id");
+ALTER TABLE "public"."user_friends" ADD FOREIGN KEY ("sender_id") REFERENCES "public"."users"("id");
+ALTER TABLE "public"."user_friends" ADD FOREIGN KEY ("recipient_id") REFERENCES "public"."users"("id");
+ALTER TABLE "public"."voice_channel" ADD FOREIGN KEY ("server_id") REFERENCES "public"."servers"("id");
+ALTER TABLE "public"."voice_channel" ADD FOREIGN KEY ("channel_group_id") REFERENCES "public"."channel_groups"("id") ON DELETE RESTRICT;
