@@ -4,6 +4,8 @@
 	import { debounce } from '$src/lib/helpers';
 	import { clickOutside } from '$src/lib/use';
 
+	let openedContainer: HTMLElement | undefined;
+
 	export enum FloatingAlignment {
         RightLeft,
 		BottomTop,
@@ -13,27 +15,19 @@
 		"align-bt",
 	];
 
-	export enum FloatingWidth {
-		Normal,
-		Wide,
-	}
-	const widthClasses = [
-		"width-normal",
-		"width-wide",
-	];
-
 	interface FloatingContex {
 		nested: boolean;
 	}
-	
 </script>
 
 <script lang="typescript">
+	type T = $$Generic<App.DB.PrimaryKey>;
+	type FloatingOpeningOptions = { reference?: HTMLElement, context?: T };
 	interface $$Slots {
 		item: {
-			open: () => void;
+			open: (options?: FloatingOpeningOptions) => void;
+			toggle: (options?: FloatingOpeningOptions) => void;
 			close: () => void;
-			toggle: () => void;
 			opened: boolean;
 		};
 		menu: {
@@ -43,29 +37,31 @@
 	}
 	interface $$Events {
 		open: void;
-		close: void;
+		close: HTMLElement;
 	}
-
+	
 	export let alignment: FloatingAlignment = FloatingAlignment.BottomTop;
 	let classes = '';
 	export { classes as class };
 	export let lazy = false;
+	export let currentContext: T | undefined = undefined;
 	
 	let opened = false;
+	let initialized = false;
 	let render = !lazy;
 	let placement: Placement = "right";
 	$: placement = alignment === FloatingAlignment.RightLeft ? "right-start" : "bottom-start";
 	let strategy: Strategy = "absolute";
 
-	let refContainer: HTMLElement | null = null;
-	let refMenu: HTMLElement;
-	let styleMenu: {[key: string]: string} = {};
+	let reference: HTMLElement | undefined = undefined;
+	let floating: HTMLElement;
+	let animationClass: string = '';
 
 	// settings
 	const spacing = 8;
 	const minWidth = 256;
 	const maxWidth = 360;
-	const minHeight = 320;
+	const minHeight = 48;
 	const maxHeight = 640;
 
 	const transformOriginMap = [
@@ -80,7 +76,7 @@
 	];
 
 	const dispatch = createEventDispatcher<$$Events>();
-	const debouncedUpdate = debounce(update, 100);
+	const debouncedUpdate = debounce(() => update(), 100);
 
 	const context = getContext<FloatingContex | undefined>('floating');
 	if (context?.nested) {
@@ -90,59 +86,58 @@
 		nested: true,
 	});
 
-	onMount(debouncedUpdate);
+	//onMount(debouncedUpdate);
 
-	export function toggle(cont: HTMLElement | Event | null = refContainer, ctx: T | null = null) {
-		if (cont?.hasOwnProperty('isTrusted')) {
-			cont = refContainer;
-		}
-		if (!cont) return;
-		console.log("normal:", {opened, cont, ctx});
-		opened ? close() : open(cont);
+	export function toggle(options: FloatingOpeningOptions = { reference }) {
+		currentContext?.id !== options.context?.id || !opened
+			? open(options)
+			: close();
+	}
+
+	function requestClose(event: MouseEvent & { target: HTMLElement }) {
+		if (openedContainer === event.target.closest("button")) return;
+		close();
 	}
 
 	export function close() {
 		opened = false;
+		animationClass = 'animate-out';
 		dispatch('close');
 	}
 
-	function requestClose() {
-		if (!$$slots.item) return;
-		console.log(">>> closing");
-		close();
-	}
-
-	export function open(cont: HTMLElement | null = refContainer) {
+	export function open(options: FloatingOpeningOptions = { reference }) {
 		if (!render) {
 			render = true;
-			setTimeout(open, 0);
+			setTimeout(() => open(options), 0);
 			return;
 		}
 		opened = true;
-		update(cont);
+		animationClass = 'animate-in';
+		// update on init or context change
+		const requiresUpdate = !initialized
+			|| currentContext?.id !== options.context?.id;
+		currentContext = options.context;
+		openedContainer = options.reference;
+		if (requiresUpdate) update(options.reference);
 		dispatch('open');
 	}
 
-	function update(container: HTMLElement | null = refContainer) {
-		if (!container) return;
-		computePosition(container, refMenu, {
+	function update(_reference: HTMLElement | undefined = reference) {
+		if (!_reference) return;
+		initialized = true;
+		computePosition(_reference, floating, {
 			placement,
 			strategy,
 			middleware: [
 				offset(spacing),
 				size({
 					apply({availableHeight, availableWidth, elements}) {
-						const {width, height} = container.getBoundingClientRect();
-						if (!opened) {
-							styleMenu["width"] = '0';
-							styleMenu["height"] = '0';
-						}
-						else {
-							styleMenu["width"] = `${Math.min(maxWidth, Math.max(minWidth, Math.min(width, availableWidth)))}px`;
-							styleMenu["height"] = `${Math.min(maxHeight, Math.max(minHeight, Math.min(height, availableHeight)))}px`;
-							console.log(styleMenu["width"], styleMenu["height"]);
-						}
-						styleMenu = {...styleMenu};
+						const height = elements.floating.children[0].clientHeight + 2;
+						const {width} = elements.reference.getBoundingClientRect();
+						Object.assign(elements.floating.style, {
+							width: `${Math.min(maxWidth, Math.max(minWidth, Math.min(width, availableWidth)))}px`,
+							height: `${Math.min(maxHeight, Math.max(minHeight, Math.min(height, availableHeight)))}px`,
+						});
 					},
 				}),
 				flip({
@@ -155,10 +150,11 @@
 				}),
 			]
 		}).then(({x, y, placement}) => {
-			styleMenu["left"] = `${x}px`;
-			styleMenu["top"] = `${y}px`;
-			styleMenu["transform-origin"] = transformOriginMap.find(([p]) => p === placement)?.[1] ?? "";
-			styleMenu = {...styleMenu};
+			Object.assign(floating.style, {
+				left: `${x}px`,
+				top: `${y}px`,
+				transformOrigin: transformOriginMap.find(([p]) => p === placement)?.[1] ?? "",
+			});
 		});
 	}
 </script>
@@ -166,14 +162,13 @@
 <svelte:window on:resize={debouncedUpdate} />
 
 <template>
-	<div bind:this={refContainer}
+	<div bind:this={reference}
 		class="floating {alignmentClasses[alignment]}"
 		use:clickOutside={requestClose}>
 		<slot name="item" {open} {close} {toggle} {opened}/>
-		<menu bind:this={refMenu}
-				style={Object.entries(styleMenu).map(([key, value]) => `${key}: ${value};`).join(" ")}
-				class={strategy}
-				class:opened>
+		<menu bind:this={floating}
+			  class="{strategy} {animationClass}"
+			  class:opened>
 			{#if render}
 				<div class="{classes}">
 					<slot name="menu" {close} {opened} />
@@ -187,44 +182,48 @@
 <style global lang="postcss">
 	.floating {
 		& > menu {
-			@apply overflow-hidden scale-90;
+			@apply overflow-hidden pointer-events-none
+			w-0 h-0;
+			will-change: transform, opacity;
 			&.opened {
-				@apply overflow-visible;
-				animation: floatingIn 200ms forwards ease-in-out;
-				& > div {
-					@apply opacity-100;
-				}
+				@apply overflow-visible pointer-events-auto;
 			}
-			&:not(.opened) {
-				@apply w-0 h-0 !important;
+			&.animate-in {
+				animation: floatingIn 200ms forwards ease-in-out;
+			}
+			&.animate-out {
+				animation: floatingOut 200ms forwards ease-in-out;
 			}
 			& > div {
-				@apply flex flex-col h-full
-				overflow-auto opacity-0
+				@apply flex flex-col
+				overflow-auto
 				border shadow-md rounded
-				transition-opacity duration-200 ease-in-out
 				border-gray-300 dark:border-gray-700
 				bg-gray-50 dark:bg-gray-800;
-			}
-		}
-		&.width-normal {
-			& > menu {
-				@apply w-56;
-			}
-		}
-		&.width-wide {
-			& > menu {
-				@apply w-96;
 			}
 		}
 	}
 
 	@keyframes floatingIn {
-		50% {
-			@apply scale-105;
+		0% {
+			@apply scale-0 opacity-0;
+		}
+		75% {
+			@apply scale-105 opacity-50;
 		}
 		100% {
-			@apply scale-100;
+			@apply scale-100 opacity-100;
+		}
+	}
+	@keyframes floatingOut {
+		0% {
+			@apply scale-100 opacity-100;
+		}
+		25% {
+			@apply scale-105 opacity-50;
+		}
+		100% {
+			@apply scale-50 opacity-0;
 		}
 	}
 </style>

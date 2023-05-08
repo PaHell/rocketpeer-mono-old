@@ -50,6 +50,7 @@
 
 <style global lang="postcss">
 	.checkbox.button.button-trans {
+		@apply overflow-hidden;
 		& > .text {
 			@apply text-sec dark:text-dark-sec;
 		}
@@ -83,15 +84,15 @@
 		}
 		& > .switch {
 			@apply w-4 h-4 ml-1 mr-2
-      flex items-center
-      border rounded shadow-sm
-      border-gray-300 bg-gray-50
-      dark:border-gray-700 dark:bg-gray-800
-      transition-colors;
+			flex items-center
+			border rounded shadow-sm
+			border-gray-300 bg-gray-50
+			dark:border-gray-700 dark:bg-gray-800
+			transition-colors;
 			& > .icon {
 				@apply indent-[-2px] text-accent-500
-        scale-0 rotate-90
-        origin-left transition-transform duration-100;
+				scale-0 rotate-90
+				origin-left transition-transform duration-100;
 			}
 		}
 		& > .toggle {

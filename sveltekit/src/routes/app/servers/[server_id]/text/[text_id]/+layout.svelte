@@ -12,8 +12,8 @@
 	export let data: PageData;
 	let search = "";
 
-	let refUserMenu: Floating;
-	let currentShownUser: App.DB.ServerUser | null = null;
+	let refUserMenu: Floating<App.DB.ServerUser>;
+	let currentShownUser: App.DB.ServerUser | undefined = undefined;
 
 	type ServerTagView = [App.DB.ServerTag, App.DB.ServerUser[]];
 
@@ -57,15 +57,6 @@
 	tagDict.push(tagOffline);
 	tagDict = tagDict.filter(kvp => kvp[1].length > 0);
 
-	function onUserClick(e: MouseEvent & { target: HTMLElement }, su: App.DB.ServerUser) {
-		if (currentShownUser?.id === su.id) {
-			currentShownUser = null;
-			refUserMenu.close();
-			return;
-		}
-		currentShownUser = su;
-		refUserMenu.open(e.target.closest(".user-view") as HTMLElement);
-	}
 </script>
 
 
@@ -105,15 +96,21 @@
 					display_name={su.display_name}
 					variant={ButtonVariant.Transparent}
 					showStatus
-					on:click={(e) => onUserClick(e, su)} />
+					on:click={(e) => refUserMenu.toggle({
+						reference: e.target.closest('.user-view'),
+						context: su,
+					})} />
 			{/each}
 		{/each}
-		<Floating bind:this={refUserMenu} alignment={FloatingAlignment.RightLeft}>
+		<Floating
+			bind:this={refUserMenu}
+			bind:currentContext={currentShownUser}
+			alignment={FloatingAlignment.RightLeft}>
 			<svelte:fragment slot="menu">
-				{#if currentShownUser}
-					<UserProfile data={currentShownUser} />
-				{:else}
+				{#if !currentShownUser}
 					<p>Loading...</p>
+				{:else}
+					<UserProfile data={currentShownUser} />
 				{/if}
 			</svelte:fragment>
 		</Floating>
