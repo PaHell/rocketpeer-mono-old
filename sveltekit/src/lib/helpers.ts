@@ -32,6 +32,13 @@ export const debounce = <F extends (...args: any[]) => any>(func: F, waitFor: nu
 	});
 }
 
+export function IsSameType<A extends {}, B extends {}>(objA: A, objB: B) {
+	const keysA = Object.keys(objA);
+	const keysB = Object.keys(objB);
+	if (keysA.length !== keysB.length) return false;
+	return keysA.join(',') === keysB.join(',');
+}
+
 export function isMobile(): boolean {
 	if (!browser) return false;
 	let check = false;

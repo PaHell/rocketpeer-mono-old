@@ -41,6 +41,7 @@
 		CheckCircle = 'checkbox-circle-line',
 		InfoCircle = 'information-line',
 		Close = 'close-line',
+		Username = 'hashtag',
 	}
 </script>
 

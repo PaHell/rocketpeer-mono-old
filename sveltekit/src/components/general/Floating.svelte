@@ -118,7 +118,12 @@
 			|| currentContext?.id !== options.context?.id;
 		currentContext = options.context;
 		openedContainer = options.reference;
+		// update position
 		if (requiresUpdate) update(options.reference);
+		// find and focus first input
+		const firstInput = floating.querySelector<HTMLInputElement | HTMLTextAreaElement>("[autofocus]");
+		if (firstInput) firstInput.focus?.();
+		// communicate opened
 		dispatch('open');
 	}
 

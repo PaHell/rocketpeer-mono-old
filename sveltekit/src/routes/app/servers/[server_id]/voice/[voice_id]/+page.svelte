@@ -40,7 +40,7 @@
 </script>
 
 <template>
-	<main id="server-voice" class="fill" class:show-chat={showChat}>
+	<main id="server-voice" class:show-chat={showChat}>
 		{#if showStream}
 			<VideoPlayer {stream}>
 				<svelte:fragment slot="left">

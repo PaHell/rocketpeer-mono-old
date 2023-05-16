@@ -66,8 +66,7 @@
 	}
 </script>
 
-
-<aside id="sidebar" class="layout-pane items-stretch">
+<template>
 	<header>
 		<div>
 			<p class="pl-2 text font-bold">{data.server_user?._server?.name}</p>
@@ -80,7 +79,7 @@
 				/>
 		</div>
 	</header>
-	<div class="fill list-channel-groups">
+	<nav class="list-channel-groups">
 		{#each serverChannels as item}
 			{#if Object.hasOwn(item, "_channels")}
 				<Button
@@ -98,16 +97,13 @@
 				<svelte:component this={components[item.type]} channel={item}/>
 			{/if}
 		{/each}
-	</div>
-</aside>
-<div id="content" class="layout-pane items-stretch">
+	</nav>
 	<slot/>
-</div>
-
+</template>
 
 <style global lang="postcss">
 	.list-channel-groups {
-		@apply flex flex-col items-stretch
+		@apply flex flex-col
 		overflow-x-hidden overflow-y-auto;
 		& > .button,
 		& > .list-channels {

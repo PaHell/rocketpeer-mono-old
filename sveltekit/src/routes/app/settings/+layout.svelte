@@ -29,8 +29,7 @@
 	];
 </script>
 
-
-<nav id="sidebar" class="layout-pane items-stretch">
+<template>
 	<header>
 		<div>
 			<p class="text font-bold">Settings</p>
@@ -38,12 +37,12 @@
 		<div>
 		</div>
 	</header>
-	<GroupedNavigation
-		items={categories}
-		class="fill"
-		/>
-</nav>
-<div id="content">
+	<nav>
+		<GroupedNavigation
+			items={categories}
+			class="fill"
+			/>
+	</nav>
 	<header>
 		<div>
 			<Icon name={Icons.Settings} class="text-icon-sec dark:text-icon-dark-sec"/>
@@ -52,12 +51,8 @@
 		<div>
 		</div>
 	</header>
-	<main>
-		<div class="p-2">
-			<slot />
-		</div>
-	</main>
-</div>
+	<slot />
+</template>
 
 
 <style global lang="postcss">

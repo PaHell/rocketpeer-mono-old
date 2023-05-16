@@ -15,7 +15,7 @@
 </script>
 
 
-	<div id="settings">
+	<main id="settings">
 		<h1 class="text heading col-span-2">{$_('routes.app.settings.title')}</h1>
 		<h2 class="text headline col-span-2">{$_('routes.app.settings.general')}</h2>
 		<SelectLanguage />
@@ -33,7 +33,7 @@
 		<h2 class="text headline col-span-2">{$_('routes.app.settings.appearance')}</h2>
 		<SelectTheme />
 		<SelectViewSize />
-	</div>
+	</main>
 
 
 <style lang="postcss">

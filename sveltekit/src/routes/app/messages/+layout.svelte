@@ -14,21 +14,20 @@
 	}
 </script>
 
-
-<aside id="sidebar" class="layout-pane items-stretch">
+<template>	
 	<header>
 		<div>
 			<p class="pl-2 text font-bold">Messages</p>
 		</div>
 		<div>
 			<Button
-				icon={Icons.Add}
-				variant={ButtonVariant.Transparent}
-				on:click={() => {}}
-				/>
+			icon={Icons.Add}
+			variant={ButtonVariant.Transparent}
+			on:click={() => {}}
+			/>
 		</div>
 	</header>
-	<div class="fill list-users">
+	<nav class="list-users">
 		<NavigationItem
 			path={'/app/messages/friends/all'}
 			match={3}
@@ -49,11 +48,9 @@
 				on:click={() => open(chat)}
 				showStatus />
 		{/each}
-	</div>
-</aside>
-<div id="content" class="layout-pane items-stretch">
+	</nav>
 	<slot/>
-</div>
+</template>
 
 
 <style global lang="postcss">

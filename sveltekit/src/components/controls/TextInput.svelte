@@ -138,6 +138,7 @@
 				placeholder=""
 				{disabled}
 				{name}
+				{autofocus}
 				autocomplete={disableAutocomplete ? 'off': name}
 				on:input={debouncedChange}
 				on:change={debouncedChange}

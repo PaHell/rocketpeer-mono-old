@@ -21,7 +21,7 @@
 </script>
 
 <template>
-	<div id="layout-app" class="layout-pane row items-stretch {$connectedVoiceChannel ? 'voice-connected' : ''}">
+	<div id="layout-grid">
 		<nav id="dock">
 			<div id="indicator" style="top: calc({indicatorTop}px + 1.25rem);"></div>
 			<DockItem
@@ -62,23 +62,52 @@
 				title="Settings"
 				icon={Icons.Settings}
 				on:active={updateIndicator}/>
-			<VoiceConnection user={data.user}/>
 		</nav>
+		<VoiceConnection user={data.user}/>
 		<slot/>
 	</div>
 </template>
 
 <style global lang="postcss">
-	#layout-app.layout-pane {
-		& > #dock,
-		& > #sidebar { padding-bottom: calc(3.5rem + 1px) !important; }
-		&.voice-connected > #dock,
-		&.voice-connected > #sidebar { padding-bottom: calc(7rem + 2px) !important; }
+	#layout-grid {
+		@apply flex-1 grid overflow-hidden
+		bg-gray-300 dark:bg-gray-700;
+		grid-gap: 1px;
+		grid-template-columns: min-content min-content 1fr min-content;
+		grid-template-rows: min-content 1fr min-content;
+		grid-template-areas: "dock   nav-header content-header content-header"
+							 "dock   nav-main   content-main   sidebar"
+							 "footer footer     content-main   sidebar";
+		& > * {
+			@apply overflow-hidden;
+		}
+		& > header {
+			&:first-of-type { grid-area: nav-header; }
+			&:last-of-type { grid-area: content-header; }
+		}
+		& > nav {
+			&:first-of-type { grid-area: dock; }
+			&:last-of-type { grid-area: nav-main; }
+		}
+		& > main { grid-area: content-main; }
+		& > aside { grid-area: sidebar; }
+		& > footer { grid-area: footer; }
 
-		& > nav#dock {
-			@apply w-20 p-2 flex flex-col items-stretch
-			border-r overflow-y-auto overflow-x-hidden
-			border-gray-300 dark:border-gray-800;
+		/* Backgrounds */
+		& > header:first-of-type,
+		& > nav,
+		& > footer {
+			@apply bg-gray-200 dark:bg-gray-900;
+		}
+		& > header:last-of-type,
+		& > main,
+		& > aside {
+			@apply bg-gray-50 dark:bg-gray-800;
+		}
+
+		& > #dock {
+			@apply w-20 p-2 flex flex-col items-center
+			overflow-y-auto overflow-x-hidden;
 			& > hr {
 				@apply w-8 mx-auto mb-2
 				border-t-2 border-gray-300 dark:border-gray-800;
@@ -92,11 +121,8 @@
 				@apply flex-none mb-2;
 			}
 		}
-		& > #sidebar > header,
-		& > #content > header {
-			@apply flex items-center
-			border-b h-14;
-
+		& > header {
+			@apply flex items-center h-14;
 			& > div {
 				@apply flex items-center;
 				&:first-child {
@@ -129,36 +155,13 @@
 				}
 			}
 		}
-		& > #sidebar {
-			@apply w-72 ml-[-1px]
-			border-x border-l
-			border-gray-300 dark:border-gray-800;
-			&:not(.padded) {
-				padding-bottom: calc(3.5rem + 1px);
-			}
-			&.padded {
-				padding-bottom: calc(7.5rem + 2px);
-			}
-			& > header {
-				@apply border-gray-300 dark:border-gray-800;
-			}
+		& > nav:last-of-type,
+		& > aside {
+			@apply w-72;
 		}
-		& > #content {
-			@apply flex-1 ml-[-1px]
-			overflow-y-hidden
-			bg-white dark:bg-gray-800
-			border-l
-			border-gray-300 dark:border-gray-700
+		& > main:last-of-type {
+			@apply flex-1 overflow-y-hidden
 			shadow-sm;
-
-			& > header {
-				@apply border-gray-300 dark:border-gray-700
-				shadow-sm relative;
-			}
-
-			& > main {
-				@apply overflow-hidden;
-			}
 		}
 	}
 </style>

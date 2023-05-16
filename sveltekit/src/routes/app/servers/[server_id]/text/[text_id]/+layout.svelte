@@ -14,6 +14,7 @@
 
 	let refUserMenu: Floating<App.DB.ServerUser>;
 	let currentShownUser: App.DB.ServerUser | undefined = undefined;
+	let showUsers = true;
 
 	type ServerTagView = [App.DB.ServerTag, App.DB.ServerUser[]];
 
@@ -80,14 +81,16 @@
 			hideLabel />
 		<Button variant={ButtonVariant.Transparent}
 			icon={Icons.Users}
+			active={showUsers}
+			on:click={() => showUsers = !showUsers}
 			class="ml-2"/>
 	</div>
 </header>
-<main id="server-text" class="fill">
-	<div>
-		<slot />
-	</div>
-	<div class="list-users">
+<main id="server-text">
+	<slot />
+</main>
+{#if showUsers}
+	<aside class="list-users">
 		{#each tagDict as [tag, server_users]}
 			<p class="text bold {tag.color}">{tag.name}</p>
 			{#each server_users as su}
@@ -110,12 +113,14 @@
 				{#if !currentShownUser}
 					<p>Loading...</p>
 				{:else}
-					<UserProfile data={currentShownUser} />
+					<UserProfile
+						user={currentShownUser.user}
+						display_name={currentShownUser.display_name}/>
 				{/if}
 			</svelte:fragment>
 		</Floating>
-	</div>
-</main>
+	</aside>
+{/if}
 
 
 <style global lang="postcss">

@@ -1,31 +1,54 @@
 <script lang="typescript" context="module">
     import Button, { ButtonVariant } from "$src/components/controls/Button.svelte";
-	import { Icons } from "$src/components/general/Icon.svelte";
+	import TextInput from "$src/components/controls/TextInput.svelte";
+	import Icon, { Icons } from "$src/components/general/Icon.svelte";
 	import ImageIcon from "$src/components/views/ImageIcon.svelte";
 </script>
 
 <script lang="typescript">
-    export let data: App.DB.ServerUser;
+    export let user: App.DB.User;
+    export let display_name: string | null;
 
-    let displayName = "";
-    $: displayName = data.display_name ?? data.user?.display_name ?? "";
+    let refInput: TextInput<string> | undefined;
+    let input = "";
+
+    function sendMessage() {
+
+    }
+
+
 </script>
 
 <template>
     <div class="user-profile">
-        {#if data.user}
-            <header>
-                <ImageIcon
-                    src={data.user.image}
-                    alt="Image of {displayName}"
-                    placeholder={Icons.User}
-                    status={data.user.status} />
-            </header>
-            <main>
-                <p class="text bold ellipsis">{displayName}</p>
-                <p class="text text-label sec ellipsis">#{data.user.username}</p>
-            </main>
-        {/if}
+        <header>
+            <ImageIcon
+                src={user.image}
+                alt="Image of {user.display_name}"
+                placeholder={Icons.User}
+                status={user.status} />
+        </header>
+        <main>
+            <p class="text bold">{@html
+                display_name
+                ? `${display_name} <wbr/>(${user.display_name})`
+                : user.display_name
+            }</p>
+            <ul>
+                <li>
+                    <Icon name={Icons.Username} class="sec small"/>
+                    <p class="text ellipsis">{user.username}</p>
+                </li>
+            </ul>
+            <TextInput
+                bind:this={refInput}
+                name="message"
+                bind:value={input}
+                on:enter={sendMessage}
+                hideLabel
+                autofocus
+                disableAutocomplete/>
+        </main>
     </div>
 </template>
 
@@ -38,13 +61,23 @@
             border-gray-300 dark:border-gray-700;
             & > .image-icon {
                 @apply w-16 h-16 border
-                bg-gray-50 dark:bg-gray-600
-                border-gray-300 dark:border-gray-700
+                bg-gray-50 dark:bg-gray-700
+                border-gray-300 dark:border-gray-600
                 shadow-sm;
             }
         }
         & > main {
-            @apply px-2 pt-1 pb-3;
+            @apply p-2;
+
+            & > ul {
+                @apply my-2;
+                & > li {
+                    @apply flex items-center;
+                    & > .text {
+                        @apply ml-1 flex-1;
+                    }
+                }
+            }
         }
     }
 </style>

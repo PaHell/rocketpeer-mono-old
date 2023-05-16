@@ -20,22 +20,19 @@
 </script>
 
 
-<nav id="sidebar" class="layout-pane items-stretch">
-	<header>
-		<div>
-			<p class="text font-bold">Admin Panel</p>
-		</div>
-		<div>
-		</div>
-	</header>
+<header>
+	<div>
+		<p class="text font-bold">Admin Panel</p>
+	</div>
+	<div>
+	</div>
+</header>
+<nav>
 	<GroupedNavigation
 		items={categories}
-		class="fill"
-		/>
+		class="fill"/>
 </nav>
-<div id="content">
-	<slot />
-</div>
+<slot />
 
 
 <style global lang="postcss">

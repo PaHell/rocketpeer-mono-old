@@ -26,7 +26,7 @@
 </script>
 
 <template>
-    <div class="voice-connection">
+    <footer class="voice-connection">
 		{#if $connectedVoiceChannel}
 			<section class="pl-2">
 				<div>
@@ -60,7 +60,7 @@
 				class={speakersOff ? 'button-red-line' : ''}
 				on:click={toggleSpeakers}/>
 		</section>
-	</div>
+	</footer>
 </template>
 
 <style global lang="postcss">
@@ -75,10 +75,7 @@
 		}
 	}
 	.voice-connection {
-		@apply absolute bottom-0 left-0
-		bg-gray-100 dark:bg-gray-900
-		border-t border-gray-300 dark:border-gray-800;
-		width: calc(23rem - 2px);
+		@apply bg-gray-100 dark:bg-gray-900;
 		& > section {
 			@apply flex items-center;
 			&:not(:last-child) {
