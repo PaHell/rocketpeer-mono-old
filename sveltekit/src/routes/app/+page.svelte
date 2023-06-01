@@ -1,1 +1,1 @@
-<!-- Redirect to first server in user's order or to all friends list -->
+<!-- makes page exist > no 404 > redirect in layout possible -->

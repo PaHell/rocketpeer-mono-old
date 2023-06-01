@@ -41,6 +41,7 @@
 				{active}
 				on:click={redirect}/>
 		</NavigationItem>
+		<p class="text tri bold">Messages</p>
 		{#each data.chats as chat}
 			<UserView user={chat.users?.[0]}
 				variant={ButtonVariant.Card}

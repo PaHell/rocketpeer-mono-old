@@ -5,14 +5,17 @@
 		@apply p-1 text-label uppercase;
 		letter-spacing: 0.25px;
 		&:not(:first-child) {
-			@apply mt-2;
+			@apply pt-2;
 		}
 	}
 
 	& > .button.user-view {
-		@apply w-full h-12 px-1 text-left border-transparent shadow-none;
+		@apply w-full h-12 px-1 text-left;
 		&:not(:last-child) {
 			@apply mb-[1px];
+		}
+		& > .icon {
+			@apply ml-1;
 		}
 		& > .image-icon {
 			@apply border-gray-300 dark:border-gray-600;

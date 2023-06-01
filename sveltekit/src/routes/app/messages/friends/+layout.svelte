@@ -6,7 +6,7 @@
     let activeNavItem = 0;
     const navItems: NavItem[] = [
         {
-            title: "Friends",
+            title: "All",
             path: "/app/messages/friends/all",
         },
         {
@@ -23,8 +23,8 @@
 <template>
     <header>
         <div>
-            <Icon name={Icons.Users} class="text-icon-sec dark:text-icon-dark-sec"/>
-            <p class="text text-headline ellipsis">{navItems[activeNavItem]?.title}</p>
+            <Icon name={Icons.User} class="text-icon-sec dark:text-icon-dark-sec"/>
+            <p class="text text-headline ellipsis mr-2">Friends</p>
             <Navigation
                 class="navigation-tabs"
                 items={navItems}

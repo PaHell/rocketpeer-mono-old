@@ -13,17 +13,7 @@
 					title: 'routes.app.settings.application.title',
 					icon: Icons.Settings,
 					path: '/app/settings'
-				}
-			]
-		},
-		{
-			title: 'routes.app.settings.ui.title',
-			items: [
-				{
-					title: 'routes.app.settings.ui.buttons.title',
-					icon: Icons.Settings,
-					path: '/app/settings/ui/buttons'
-				}
+				},
 			]
 		},
 	];

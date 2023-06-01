@@ -114,7 +114,7 @@
 			}
 			& > #indicator {
 				@apply absolute top-0 left-0 w-1 h-6
-				bg-accent-500 dark:bg-gray-300 rounded-r
+				bg-black dark:bg-white rounded-r
 				transition-[top] duration-200 ease-in-out;
 			}
 			& > .dock-item {

@@ -14,31 +14,35 @@
 	}
 </script>
 
-
+<template>
 	<main id="settings">
-		<h1 class="text heading col-span-2">{$_('routes.app.settings.title')}</h1>
-		<h2 class="text headline col-span-2">{$_('routes.app.settings.general')}</h2>
-		<SelectLanguage />
-		{#if $authenticated}
-			<div>
-				<p class="text label">&nbsp;</p>
-				<Button
-					icon={Icons.Logout}
-					text="routes.app.settings.logout"
-					class="w-full"
-					on:click={logout}
-				/>
-			</div>
-		{/if}
-		<h2 class="text headline col-span-2">{$_('routes.app.settings.appearance')}</h2>
-		<SelectTheme />
-		<SelectViewSize />
+		<div>
+			<h2 class="text headline col-span-2">{$_('routes.app.settings.general')}</h2>
+			<SelectLanguage />
+			{#if $authenticated}
+				<div>
+					<p class="text label">&nbsp;</p>
+					<Button
+						icon={Icons.Logout}
+						text="routes.app.settings.logout"
+						class="w-full"
+						on:click={logout}
+					/>
+				</div>
+			{/if}
+			<h2 class="text headline col-span-2">{$_('routes.app.settings.appearance')}</h2>
+			<SelectTheme />
+			<SelectViewSize />
+		</div>
 	</main>
-
+</template>
 
 <style lang="postcss">
 	#settings {
-		@apply flex-1 min-w-0 grid grid-cols-2 gap-4
-    items-center;
+		@apply p-2;
+		& > div {
+			@apply min-w-0 grid grid-cols-2 gap-4
+			items-center self-start;
+		}
 	}
 </style>

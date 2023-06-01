@@ -80,34 +80,50 @@
         }
 
         & > svg {
-            & > rect {
-                @apply stroke-1 stroke-gray-300 dark:stroke-gray-700;
-                rx: 32;
-                transition: rx .25s ease-in-out;
+            & > * {
+                transition: rx .25s ease-in-out, fill .25s ease-in-out, stroke .25s ease-in-out;
                 will-change: rx, fill, stroke;
+            }
+            & > rect {
+                @apply stroke-1 stroke-gray-300 dark:stroke-gray-800;
+                rx: 32;
                 &.bg {
-                    @apply fill-gray-200 dark:fill-gray-800;
+                    @apply fill-gray-300 dark:fill-gray-800;
+                }
+                &.img {
+                    @apply stroke-gray-200 dark:stroke-gray-700;
                 }
             }
         }
         & > .icon {
-            @apply leading-[4rem] text-icon-large;
+            @apply leading-[4rem] text-icon-large relative;
         }
         &:hover,
+        &:active,
         &.active {
             & > svg > rect {
                 rx: 16;
             }
         }
-
         &:hover {
             & > svg > rect {
                 &.bg {
-                    @apply fill-accent-500
-                    stroke-accent-600 dark:stroke-accent-400;
+                    @apply fill-white dark:fill-gray-800
+                    stroke-gray-300 dark:stroke-gray-700;
                 }
-                &.img {
-                    @apply stroke-gray-400 dark:stroke-gray-600;
+            }
+        }
+        &:active {
+            @apply transform scale-95 ease-in-out;
+        }
+        &.active {
+            & > svg {
+                @apply drop-shadow;
+                & > rect {
+                    &.bg {
+                        @apply fill-accent-500 dark:fill-accent-500
+                        stroke-accent-600 dark:stroke-accent-400;
+                    }
                 }
             }
             & > .icon {
@@ -115,15 +131,6 @@
             }
             & > .logo > svg {
                 @apply fill-white;
-            }
-        }
-        &:active {
-            @apply transform scale-95 ease-in-out;
-            & > svg > rect {
-                &.bg {
-                    @apply fill-accent-500
-                    stroke-accent-400;
-                }
             }
         }
     }

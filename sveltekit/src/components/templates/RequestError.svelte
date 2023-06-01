@@ -15,7 +15,7 @@
 </script>
 
 <template>
-    <div class="request-error">
+    <main class="request-error">
         <Alert
             variant={AlertVariant.Danger}
             {title}
@@ -39,7 +39,7 @@
                     on:click={() => dispatch("reload")}/>
             </div>
         </Alert>
-    </div>
+    </main>
 </template>
 
 <style global lang="postcss">
