@@ -165,15 +165,15 @@ CREATE TABLE "public"."users" (
     "id" uuid NOT NULL,
     "username" varchar(200) NOT NULL,
     "password" varchar(200) NOT NULL,
-    "display_name" varchar(200) DEFAULT NULL::character varying,
+    "display_name" varchar(200) NOT NULL,
     "first_name" varchar(200) NOT NULL,
     "last_name" varchar(200) NOT NULL,
-    "image" varchar(200) DEFAULT NULL::character varying,
+    "image" varchar(200) NOT NULL,
     "status" "public"."status" NOT NULL,
     "email" varchar(200) NOT NULL,
     "privacy_level" "public"."privacy_level" NOT NULL,
     "role" "public"."role" NOT NULL,
-    "created_at" timestamptz DEFAULT now(),
+    "created_at" timestamptz DEFAULT now() NOT NULL,
     PRIMARY KEY ("id")
 );
 

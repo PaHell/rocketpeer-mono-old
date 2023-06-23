@@ -1,15 +1,17 @@
 use backend::configuration::get_configuration;
-use backend::startup::run;
-use sqlx::PgPool;
-use std::net::TcpListener;
+use backend::startup::Application;
+use backend::telemetry::{get_subscriber, init_subscriber};
+
+
+
 
 #[tokio::main]
 async fn main() -> Result<(), std::io::Error> {
-    let configuration = get_configuration().expect("failed to get config");
-    let connection_pool = PgPool::connect_lazy(&configuration.database.connection_string())
-        .await
-        .expect("failed to connect to postgres");
-    let address = format!("127.0.0.1:{}", configuration.application_port);
-    let listener = TcpListener::bind(address)?;
-    run(listener, connection_pool)?.await
+    let subscriber = get_subscriber("rocketpeer".into(), "info".into(), std::io::stdout);
+    init_subscriber(subscriber);
+
+    let configuration = get_configuration().expect("Failed to read configuration");
+    let application = Application::build(configuration).await?;
+    application.run_until_stopped().await?;
+    Ok(())
 }
