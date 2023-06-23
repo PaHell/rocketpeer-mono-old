@@ -1,7 +1,5 @@
-use crate::types::{FrontendGeneratedUser, User};
-use crate::user_routes::helper::{
-    delete_user_with_id, insert_new_user_into_db, user_with_mail_exists,
-};
+use crate::types::{FrontendGeneratedUser};
+use crate::user_routes::helper::{delete_user_with_id, insert_new_user_into_db, update_role, user_with_mail_exists};
 use crate::user_routes::{fetch_single_user, update_user};
 use actix_web::web::Path;
 use actix_web::{web, HttpResponse};
@@ -67,5 +65,15 @@ pub async fn update_user_status(db: web::Data<PgPool>, path: Path<(String, i8)>)
     match update_status(&db, uuid, status).await {
         Ok(_) => HttpResponse::Ok().finish(),
         Err(_) => HttpResponse::NotModified().finish(),
+    }
+}
+
+
+#[api_v2_operation(tags(User))]
+pub async fn update_user_role(db: web::Data<PgPool>, path: Path<(String, i8)>) -> HttpResponse {
+    let (uuid, role) = path.into_inner();
+    match update_role(&db, uuid, role).await {
+        Ok(_) => HttpResponse::Ok().finish(),
+        Err(_) => HttpResponse::NotModified().finish()
     }
 }

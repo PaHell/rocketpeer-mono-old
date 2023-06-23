@@ -1,13 +1,9 @@
 use crate::configuration::{DatabaseSettings, Settings};
 
-use crate::user_routes::{
-    create_user, delete_user, get_user, update_user_data, update_user_status,
-};
 use actix_web::dev::Server;
 use actix_web::web::Data;
 use actix_web::{App, HttpServer};
 use paperclip::actix::{
-    web::{self},
     OpenApiExt,
 };
 use paperclip::v2::models::DefaultApiRaw;
@@ -15,6 +11,7 @@ use sqlx::postgres::PgPoolOptions;
 use sqlx::PgPool;
 use std::net::TcpListener;
 use tracing_actix_web::TracingLogger;
+use crate::routes::http_routes;
 
 pub struct Application {
     port: u16,
@@ -57,16 +54,7 @@ fn run(listener: TcpListener, db_pool: PgPool) -> Result<Server, std::io::Error>
         App::new()
             .wrap(TracingLogger::default())
             .wrap_api_with_spec(DefaultApiRaw::default())
-            // All user specific endpoints
-            .service(
-                web::scope("/user")
-                    .route("/{uuid}", web::get().to(get_user))
-                    .route("/create", web::post().to(create_user))
-                    .route("/{uuid}", web::delete().to(delete_user))
-                    .route("/{uuid}", web::put().to(update_user_data))
-                    .route("/{uuid}/status={status}", web::put().to(update_user_status)),
-            )
-            //.route("/health_check", web::get().to(health_check))
+            .configure(http_routes)
             // App Data accessible in all routes
             .app_data(db_pool.clone())
             // Swagger Stuff

@@ -177,7 +177,7 @@ pub async fn update_user(
 
 pub async fn update_status(db: &PgPool, uuid: String, status: i8) -> Result<PgQueryResult, Error> {
     let parsed_status = UserStatus::try_from(status).unwrap();
-    let test = query!(
+    query!(
         r#"
         UPDATE 
             users
@@ -190,7 +190,23 @@ pub async fn update_status(db: &PgPool, uuid: String, status: i8) -> Result<PgQu
         Uuid::parse_str(&uuid).unwrap()
     )
     .execute(db)
-    .await;
-    println!("{:?}", &test);
-    return test;
+    .await
+}
+
+pub async fn update_role(db: &PgPool, uuid: String, role: i8) -> Result<PgQueryResult, Error> {
+    let parsed_role = UserRole::try_from(role).unwrap();
+    query!(
+        r#"
+        UPDATE
+            users
+        SET
+            role = ($1)
+        WHERE
+            id = $2
+        ;"#,
+        parsed_role as UserRole,
+        Uuid::parse_str(&uuid).unwrap()
+    )
+    .execute(db)
+    .await
 }
